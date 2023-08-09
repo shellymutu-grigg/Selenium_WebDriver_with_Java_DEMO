@@ -33,3 +33,5 @@ target/classes/*
 test-output/*
 /target/
 /bin/
+
+.env
