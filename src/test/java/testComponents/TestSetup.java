@@ -25,7 +25,7 @@ public class TestSetup {
 	public LoginPage loginPage;
 
 	public WebDriver initializeDriver() throws IOException {
-		String browserNameString = GetBrowser("browser");
+		String browserNameString = getGlobalProperty("browser");
 
 		if (browserNameString.contains("chrome")) {
 			ChromeOptions chromeOptions = new ChromeOptions();
@@ -53,7 +53,7 @@ public class TestSetup {
 
 	}
 	
-	public String GetBrowser(String parameter) throws IOException {;
+	public String getGlobalProperty(String parameter) throws IOException {;
 		// Read in properties file
 		Properties properties = new Properties();
 		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")

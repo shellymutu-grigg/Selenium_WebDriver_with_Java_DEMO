@@ -10,7 +10,7 @@
 	
 	<test thread-count="5" name="Submit Order Test">
     	<classes>
-      		<class name="tests.SubmitOrderTest"/>
+      		<class name="tests.CreateOrderTest"/>
     	</classes>
   	</test> 
 <!--	

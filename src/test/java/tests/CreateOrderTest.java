@@ -15,16 +15,17 @@ public class CreateOrderTest extends TestSetup {
 	@Test(groups = { "Login" })
 	public void submitOrderTest() throws IOException, InterruptedException {		
 		String email = GetParameter("EMAIL");
-		String password = GetParameter("EMAIL");
+		String password = GetParameter("PASSWORD_SUCCESS");
 		
 		// Login to site
-		SearchPage searchPage = loginPage.loginApplication(email, password);
-		System.out.println(MessageFormat.format("submitOrderTest loginApplication success: {0}",email));
-		
-		searchPage.searchForProducts("istqb");
+		SearchPage searchPage = loginPage.loginApplication(email, password);		
+		searchPage.searchForProducts(getGlobalProperty("searchText"));
 		
 		List<WebElement> productList = searchPage.getProductList();
-		System.out.println(MessageFormat.format("submitOrderTest searchForProducts size success: {0}", productList.size()));
+		System.out.println(MessageFormat.format("productList.size(): ", productList.size()));
+
+		int index = Integer.parseInt(getGlobalProperty("resultIndex"));
+		searchPage.addProductToCart(productList.get(index).getText().split("\n")[0]);
 	}
 	
 	public String GetParameter(String parameter){

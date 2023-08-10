@@ -29,6 +29,9 @@ public class LoginPage extends AbstractComponents {
 	@FindBy(xpath="//span[normalize-space()='Account & Lists']")
 	WebElement accountLink;
 	
+	@FindBy(linkText="Your Account")
+	WebElement yourAccountLink;
+	
 	@FindBy(id = "signInSubmit")
 	WebElement login;
 
@@ -39,6 +42,11 @@ public class LoginPage extends AbstractComponents {
 	}
 
 	public SearchPage loginApplication(String email, String password) throws InterruptedException {
+		
+		if(yourAccountLink != null) {
+			yourAccountLink.click();
+			waitForElementToAppear(By.cssSelector(".ya-personalized"));
+		}
 		accountLink.click();
 		
 		waitForElementToAppear(By.cssSelector(".a-spacing-small"));
