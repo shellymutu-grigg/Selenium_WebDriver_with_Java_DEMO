@@ -2,12 +2,10 @@ package testComponents;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.Properties;
 
 import org.openqa.selenium.Dimension;
-//import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,6 +15,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.github.cdimascio.dotenv.Dotenv;
 import pageObjects.LoginPage;
 
 public class TestSetup {
@@ -64,6 +63,17 @@ public class TestSetup {
 		String browser = System.getProperty(parameter) != null ? System.getProperty(parameter)
 				: properties.getProperty(parameter);
 		return browser;
+	}
+	
+	public String GetParameter(String parameter){
+		// Load .env file variables
+		Dotenv dotenv = Dotenv
+				   .configure()
+				   .ignoreIfMissing()
+				   .load();
+		String fileParameter = dotenv.get(parameter);
+		return fileParameter;
+		
 	}
 
 	@BeforeMethod(alwaysRun = true)

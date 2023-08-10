@@ -1,6 +1,6 @@
 package abstractComponents;
 
-public class TestFunctions {
+public class HelperFunctions {
 	
 	public int determineIndex(String productName) {
 		int index =0;
