@@ -2,8 +2,13 @@ package abstractComponents;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.Properties;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -34,17 +39,18 @@ public class HelperFunctions {
 		
 	}
 	
-	public int determineIndex(String productName) {
-		int index =0;
-		if(productName.contains("Previously viewed")) {
-			index = 1;
-		}
-		return index;
-	}
-	
 	public void validatePageTitle(String globalProperty, String pageTitle) throws IOException {
 		String resultsTitle = getGlobalProperty(globalProperty);
 		Assert.assertEquals(resultsTitle, pageTitle);
+	}
+	
+	public boolean isElementPresent(By by, WebDriver webDriver) {
+	  boolean exists = false;
+	  List<WebElement> list = webDriver.findElements(by);
+	  if(!list.isEmpty()) {
+	      exists = true;
+	  }
+	  return exists;
 	}
 	
 }

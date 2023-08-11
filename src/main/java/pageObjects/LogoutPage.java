@@ -40,7 +40,6 @@ public class LogoutPage extends AbstractComponents {
 		actions.moveToElement(logoutMenu).perform();
 		
 		waitForElementToAppear(accountMenuBy);
-		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
 	}
 	
 	public void logout() throws InterruptedException, IOException {
@@ -49,6 +48,6 @@ public class LogoutPage extends AbstractComponents {
 		signOutLink.click();
 		
 		waitForElementToAppear(loggedOutBy);
-		helperFunctions.validatePageTitle("loginTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
 	}
 }

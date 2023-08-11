@@ -11,8 +11,9 @@ import pageObjects.ResultsPage;
 import pageObjects.SearchPage;
 import testComponents.TestSetup;
 import abstractComponents.HelperFunctions;
+import interfaces.IHelper;
 
-public class E2ECreateOrderTest extends TestSetup {	
+public class E2ECreateOrderTest extends TestSetup implements IHelper{	
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
 	@Test(groups = { "E2E" })
@@ -32,7 +33,7 @@ public class E2ECreateOrderTest extends TestSetup {
 		
 		String productName = productStrings[0];
 
-		int index = helperFunctions.determineIndex(productName);
+		int index = determineIndex(productName);
 		productName = productList.get(resultIndex).getText().split("\n")[index];
 
 		CartPage cartPage = resultsPage.addProductToCart(productName, index);		
@@ -40,9 +41,21 @@ public class E2ECreateOrderTest extends TestSetup {
 		
 		LogoutPage logoutPage =  cartPage.deleteCart();
 		logoutPage.openLogoutMenu();
+		
+		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
+		
 		logoutPage.logout();
 		
 		webDriver.quit();
+	}
+
+	@Override
+	public int determineIndex(String productName) {
+		int index =0;
+		if(productName.contains("Previously viewed")) {
+			index = 1;
+		}
+		return index;
 	}
 
 }
