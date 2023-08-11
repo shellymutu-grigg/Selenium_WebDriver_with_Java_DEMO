@@ -60,30 +60,9 @@ public class ResultsPage extends AbstractComponents {
 		return product;
 	}
 	
-	public WebElement loadAlternativeProduct(List<WebElement> products) throws InterruptedException, IOException {
-		webDriver.navigate().back();
-		
-		waitForElementToAppear(resultsBy);
-		helperFunctions.validatePageTitle("resultsTitle", webDriver.getTitle());
-		
-		int index = helperFunctions.generateRandomIndex(products.size());
-		WebElement alternativeProduct = products.get(index);
-		
-		return alternativeProduct;
-	}
-	
 	public void selectProduct(WebElement product) throws Exception{
 		product.click();
 		setTitle(product);
-	}
-	
-	public boolean isElementPresent(By by) {
-	  boolean exists = false;
-	  List<WebElement> list = webDriver.findElements(by);
-	  if(!list.isEmpty()) {
-	      exists = true;
-	  }
-	  return exists;
 	}
 	
 	public void checkProductLink(WebElement productCheck) throws Exception {
@@ -102,7 +81,6 @@ public class ResultsPage extends AbstractComponents {
 		} else {
 			throw new Exception("Index of product is incorrect");
 		}
-		
 	}
 	
 	public CartPage addProductToCart(String productName, int index) throws Exception {
@@ -116,15 +94,6 @@ public class ResultsPage extends AbstractComponents {
 		
 		waitForElementToAppear(productTitleBy);
 		webDriver.getTitle().contains(bookTitle);
-		
-//		boolean available = isElementPresent(By.xpath("//span[normalize-space()='" + helperFunctions.getGlobalProperty("notAvailable") + "']"));
-//		
-//		while (available == false) {
-//			product = loadAlternativeProduct(products);
-//			available = isElementPresent(By.xpath("//span[normalize-space()='" + helperFunctions.getGlobalProperty("notAvailable") + "']"));
-//		}
-//		setTitle(product);
-	//	selectProduct(product);
 		
 		addToCartButton.click();
 		

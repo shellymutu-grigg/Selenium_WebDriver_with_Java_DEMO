@@ -3,7 +3,6 @@ package abstractComponents;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.Random;
 
 import org.testng.Assert;
 
@@ -43,17 +42,9 @@ public class HelperFunctions {
 		return index;
 	}
 	
-	public boolean verifyPage(String pageTitle) {
-		return false;
-		
-	}
-	
 	public void validatePageTitle(String globalProperty, String pageTitle) throws IOException {
 		String resultsTitle = getGlobalProperty(globalProperty);
 		Assert.assertEquals(resultsTitle, pageTitle);
 	}
 	
-	public int generateRandomIndex(int noOfProducts) {
-		return new Random().nextInt(noOfProducts - 1 + 1) + 1;
-	}
 }
