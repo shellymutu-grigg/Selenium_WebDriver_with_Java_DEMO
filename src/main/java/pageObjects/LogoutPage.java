@@ -50,7 +50,5 @@ public class LogoutPage extends AbstractComponents {
 		
 		waitForElementToAppear(loggedOutBy);
 		helperFunctions.validatePageTitle("loginTitle", webDriver.getTitle());
-		
-		webDriver.quit();
 	}
 }

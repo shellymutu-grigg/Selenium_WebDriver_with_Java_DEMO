@@ -56,7 +56,7 @@ public class TestSetup {
 	protected LoginPage launchApplication() throws IOException, InterruptedException {
 		webDriver = initializeDriver();
 		loginPage = new LoginPage(webDriver);
-		loginPage.navigate();
+		loginPage.navigateToURL();
 		return loginPage;
 
 	}

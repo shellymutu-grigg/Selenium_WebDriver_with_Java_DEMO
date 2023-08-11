@@ -21,7 +21,7 @@ public class E2ECreateOrderTest extends TestSetup {
 		String password = helperFunctions.GetParameter("PASSWORD_SUCCESS");
 		
 		// Login to site
-		SearchPage searchPage = loginPage.loginApplication(email, password);		
+		SearchPage searchPage = loginPage.loginApplicationSuccess(email, password);		
 		
 		ResultsPage resultsPage = searchPage.searchForProducts(helperFunctions.getGlobalProperty("searchText"));
 		
@@ -42,6 +42,7 @@ public class E2ECreateOrderTest extends TestSetup {
 		logoutPage.openLogoutMenu();
 		logoutPage.logout();
 		
+		webDriver.quit();
 	}
 
 }

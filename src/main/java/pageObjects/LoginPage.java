@@ -2,6 +2,7 @@ package pageObjects;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
@@ -43,15 +44,16 @@ public class LoginPage extends AbstractComponents {
 	By userEmailBy = By.cssSelector(".a-form-label");
 	By userPasswordBy = By.id("nav-global-location-popover-link");
 	By landingPageBy = By.cssSelector(".navFooterLine");
+	By loginFail = By.cssSelector(".cvf-widget-form-captcha");
+	By loginFailAlt = By.id("auth-captcha-image-container");
 
 	public LoginPage(WebDriver webDriver) {
 		super(webDriver);
 		this.webDriver = webDriver;
 		PageFactory.initElements(webDriver, this);
 	}
-
-	public SearchPage loginApplication(String email, String password) throws InterruptedException, IOException {
-		
+	
+	public void navigateToLanding() throws InterruptedException, IOException {
 		if(yourAccountLink != null) {
 			yourAccountLink.click();
 			waitForElementToAppear(yourAccountLinkBy);
@@ -60,7 +62,9 @@ public class LoginPage extends AbstractComponents {
 		
 		waitForElementToAppear(signInPageBy);
 		helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
-		
+	}
+	
+	public void enterUserDetails(String email, String password) throws InterruptedException {
 		userEmail.sendKeys(email);
 		continueButton.click();
 		
@@ -68,6 +72,37 @@ public class LoginPage extends AbstractComponents {
 		
 		userPassword.sendKeys(password);
 		login.click();
+	}
+	public void loginApplicationFail(String email, String password) throws InterruptedException, IOException {
+		navigateToLanding();
+		
+		enterUserDetails(email, password);
+		
+		Thread.sleep(10);
+		if(isElementPresent(loginFail)) {
+			waitForElementToAppear(loginFail);
+			helperFunctions.validatePageTitle("loginFailTitle", webDriver.getTitle());
+		}
+		else if(isElementPresent(loginFailAlt)) {
+			waitForElementToAppear(loginFailAlt);
+			helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
+		}
+	}
+	
+	public boolean isElementPresent(By by) {
+		  boolean exists = false;
+		  List<WebElement> list = webDriver.findElements(by);
+		  if(!list.isEmpty()) {
+		      exists = true;
+		  }
+		  return exists;
+		}
+
+	public SearchPage loginApplicationSuccess(String email, String password) throws InterruptedException, IOException {
+		
+		navigateToLanding();
+		
+		enterUserDetails(email, password);
 		
 		waitForElementToAppear(userPasswordBy);
 		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
@@ -77,7 +112,7 @@ public class LoginPage extends AbstractComponents {
 	}
 
 
-	public void navigate() throws IOException, InterruptedException {
+	public void navigateToURL() throws IOException, InterruptedException {
 		// Read in properties file
 		Properties properties = new Properties();
 		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
