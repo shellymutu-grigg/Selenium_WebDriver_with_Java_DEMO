@@ -2,7 +2,6 @@ package abstractComponents;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
 
