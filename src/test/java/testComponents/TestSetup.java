@@ -1,9 +1,7 @@
 package testComponents;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Properties;
 
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -15,16 +13,18 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.github.cdimascio.dotenv.Dotenv;
 import pageObjects.LoginPage;
+
+import abstractComponents.HelperFunctions;
 
 public class TestSetup {
 
 	public WebDriver webDriver;
 	public LoginPage loginPage;
+	HelperFunctions helperFunctions = new HelperFunctions();
 
 	public WebDriver initializeDriver() throws IOException {
-		String browserNameString = getGlobalProperty("browser");
+		String browserNameString = helperFunctions.getGlobalProperty("browser");
 
 		if (browserNameString.contains("chrome")) {
 			ChromeOptions chromeOptions = new ChromeOptions();
@@ -51,33 +51,9 @@ public class TestSetup {
 		return webDriver;
 
 	}
-	
-	public String getGlobalProperty(String parameter) throws IOException {;
-		// Read in properties file
-		Properties properties = new Properties();
-		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
-				+ "//src//test//resources//globalData.properties");
-		properties.load(fileInputStream);
-		
-		// If the value is sent via Maven commands use that otherwise use the globalData.properties file
-		String browser = System.getProperty(parameter) != null ? System.getProperty(parameter)
-				: properties.getProperty(parameter);
-		return browser;
-	}
-	
-	public String GetParameter(String parameter){
-		// Load .env file variables
-		Dotenv dotenv = Dotenv
-				   .configure()
-				   .ignoreIfMissing()
-				   .load();
-		String fileParameter = dotenv.get(parameter);
-		return fileParameter;
-		
-	}
 
 	@BeforeMethod(alwaysRun = true)
-	protected LoginPage launchApplication() throws IOException {
+	protected LoginPage launchApplication() throws IOException, InterruptedException {
 		webDriver = initializeDriver();
 		loginPage = new LoginPage(webDriver);
 		loginPage.navigate();

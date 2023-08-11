@@ -1,5 +1,6 @@
 package pageObjects;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -14,10 +15,14 @@ import abstractComponents.HelperFunctions;
 public class ResultsPage extends AbstractComponents {
 
 	WebDriver webDriver;
+	HelperFunctions helperFunctions = new HelperFunctions();
 	
 	// PageFactory Pattern
 	@FindBy(css=".s-card-container")
 	List<WebElement> products;
+	
+	@FindBy(css=".s-image")
+	List<WebElement> productsImages;
 	
 	@FindBy(id = "add-to-cart-button")
 	WebElement addToCartButton;
@@ -26,6 +31,9 @@ public class ResultsPage extends AbstractComponents {
 	
 	By productsBy = By.cssSelector(".s-card-container");
 	By productTitleBy = By.id("productTitle");
+	By resultsBy = By.id("a-autoid-0-announce");
+	By resultsTitle = By.cssSelector(".s-result-item");
+	By checkoutButtonBy = By.name("proceedToRetailCheckout");
 	
 	public ResultsPage(WebDriver webDriver) {
 		super(webDriver);
@@ -33,56 +41,95 @@ public class ResultsPage extends AbstractComponents {
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public List<WebElement> getProductList() throws InterruptedException{
+	public List<WebElement> getProductList() throws InterruptedException, IOException{
 		waitForElementToAppear(productsBy);
+		helperFunctions.validatePageTitle("resultsTitle", webDriver.getTitle());
+
 		return products;
 	}
 	
-	public WebElement getProductByName(String productName, int index) {
-		WebElement finalProduct = products.stream()
-				.filter(product -> 
-					product.getText().split("\n")[index].trim().contains(productName) 
+	public WebElement getProductByName(String productName, int index) throws Exception {
+		WebElement product = products.stream()
+				.filter(product_ -> 
+					product_.getText().split("\n")[index].trim().contains(productName) 
 				).findFirst()
 				.orElse(null);
-		bookTitle = finalProduct.getText().split("\n")[index];
-		return finalProduct;
+
+		setTitle(product);
+		
+		return product;
 	}
 	
-	public String alternativeProductName(List<WebElement> products, int index) throws InterruptedException {
+	public WebElement loadAlternativeProduct(List<WebElement> products) throws InterruptedException, IOException {
 		webDriver.navigate().back();
-		int alternateIndex = 1;
 		
-		String randomProductTitle = products.get(alternateIndex).getText().split("\n")[0];
-
-		HelperFunctions testFunctions = new HelperFunctions();
-		int alternateTitleIndex = testFunctions.determineIndex(randomProductTitle);
-		randomProductTitle = products.get(alternateIndex).getText().split("\n")[alternateTitleIndex];
-		products.get(alternateIndex).findElement(By.cssSelector("img[alt='"+ randomProductTitle +"']")).click();
+		waitForElementToAppear(resultsBy);
+		helperFunctions.validatePageTitle("resultsTitle", webDriver.getTitle());
 		
-		waitForElementToAppear(productTitleBy);
+		int index = helperFunctions.generateRandomIndex(products.size());
+		WebElement alternativeProduct = products.get(index);
 		
-		return randomProductTitle;
+		return alternativeProduct;
 	}
 	
-	public boolean verifyIfProductAvailable(String notAvailable, int index, List<WebElement> products) throws InterruptedException {
-		if(notAvailable != null) {
-			alternativeProductName(products, index);
+	public void selectProduct(WebElement product) throws Exception{
+		product.click();
+		setTitle(product);
+	}
+	
+	public boolean isElementPresent(By by) {
+	  boolean exists = false;
+	  List<WebElement> list = webDriver.findElements(by);
+	  if(!list.isEmpty()) {
+	      exists = true;
+	  }
+	  return exists;
+	}
+	
+	public void checkProductLink(WebElement productCheck) throws Exception {
+		if(productCheck != null) {
+			productCheck.click();
+		} else {
+			throw new Exception("Product not found");
 		}
-		WebElement addToCart = webDriver.findElement(By.id( "add-to-cart-button"));
-		return addToCart == null ? false : true;
 	}
 	
-	public CartPage addProductToCart(String productName, int index) throws InterruptedException {
+	public void setTitle(WebElement product) throws Exception {
+		int productIndex = products.indexOf(product);
+		if(productIndex >=0) {
+			WebElement productImage = productsImages.get(productIndex);		
+			bookTitle = productImage.getAttribute("alt");
+		} else {
+			throw new Exception("Index of product is incorrect");
+		}
+		
+	}
+	
+	public CartPage addProductToCart(String productName, int index) throws Exception {
 		WebElement product = getProductByName(productName, index);
-		product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")).click();
+			
+		waitForElementToAppear(resultsTitle);
+		
+		setTitle(product);
+		
+		checkProductLink(product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
 		
 		waitForElementToAppear(productTitleBy);
-			
-		String notAvailable = webDriver.findElement(By.xpath("//span[normalize-space()='Have you moved recently?']")).getText();
-
-		if(verifyIfProductAvailable(notAvailable, index, products)) {
-			addToCartButton.click();
-		}
+		webDriver.getTitle().contains(bookTitle);
+		
+//		boolean available = isElementPresent(By.xpath("//span[normalize-space()='" + helperFunctions.getGlobalProperty("notAvailable") + "']"));
+//		
+//		while (available == false) {
+//			product = loadAlternativeProduct(products);
+//			available = isElementPresent(By.xpath("//span[normalize-space()='" + helperFunctions.getGlobalProperty("notAvailable") + "']"));
+//		}
+//		setTitle(product);
+	//	selectProduct(product);
+		
+		addToCartButton.click();
+		
+		waitForElementToAppear(checkoutButtonBy);
+		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
 		
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;

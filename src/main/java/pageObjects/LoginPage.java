@@ -11,10 +11,13 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
+import abstractComponents.HelperFunctions;
 
 public class LoginPage extends AbstractComponents {
 
 	WebDriver webDriver;
+	
+	HelperFunctions helperFunctions = new HelperFunctions();
 
 	// PageFactory Pattern
 	@FindBy(id = "ap_email")
@@ -34,6 +37,12 @@ public class LoginPage extends AbstractComponents {
 	
 	@FindBy(id = "signInSubmit")
 	WebElement login;
+	
+	By yourAccountLinkBy = By.cssSelector(".ya-personalized");
+	By signInPageBy = By.id("ap_email");
+	By userEmailBy = By.cssSelector(".a-form-label");
+	By userPasswordBy = By.id("nav-global-location-popover-link");
+	By landingPageBy = By.cssSelector(".navFooterLine");
 
 	public LoginPage(WebDriver webDriver) {
 		super(webDriver);
@@ -41,29 +50,34 @@ public class LoginPage extends AbstractComponents {
 		PageFactory.initElements(webDriver, this);
 	}
 
-	public SearchPage loginApplication(String email, String password) throws InterruptedException {
+	public SearchPage loginApplication(String email, String password) throws InterruptedException, IOException {
 		
 		if(yourAccountLink != null) {
 			yourAccountLink.click();
-			waitForElementToAppear(By.cssSelector(".ya-personalized"));
+			waitForElementToAppear(yourAccountLinkBy);
 		}
 		accountLink.click();
 		
-		waitForElementToAppear(By.cssSelector(".a-spacing-small"));
+		waitForElementToAppear(signInPageBy);
+		helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
 		
 		userEmail.sendKeys(email);
 		continueButton.click();
 		
-		waitForElementToAppear(By.cssSelector(".a-form-label"));
+		waitForElementToAppear(userEmailBy);
 		
 		userPassword.sendKeys(password);
 		login.click();
+		
+		waitForElementToAppear(userPasswordBy);
+		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
+		
 		SearchPage searchPage = new SearchPage(webDriver);
 		return searchPage;
 	}
 
 
-	public void navigate() throws IOException {
+	public void navigate() throws IOException, InterruptedException {
 		// Read in properties file
 		Properties properties = new Properties();
 		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
@@ -72,5 +86,8 @@ public class LoginPage extends AbstractComponents {
 		String url = System.getProperty("url") != null ? System.getProperty("url")
 		: properties.getProperty("url");
 		webDriver.get(url);
+		
+		waitForElementToAppear(landingPageBy);
+		helperFunctions.validatePageTitle("landingTitle", webDriver.getTitle());
 	}
 }

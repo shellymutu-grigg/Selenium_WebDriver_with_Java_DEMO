@@ -1,6 +1,6 @@
 package pageObjects;
 
-import java.text.MessageFormat;
+import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -10,16 +10,21 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
+import abstractComponents.HelperFunctions;
 
 public class CartPage extends AbstractComponents {
 	
 	WebDriver webDriver;
+	
+	HelperFunctions helperFunctions = new HelperFunctions();
 	
 	// PageFactory Pattern
 	@FindBy(css="input[value='Delete']")
 	List<WebElement> deleteItems;
 		
 	By cartBy = By.id("sc-active-cart");
+	By cartHeaderBy = By.cssSelector(".sc-cart-header");
+	By subTotalBy = By.id("sc-subtotal-label-buybox");
 
 	public CartPage(WebDriver webDriver) {
 		super(webDriver);
@@ -27,14 +32,20 @@ public class CartPage extends AbstractComponents {
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public void openCart() {
+	public void openCart() throws InterruptedException, IOException {
 		webDriver.findElement(By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']")).click();
+		
+		waitForElementToAppear(subTotalBy);
+		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
 	}
 	
-	public LogoutPage deleteCart() throws InterruptedException {
+	public LogoutPage deleteCart() throws InterruptedException, IOException {
 		waitForElementToAppear(cartBy);
-		System.out.println(MessageFormat.format("deleteItems.size(): {0}", deleteItems.size()));
+		
 		deleteItems.get(0).click();
+		
+		waitForElementToAppear(cartHeaderBy);
+		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
 		
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;

@@ -1,5 +1,7 @@
 package pageObjects;
 
+import java.io.IOException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,10 +9,13 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
+import abstractComponents.HelperFunctions;
 
 public class SearchPage extends AbstractComponents {
 
 	WebDriver webDriver;
+	
+	HelperFunctions helperFunctions = new HelperFunctions();
 
 	// PageFactory Pattern
 	@FindBy(id = "twotabsearchtextbox")
@@ -21,6 +26,8 @@ public class SearchPage extends AbstractComponents {
 
 	@FindBy(id = "continue")
 	WebElement continueButton;
+	
+	By departmentsBy = By.id("departments");
 
 	public SearchPage(WebDriver webDriver) {
 		super(webDriver);
@@ -28,11 +35,16 @@ public class SearchPage extends AbstractComponents {
 		PageFactory.initElements(webDriver, this);
 	}
 
-	public ResultsPage searchForProducts(String product) throws InterruptedException {
+	public ResultsPage searchForProducts(String product) throws InterruptedException, IOException {
+		
+		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
+		
 		searchField.sendKeys(product);
 		searchButton.click();
 		
-		waitForElementToAppear(By.id("departments"));
+		waitForElementToAppear(departmentsBy);
+		helperFunctions.validatePageTitle("resultsTitle", webDriver.getTitle());
+		
 		ResultsPage resultsPage = new ResultsPage(webDriver);
 		return resultsPage;
 	}
