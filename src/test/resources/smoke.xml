@@ -9,14 +9,19 @@
 		</run>
 	</groups>
 	
-	<test thread-count="5" name="Smoke Tests">
+	<test thread-count="5" name="Error Validations Test">
     	<classes>
       		<class name="tests.LoginFailureTest"/>
     	</classes>
   	</test> 
-	<test thread-count="5" name="Error Validations Test">
+	<test thread-count="5" name="Login Success Test">
     	<classes>
       		<class name="tests.LoginSuccessTest"/>
+    	</classes>
+  	</test>
+  	<test thread-count="5" name="Review Orders Test">
+    	<classes>
+      		<class name="tests.ReviewOrdersTest"/>
     	</classes>
   	</test>
 </suite>

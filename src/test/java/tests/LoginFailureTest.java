@@ -1,11 +1,12 @@
 package tests;
 
+import org.testng.ITestListener;
 import org.testng.annotations.Test;
 
 import abstractComponents.HelperFunctions;
 import testComponents.TestSetup;
 
-public class LoginFailureTest extends TestSetup{
+public class LoginFailureTest extends TestSetup implements ITestListener{
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
 	@Test(groups = { "Smoke" })
@@ -15,6 +16,7 @@ public class LoginFailureTest extends TestSetup{
 		
 		loginPage.loginApplicationFail(email, password);
 		
+		Thread.sleep(5);
 		webDriver.quit();
 	}
 

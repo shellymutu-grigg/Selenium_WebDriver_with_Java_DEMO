@@ -40,7 +40,7 @@ public class E2ECreateOrderTest extends TestSetup implements IHelper{
 		cartPage.openCart();
 		
 		LogoutPage logoutPage =  cartPage.deleteCart();
-		logoutPage.openLogoutMenu();
+		logoutPage.openAccountMenu();
 		
 		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
 		
