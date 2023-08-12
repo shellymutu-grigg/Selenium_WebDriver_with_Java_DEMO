@@ -29,8 +29,6 @@ public class ReviewOrdersTest extends TestSetup{
 		logoutPage.openAccountMenu();	
 		
 		logoutPage.logout();
-		
-		webDriver.quit();
 	}
 
 }

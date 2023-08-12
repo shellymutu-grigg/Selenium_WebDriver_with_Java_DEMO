@@ -5,9 +5,9 @@ Demonstration of material learnt from "Selenium WebDriver with Java -Basics to A
 This repoistory requires a .env file with the email address and password for a legitimate account for www.amazon.com.
 Please see `.env-example` file for an example of the variables required
 
-Maven version: Apache Maven 3.9.4
-Java version: "17.0.8" 2023-07-18 LTS
-Eclipse IDE for Java Developers Version: 2023-06 (4.28.0)
+ - Maven version: `Apache Maven 3.9.4`
+ - Java version: `"17.0.8" 2023-07-18 LTS`
+ - Eclipse IDE for Java Developers Version: `2023-06 (4.28.0)`
 
 ## Maven commands
 - Run smoke test suite:`mvn test -DsuiteXmlFile="src/test/resources/smoke.xml"`
@@ -36,6 +36,6 @@ Automation Tests built:
 	- wait times
 	- SQL queries
 3. Framework - see repoistory
-4. ExtentReports ***TO BE COMPLETED***
+4. ExtentReport - added to End to End Test
 5. Cross Browser Testing ***TO BE COMPLETED***	
 6. Selenium Grid  ***TO BE COMPLETED***

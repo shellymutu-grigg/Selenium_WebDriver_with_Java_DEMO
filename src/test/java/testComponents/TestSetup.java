@@ -12,6 +12,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import pageObjects.LoginPage;
 
@@ -22,6 +26,9 @@ public class TestSetup {
 	public WebDriver webDriver;
 	public LoginPage loginPage;
 	HelperFunctions helperFunctions = new HelperFunctions();
+	
+	protected static ExtentReports extentReports;
+	protected static ExtentTest extentTest;
 
 	public WebDriver initializeDriver() throws IOException {
 		String browserNameString = helperFunctions.getGlobalProperty("browser");
@@ -51,19 +58,58 @@ public class TestSetup {
 		return webDriver;
 
 	}
+	
+	@BeforeMethod(alwaysRun = true)
+	protected void attachExtentReports() throws IOException, InterruptedException {
+		// ExtentSparkReporter
+		String pathnameString = System.getProperty("user.dir") + "//reports//index.html";
+		ExtentSparkReporter reporter = new ExtentSparkReporter(pathnameString);
+		reporter.config().setReportName("Web Automation Results");
+		reporter.config().setDocumentTitle("Test Results");
+
+		// ExtentReports
+		extentReports = new ExtentReports();
+		extentReports.attachReporter(reporter);
+		extentReports.setSystemInfo("Tester", "Shelly Mutu-Grigg");
+	}
 
 	@BeforeMethod(alwaysRun = true)
 	protected LoginPage launchApplication() throws IOException, InterruptedException {
 		webDriver = initializeDriver();
 		loginPage = new LoginPage(webDriver);
 		loginPage.navigateToURL();
-		return loginPage;
+		
+		// ExtentSparkReporter
+		String pathnameString = System.getProperty("user.dir") + "//reports//index.html";
+		ExtentSparkReporter reporter = new ExtentSparkReporter(pathnameString);
+		reporter.config().setReportName("Web Automation Results");
+		reporter.config().setDocumentTitle("Test Results");
 
+		// ExtentReports
+		extentReports = new ExtentReports();
+		extentReports.attachReporter(reporter);
+		extentReports.setSystemInfo("Tester", "Shelly Mutu-Grigg");
+		return loginPage;
 	}
 
 	@AfterMethod(alwaysRun = true)
 	public void teardown() {
-		//webDriver.close();
+		webDriver.close();
 	}
+	
+//	@BeforeTest
+//	public void config() {
+//
+//		// ExtentSparkReporter
+//		String pathnameString = System.getProperty("user.dir") + "//reports//index.html";
+//		ExtentSparkReporter reporter = new ExtentSparkReporter(pathnameString);
+//		reporter.config().setReportName("Web Automation Results");
+//		reporter.config().setDocumentTitle("Test Results");
+//
+//		// ExtentReports
+//		extentReports = new ExtentReports();
+//		extentReports.attachReporter(reporter);
+//		extentReports.setSystemInfo("Tester", "Shelly Mutu-Grigg");
+//	}
 
 }

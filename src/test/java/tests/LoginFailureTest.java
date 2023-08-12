@@ -14,8 +14,6 @@ public class LoginFailureTest extends TestSetup {
 		String password = helperFunctions.GetParameter("PASSWORD_FAIL");
 		
 		loginPage.loginApplicationFail(email, password);
-		
-		webDriver.quit();
 	}
 
 }

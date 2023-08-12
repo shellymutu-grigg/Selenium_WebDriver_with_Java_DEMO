@@ -2,7 +2,6 @@ package pageObjects;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Properties;
 
 import org.openqa.selenium.By;

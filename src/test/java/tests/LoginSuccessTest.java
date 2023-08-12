@@ -21,8 +21,6 @@ public class LoginSuccessTest extends TestSetup{
 		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
 		
 		logoutPage.logout();
-		
-		webDriver.quit();
 	}
 
 }
