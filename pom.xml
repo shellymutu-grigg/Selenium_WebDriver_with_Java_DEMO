@@ -74,6 +74,67 @@
 		    <version>3.0.0</version>
 		</dependency>
 	</dependencies>
+	
+	<!-- Maven command to run each profile: "mvn test -P<profile-id e.g. Regression> -e" -->
+  <profiles>
+	  <profile>
+		  <id>Smoke</id>
+			<build>
+			  	<pluginManagement>
+					<plugins>  
+					 <plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+			          	<artifactId>maven-surefire-plugin</artifactId>
+			          	<version>2.22.1</version>
+				        <configuration>
+				          <suiteXmlFiles>
+				            <suiteXmlFile>src/test/resources/smoke.xml</suiteXmlFile>
+				          </suiteXmlFiles>
+				        </configuration>
+			     	</plugin>
+			      </plugins>
+		    	</pluginManagement>
+			</build>
+	  	</profile>
+	  <profile>
+		  <id>E2E</id>
+		  <build>
+			  	<pluginManagement>
+					<plugins>  
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+				          	<artifactId>maven-surefire-plugin</artifactId>
+				          	<version>2.22.1</version>
+				        	<configuration>
+					          <suiteXmlFiles>
+					            <suiteXmlFile>src/test/resources/e2e.xml</suiteXmlFile>
+					          </suiteXmlFiles>
+					        </configuration>
+			     		</plugin>
+			      	</plugins>
+		    	</pluginManagement>
+			</build>
+	  </profile>
+	  <profile>
+		  <id>ErrorHandling</id>
+		  <build>
+			  	<pluginManagement>
+					<plugins>  
+						 <plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+				          	<artifactId>maven-surefire-plugin</artifactId>
+				          	<version>2.22.1</version>
+					        <configuration>
+					          <suiteXmlFiles>
+					            <suiteXmlFile>src/test/resources/errors.xml</suiteXmlFile>
+					          </suiteXmlFiles>
+					        </configuration>
+				     	</plugin>
+			      </plugins>
+		    	</pluginManagement>
+			</build>
+	  </profile>
+  </profiles>
 
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -123,6 +184,7 @@
 		    </configuration>
         </plugin>
         <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
           	<artifactId>maven-surefire-plugin</artifactId>
           	<version>2.22.1</version>
           	<configuration>

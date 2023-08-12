@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- Error Handling Tests -->
+<suite name="Suite">
+	<groups>
+		<run>
+			<include name="ErrorHandling"/>
+		</run>
+	</groups>
+	
+	<test thread-count="5" name="Error Handling Test">
+    	<classes>
+      		<class name="tests.LoginFailureTest"/>
+    	</classes>
+  	</test> 
+</suite>

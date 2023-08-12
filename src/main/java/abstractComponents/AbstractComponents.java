@@ -18,7 +18,6 @@ public class AbstractComponents {
 
 	public static void waitForElementToAppear(By findBy) throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		Thread.sleep(10);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(findBy));
 	}
 }

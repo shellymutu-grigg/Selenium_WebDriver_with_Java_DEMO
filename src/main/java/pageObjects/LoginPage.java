@@ -11,11 +11,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+import org.testng.ITestListener;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
 
-public class LoginPage extends AbstractComponents {
+public class LoginPage extends AbstractComponents implements ITestListener{
 
 	WebDriver webDriver;
 	
@@ -46,12 +47,12 @@ public class LoginPage extends AbstractComponents {
 	By userPasswordBy = By.id("nav-global-location-popover-link");
 	By landingPageBy = By.cssSelector(".navFooterLine");
 	By landingPageAltBy = By.cssSelector(".nav-footer-copyright");
-	By loginFail = By.cssSelector(".cvf-widget-form-captcha");
-	By loginFailPuzzle = By.cssSelector(".cvf-page-content");
+	By loginFailPuzzle = By.id("cvf-page-content");
 	By loginFailPuzzleMessageText = By.cssSelector(".a-spacing-mini");
-	//By loginFailMessage = By.id("auth-captcha-image-container");
 	By loginFailImportantMessage = By.cssSelector(".a-list-item");
-	By loginFailAlert = By.id("");
+	By loginFailImportantMessageText = By.cssSelector(".a-list-item");
+	By loginFailAlert = By.id("auth-error-message-box");
+	By loginFailAlertMessageText = By.cssSelector(".a-alert-content");
 
 	public LoginPage(WebDriver webDriver) {
 		super(webDriver);
@@ -83,32 +84,14 @@ public class LoginPage extends AbstractComponents {
 		navigateToLanding();
 		enterUserDetails(email, password);
 		
-		Thread.sleep(5);
-		if(helperFunctions.isElementPresent(loginFail, webDriver)) {
-			waitForElementToAppear(loginFail);
-			
-			System.out.println(MessageFormat.format("Need to validate page: {0}", "loginFail"));
-			Thread.sleep(20000);
-			helperFunctions.validatePageTitle("loginFailTitle", webDriver.getTitle());
+		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
+			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, "loginFailAlertMessageText", "signInTitle");
 		}
 		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
-			waitForElementToAppear(loginFailPuzzle);
-			validateMessageText(loginFailPuzzleMessageText, "loginPuzzleMessageText");
-			
-			helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
+			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, "loginPuzzleMessageText", "signInTitle");
 		}
-		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {			
-			waitForElementToAppear(loginFailImportantMessage);
-			validateMessageText(loginFailImportantMessage, "loginImportantMessageText");
-			
-			helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
-		}
-		else if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
-			
-			// Validate alert message text
-			
-			waitForElementToAppear(loginFailAlert);
-			helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
+		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
+			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, "loginFailImportantMessageText", "signInTitle");
 		}
 	}
 	
@@ -117,7 +100,6 @@ public class LoginPage extends AbstractComponents {
 		enterUserDetails(email, password);
 		
 		waitForElementToAppear(userPasswordBy);
-
 	}
 	
 	public void validateMessageText(By text, String property) throws IOException {
@@ -125,6 +107,33 @@ public class LoginPage extends AbstractComponents {
 		String messageText = message.getText();
 		String expectedMessage = helperFunctions.getGlobalProperty(property);
 		Assert.assertEquals(messageText, expectedMessage);
+	}
+	
+	public void validateLoginFailure(By elementHandle, By elementMessageText, String globalProperty, String pageTitle) throws InterruptedException, IOException {
+		waitForElementToAppear(elementHandle);
+		validateMessageText(elementMessageText, globalProperty);
+		
+		helperFunctions.validatePageTitle(pageTitle, webDriver.getTitle());
+	}
+	
+	public void navigateToURL() throws IOException, InterruptedException {
+		// Read in properties file
+		Properties properties = new Properties();
+		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
+				+ "//src//test//resources//globalData.properties");
+		properties.load(fileInputStream);
+		String url = System.getProperty("url") != null ? System.getProperty("url")
+		: properties.getProperty("url");
+		webDriver.get(url);
+		
+		if(helperFunctions.isElementPresent(landingPageBy, webDriver)) {
+			waitForElementToAppear(landingPageBy);
+			helperFunctions.validatePageTitle("landingTitle", webDriver.getTitle());
+		}
+		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
+			waitForElementToAppear(landingPageAltBy);
+			helperFunctions.validatePageTitle("landingTitle", webDriver.getTitle());
+		}
 	}
 
 	public SearchPage loginApplicationSuccess(String email, String password) throws InterruptedException, IOException {
@@ -155,26 +164,5 @@ public class LoginPage extends AbstractComponents {
 		
 		OrdersPage ordersPage = new OrdersPage(webDriver);
 		return ordersPage;
-	}
-
-
-	public void navigateToURL() throws IOException, InterruptedException {
-		// Read in properties file
-		Properties properties = new Properties();
-		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
-				+ "//src//test//resources//globalData.properties");
-		properties.load(fileInputStream);
-		String url = System.getProperty("url") != null ? System.getProperty("url")
-		: properties.getProperty("url");
-		webDriver.get(url);
-		
-		if(helperFunctions.isElementPresent(landingPageBy, webDriver)) {
-			waitForElementToAppear(landingPageBy);
-			helperFunctions.validatePageTitle("landingTitle", webDriver.getTitle());
-		}
-		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
-			waitForElementToAppear(landingPageAltBy);
-			helperFunctions.validatePageTitle("landingTitle", webDriver.getTitle());
-		}
 	}
 }

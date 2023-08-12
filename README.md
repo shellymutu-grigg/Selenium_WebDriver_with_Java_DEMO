@@ -11,10 +11,11 @@ Eclipse IDE for Java Developers Version: 2023-06 (4.28.0)
 
 ## Maven commands
 - Run smoke test suite:`mvn test -DsuiteXmlFile="src/test/resources/smoke.xml"`
+- Run profiles: `mvn test -P<profile-id> e.g. ErrorHandling` e.g `mvn test -PErrorHandling`
 
 ## Functionality covered
 Automation Tests built:
-1. E2E Test
+1. E2E Test (Suite)
 	- Login
 	- Search for product
 	- Add product to cart
@@ -24,6 +25,8 @@ Automation Tests built:
 	- Login Failure Test
 	- Login Success Test
 	- Review Orders Test
+3. Error Handling Test Suite
+	- Login Failure Test (including capturing screenshots on failure)
 	
 ## Evidence supplied
 1. Inheritance vs. Abstraction
