@@ -96,20 +96,4 @@ public class TestSetup {
 	public void teardown() {
 		webDriver.close();
 	}
-	
-//	@BeforeTest
-//	public void config() {
-//
-//		// ExtentSparkReporter
-//		String pathnameString = System.getProperty("user.dir") + "//reports//index.html";
-//		ExtentSparkReporter reporter = new ExtentSparkReporter(pathnameString);
-//		reporter.config().setReportName("Web Automation Results");
-//		reporter.config().setDocumentTitle("Test Results");
-//
-//		// ExtentReports
-//		extentReports = new ExtentReports();
-//		extentReports.attachReporter(reporter);
-//		extentReports.setSystemInfo("Tester", "Shelly Mutu-Grigg");
-//	}
-
 }

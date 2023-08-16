@@ -10,7 +10,7 @@ Please see `.env-example` file for an example of the variables required
  - Eclipse IDE for Java Developers Version: `2023-06 (4.28.0)`
 
 ## Maven commands
-- Run smoke test suite:`mvn test -DsuiteXmlFile="src/test/resources/smoke.xml"`
+- Run smoke test suite: `mvn test -DsuiteXmlFile="src/test/resources/smoke.xml"`
 - Run profiles: `mvn test -P<profile-id> e.g. ErrorHandling` e.g `mvn test -PErrorHandling`
 
 ## Functionality covered
@@ -36,6 +36,6 @@ Automation Tests built:
 	- wait times
 	- SQL queries
 3. Framework - see repoistory
-4. ExtentReport - added to End to End Test
+4. ExtentReports - added to End to End Test
 5. Cross Browser Testing ***TO BE COMPLETED***	
 6. Selenium Grid  ***TO BE COMPLETED***

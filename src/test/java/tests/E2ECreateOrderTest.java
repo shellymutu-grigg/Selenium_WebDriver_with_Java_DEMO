@@ -3,7 +3,11 @@ package tests;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
+//import org.testng.ITestResult;
 import org.testng.annotations.Test;
+import org.testng.annotations.Listeners;
+
+import com.aventstack.extentreports.ExtentTest;
 
 import pageObjects.CartPage;
 import pageObjects.LogoutPage;
@@ -12,7 +16,9 @@ import pageObjects.SearchPage;
 import testComponents.TestSetup;
 import abstractComponents.HelperFunctions;
 import interfaces.IHelper;
+import resources.ListenersNG;
 
+@Listeners(ListenersNG.class)
 public class E2ECreateOrderTest extends TestSetup implements IHelper{	
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
@@ -23,12 +29,12 @@ public class E2ECreateOrderTest extends TestSetup implements IHelper{
 		String email = helperFunctions.GetParameter("EMAIL");
 		String password = helperFunctions.GetParameter("PASSWORD_SUCCESS");
 		
-		extentTest.log(extentTest.getStatus(), "Test Started");
+		//listener.logResult(extentTest.getStatus(), "Test Started");
 		
 		// Login to site
 		SearchPage searchPage = loginPage.loginApplicationSuccess(email, password);		
 		
-		extentTest.log(extentTest.getStatus(), "User logged into application");
+		//listener.logResult(extentTest.getStatus(), "User logged into application");
 		
 		ResultsPage resultsPage = searchPage.searchForProducts(helperFunctions.getGlobalProperty("searchText"));
 		
@@ -42,34 +48,32 @@ public class E2ECreateOrderTest extends TestSetup implements IHelper{
 		int index = determineIndex(productName);
 		productName = productList.get(resultIndex).getText().split("\n")[index];
 
-		extentTest.log(extentTest.getStatus(), "User attempts to search for a prouct");
+		//listener.logResult(extentTest.getStatus(), "User attempts to search for a prouct");
 		
 		CartPage cartPage = resultsPage.addProductToCart(productName, index);
 		
-		extentTest.log(extentTest.getStatus(), "User attempts to add prouct to cart");
+		//listener.logResult(extentTest.getStatus(), "User attempts to add prouct to cart");
 		
 		cartPage.openCart();
 		
-		extentTest.log(extentTest.getStatus(), "User attempts to navigate to cart");		
+		//listener.logResult(extentTest.getStatus(), "User attempts to navigate to cart");		
 		
 		LogoutPage logoutPage =  cartPage.deleteCart();
 		
-		extentTest.log(extentTest.getStatus(), "User attempts to delete product from cart");
+		//listener.logResult(extentTest.getStatus(), "User attempts to delete product from cart");
 		
 		logoutPage.openAccountMenu();
 		
-		extentTest.log(extentTest.getStatus(), "User attempts to open account menu");
+		//listener.logResult(extentTest.getStatus(), "User attempts to open account menu");
 		
 		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
 		
 		logoutPage.logout();
 		
-		extentTest.log(extentTest.getStatus(), "User attempts to log out");
+		//listener.logResult(extentTest.getStatus(), "User attempts to log out");
 		
 		
-		extentTest.pass("Test Complete");
-		
-		extentReports.flush();
+		//listener.onFinish(null);
 	}
 
 	@Override

@@ -95,6 +95,7 @@ public class ResultsPage extends AbstractComponents {
 		waitForElementToAppear(productTitleBy);
 		webDriver.getTitle().contains(bookTitle);
 		
+		// Need to add a check around this
 		addToCartButton.click();
 		
 		waitForElementToAppear(checkoutButtonBy);
