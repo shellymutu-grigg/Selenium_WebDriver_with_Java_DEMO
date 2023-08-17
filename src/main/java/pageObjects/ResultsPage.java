@@ -1,6 +1,7 @@
 package pageObjects;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -95,7 +96,10 @@ public class ResultsPage extends AbstractComponents {
 		waitForElementToAppear(productTitleBy);
 		webDriver.getTitle().contains(bookTitle);
 		
-		// Need to add a check around this
+		if(!isElementPresent(By.id("add-to-cart-button"))) {
+			System.out.println(MessageFormat.format("Add to cart button is present: {0}", isElementPresent(By.id("add-to-cart-button"))));
+			System.out.println(MessageFormat.format("Book is not available for purchase {0}", "this"));
+		}
 		addToCartButton.click();
 		
 		waitForElementToAppear(checkoutButtonBy);
@@ -103,5 +107,14 @@ public class ResultsPage extends AbstractComponents {
 		
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;
+	}
+	
+	public boolean isElementPresent(By by) {
+	  boolean exists = false;
+	  List<WebElement> list = webDriver.findElements(by);
+	  if(!list.isEmpty()) {
+	      exists = true;
+	  }
+	  return exists;
 	}
 }

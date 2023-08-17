@@ -1,12 +1,15 @@
 package tests;
 
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import abstractComponents.HelperFunctions;
 import pageObjects.LogoutPage;
 import pageObjects.OrdersPage;
+import resources.ExtentListeners;
 import testComponents.TestSetup;
 
+@Listeners(ExtentListeners.class)
 public class ReviewOrdersTest extends TestSetup{
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
