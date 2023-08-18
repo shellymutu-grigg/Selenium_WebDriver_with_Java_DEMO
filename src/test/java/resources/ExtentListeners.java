@@ -26,9 +26,9 @@ import testComponents.TestSetup;
  
 public class ExtentListeners extends TestSetup implements ITestListener {
 	Date calendarDate = Calendar.getInstance().getTime();  
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-HH_mm_ss");  
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
     String date = dateFormat.format(calendarDate);
-    String filePathName = System.getProperty("user.dir") + "//reports//TestReport_"+ date.toString().replace(":", "_").replace(" ", "_") +".html";
+    String filePathName = System.getProperty("user.dir") + "//reports//Test Report_"+ date.toString().replace(":", "_").replace(" ", "_") +".html";
     
     ExtentReports extentReports;
     ExtentTest extentTest;
@@ -42,13 +42,14 @@ public class ExtentListeners extends TestSetup implements ITestListener {
 		reporter.config().setReportName("Amazon Automation Test Results");
 		reporter.config().setDocumentTitle("Test Results");
 		
-		extentReports = new ExtentReports();
+		if(extentReports == null) { 
+			extentReports = new ExtentReports();
+		}
 		extentReports.attachReporter(reporter);
 		extentReports.setSystemInfo("Author", "Shelly Mutu-Grigg");
-		extentReports.setSystemInfo("Activity Name", "Selenium with Java");
-		extentReports.setSystemInfo("Test Case Name:", "Selenium with Java");
+		extentReports.setSystemInfo("ActivityName", "Selenium with Java");
 		
-		extentTest = extentReports.createTest("Test Suite: " + context.getSuite().getName());
+		extentTest = extentReports.createTest("Test Case Name: " + context.getName());
         extentTest.assignAuthor("Shelly Mutu-Grigg");
         testReport.set(extentTest);
     }
@@ -60,10 +61,20 @@ public class ExtentListeners extends TestSetup implements ITestListener {
  
     @Override
     public void onTestSuccess(ITestResult result) {
-        String methodName=result.getMethod().getMethodName();
-        String logText="<b>"+"TEST CASE:- "+ methodName.toUpperCase()+ " - PASSED"+"</b>";      
-        Markup markup = MarkupHelper.createLabel(logText, ExtentColor.GREEN);
-        testReport.get().pass(markup);
+    	ITestContext context = result.getTestContext();
+        webDriver = (WebDriver) context.getAttribute("WebDriver");
+    	String methodName=result.getMethod().getMethodName();
+        String logText=methodName.toUpperCase()+ " - PASSED"; 
+        
+    	try {
+            String fileName = captureScreenshot(result.getMethod().getMethodName());
+            extentTest.pass("<b>" + "<font color=" + "green>" + "Screenshot of success" + "</font>" + "</b>",
+             MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
+         } catch (Exception e) {
+         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
+         } 
+    	Markup markup = MarkupHelper.createLabel(logText, ExtentColor.GREEN);
+    	testReport.get().log(Status.PASS, markup);
     }
  
     @Override
@@ -71,8 +82,8 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     	ITestContext context = result.getTestContext();
         webDriver = (WebDriver) context.getAttribute("WebDriver");
      	String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
-     	testReport.get().fail("<b>Exception Occured:</b> <details>" + "<summary>" + "<b>" + "<font color=" + "red>" + "Click to see Stack Trace"
-                + "</font>" + "</b >" + "</summary>" +exceptionMessage.replaceAll(",", "<br>")+"</details>"+" \n");
+     	testReport.get().fail("Exception Occured: <details>" + "<summary>" +  "<font color=" + "red>" + "Click to see Stack Trace"
+                + "</font>" + "</summary>" + exceptionMessage.replaceAll(",", "<br>")+"</details>"+" \n");
      	try {
            String fileName = captureScreenshot(result.getMethod().getMethodName());
            extentTest.fail("<b>" + "<font color=" + "red>" + "Screenshot of failure" + "</font>" + "</b>",
@@ -80,7 +91,8 @@ public class ExtentListeners extends TestSetup implements ITestListener {
         } catch (Exception e) {
         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
         }
-        String failureLog="TEST CASE FAILED";
+     	String methodName=result.getMethod().getMethodName();
+        String failureLog= methodName.toUpperCase()+ " FAILED";
         Markup markup = MarkupHelper.createLabel(failureLog, ExtentColor.RED);
         testReport.get().log(Status.FAIL, markup);
     }
@@ -88,7 +100,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     @Override
     public void onTestSkipped(ITestResult result) {
         String methodName=result.getMethod().getMethodName();
-        String logText="<b>"+"TEST CASE:- "+ methodName.toUpperCase()+ " - SKIPPED"+"</b>";     
+        String logText="<b>"+"TEST CASE: "+ methodName.toUpperCase()+ " - SKIPPED"+"</b>";     
         Markup markup = MarkupHelper.createLabel(logText, ExtentColor.ORANGE);
         extentTest.skip(markup);
         testReport.get().skip(markup);

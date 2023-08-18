@@ -19,8 +19,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.Reporter;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import pageObjects.LoginPage;
@@ -33,14 +33,15 @@ public class TestSetup {
 	public LoginPage loginPage;
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
-	@BeforeClass
-	public void initializeDriver(ITestContext context) throws IOException{
+	@BeforeMethod(alwaysRun = true)
+	public WebDriver initializeDriver() throws IOException{
 		String browserNameString = helperFunctions.getGlobalProperty("browser");
 
 		if (browserNameString.contains("chrome")) {
 			ChromeOptions chromeOptions = new ChromeOptions();
 			chromeOptions.addArguments("--ignore-ssl-errors=yes");
 			chromeOptions.addArguments("--ignore-certificate-errors");
+			chromeOptions.addArguments("--user-data-dir=" + System.getProperty("java.io.tmpdir"));
 			WebDriverManager.chromedriver().setup();
 			if (browserNameString.contains("headless")) {
 				chromeOptions.addArguments("headless");
@@ -56,14 +57,16 @@ public class TestSetup {
 
 		webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		webDriver.manage().window().maximize();
+		ITestContext context = Reporter.getCurrentTestResult().getTestContext();
 		context.setAttribute("WebDriver", webDriver);
+		return webDriver;
 	}
 
 	@BeforeMethod(alwaysRun = true)
 	protected LoginPage launchApplication() throws IOException, InterruptedException {
 		loginPage = new LoginPage(webDriver);
 		loginPage.navigateToURL();
-
+		
 		return loginPage;
 	}
 
@@ -74,13 +77,12 @@ public class TestSetup {
 	
 	public String captureScreenshot(String testCaseName) throws IOException {
 		Date calendarDate = Calendar.getInstance().getTime();  
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd-HH_mm_ss");  
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
         String date = dateFormat.format(calendarDate);  
         TakesScreenshot takeScreenshot = (TakesScreenshot)webDriver;
         File screenshot = takeScreenshot.getScreenshotAs(OutputType.FILE);
-        File screenshotOutputFile = new File(System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString() + ".png");
+        File screenshotOutputFile = new File(System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString().replace(":", "_").replace(" ", "_") + ".png");
 		FileUtils.copyFile(screenshot, screenshotOutputFile);
-		System.out.println("Successfully captured a screenshot");
-		return System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString() + ".png";
+		return System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString().replace(":", "_").replace(" ", "_") + ".png";
     }
 }

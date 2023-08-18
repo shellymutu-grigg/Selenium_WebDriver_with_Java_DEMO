@@ -87,7 +87,7 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, "loginFailAlertMessageText", "signInTitle");
 		}
 		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
-			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, "loginPuzzleMessageText", "signInTitle");
+			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, "loginPuzzleMessageText", "loginFailTitle");
 		}
 		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
 			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, "loginFailImportantMessageText", "signInTitle");
