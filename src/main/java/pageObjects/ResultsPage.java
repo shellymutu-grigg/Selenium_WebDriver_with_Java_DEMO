@@ -97,8 +97,7 @@ public class ResultsPage extends AbstractComponents {
 		webDriver.getTitle().contains(bookTitle);
 		
 		if(!isElementPresent(By.id("add-to-cart-button"))) {
-			System.out.println(MessageFormat.format("Add to cart button is present: {0}", isElementPresent(By.id("add-to-cart-button"))));
-			System.out.println(MessageFormat.format("Book is not available for purchase {0}", "this"));
+			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
 		}
 		addToCartButton.click();
 		

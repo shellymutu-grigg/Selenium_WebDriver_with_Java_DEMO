@@ -12,7 +12,8 @@ import testComponents.TestSetup;
 public class LoginSuccessTest extends TestSetup{
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
-	@Test(groups = { "Smoke" })
+	@Test(groups = { "Smoke", "Login" })
+	
 	public void loginSuccessTest() throws Exception {		
 		String email = helperFunctions.GetParameter("EMAIL");
 		String password = helperFunctions.GetParameter("PASSWORD_SUCCESS");
