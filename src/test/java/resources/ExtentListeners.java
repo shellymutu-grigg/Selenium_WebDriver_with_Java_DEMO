@@ -75,6 +75,12 @@ public class ExtentListeners extends TestSetup implements ITestListener, IInvoke
         } catch (Exception e) {
         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
         }
+     	System.out.println(MessageFormat.format("Screenshot capture failure completed: {0}", result.getMethod().getMethodName()));
+     	try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
         ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(result.getMethod().getMethodName() + " FAIL", ExtentColor.RED));
     }
  

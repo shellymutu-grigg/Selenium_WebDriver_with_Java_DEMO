@@ -17,7 +17,7 @@ public class SearchOrdersTest extends TestSetup{
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
 	@Test(groups = { "Smoke" }, priority = 1, description = "Verify user is able search order history")
-	public void reviewOrdersTest(Method method) throws Exception {		
+	public void searchOrdersTest(Method method) throws Exception {		
 		ExtentTestManager.startTest(method.getName(), "Verify user is able search order history");
 		
 		String email = helperFunctions.GetParameter("EMAIL");

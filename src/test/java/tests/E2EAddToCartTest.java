@@ -18,14 +18,14 @@ import resources.ExtentListeners;
 import resources.ExtentTestManager;
 
 @Listeners(ExtentListeners.class)
-public class E2ECreateOrderTest extends TestSetup implements IHelper{	
+public class E2EAddToCartTest extends TestSetup implements IHelper{	
 	HelperFunctions helperFunctions = new HelperFunctions();
 	String email = helperFunctions.GetParameter("EMAIL");
 	String password = helperFunctions.GetParameter("PASSWORD_SUCCESS");
 
 	
 	@Test(groups = { "E2E" }, priority = 1, description = "End to End scenario")
-	public void createOrderTest(Method method) throws Exception {	
+	public void addToCartTest(Method method) throws Exception {	
 		ExtentTestManager.startTest(method.getName(), "Verify a user is able to login, add and item to their cart, remove it and log out successfully.");
 		
 		SearchPage searchPage = loginPage.loginApplicationSuccess(email, password);		

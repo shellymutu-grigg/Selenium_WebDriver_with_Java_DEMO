@@ -15,7 +15,7 @@ Please see `.env-example` file for an example of the variables required
 
 ## Functionality covered
 Automation Tests built:
-1. E2E Test (Suite)
+1. E2E Add to Cart Test
 	- Login
 	- Search for product
 	- Add product to cart
@@ -25,17 +25,18 @@ Automation Tests built:
 	- Login Failure Test
 	- Login Success Test
 	- Review Orders Test
-3. Error Handling Test Suite
-	- Login Failure Test (including capturing screenshots on failure)
+3. Error Handling Test
+	- Login Failure Test
 	
 ## Evidence supplied
 1. Inheritance vs. Abstraction
 	- Inhertiance uses extends (can only be used once) e.g. pageObjects extends AbstractComponents
 	- Abstraction uses implements (can be used multiple times but the abstract class can not be instantiated) e.g. E2ECreateOrderTest implements IHelper and it must define the method defined in IHelper
-2. Performance considerations
-	- wait times
+2. Framework Design
+	- Page Object Approach
+3. Performance considerations
+	- Stack runtime memory
+	- Wait times
 	- SQL queries
-3. Framework - see repoistory
-4. ExtentReports - added to End to End Test
-5. Cross Browser Testing ***TO BE COMPLETED***	
-6. Selenium Grid  ***TO BE COMPLETED***
+4. ExtentReports
+5. Selenium Grid  ***TO BE COMPLETED***

@@ -8,9 +8,9 @@
 		</run>
 	</groups>
   	
-	<test thread-count="5" name="E2E Create Order Test">
+	<test thread-count="5" name="End to End Add to Cart Test">
     	<classes>
-      		<class name="tests.E2ECreateOrderTest"/>
+      		<class name="tests.E2EAddToCartTest"/>
     	</classes>
   	</test> 
 </suite>
