@@ -96,6 +96,7 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 	
 	public void login(String email, String password) throws InterruptedException, IOException {
 		navigateToLanding();
+		
 		enterUserDetails(email, password);
 		
 		waitForElementToAppear(userPasswordBy);

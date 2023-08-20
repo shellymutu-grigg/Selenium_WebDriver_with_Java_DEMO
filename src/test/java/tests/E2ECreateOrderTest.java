@@ -1,5 +1,6 @@
 package tests;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,7 @@ import testComponents.TestSetup;
 import abstractComponents.HelperFunctions;
 import interfaces.IHelper;
 import resources.ExtentListeners;
+import resources.ExtentTestManager;
 
 @Listeners(ExtentListeners.class)
 public class E2ECreateOrderTest extends TestSetup implements IHelper{	
@@ -22,8 +24,10 @@ public class E2ECreateOrderTest extends TestSetup implements IHelper{
 	String password = helperFunctions.GetParameter("PASSWORD_SUCCESS");
 
 	
-	@Test(groups = { "E2E" })
-	public void createOrderTest() throws Exception {	
+	@Test(groups = { "E2E" }, priority = 1, description = "End to End scenario")
+	public void createOrderTest(Method method) throws Exception {	
+		ExtentTestManager.startTest(method.getName(), "Verify a user is able to login, add and item to their cart, remove it and log out successfully.");
+		
 		SearchPage searchPage = loginPage.loginApplicationSuccess(email, password);		
 				
 		ResultsPage resultsPage = searchPage.searchForProducts(helperFunctions.getGlobalProperty("searchText"));

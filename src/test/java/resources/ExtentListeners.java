@@ -1,17 +1,24 @@
 package resources;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.Reporter;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
@@ -20,81 +27,78 @@ import com.aventstack.extentreports.markuputils.MarkupHelper;
 import testComponents.TestSetup;
  
 public class ExtentListeners extends TestSetup implements ITestListener, IInvokedMethodListener {
-		
-	ExtentReports extentReports;    
-    ExtentTest extentTest;
     
-    ThreadLocal<ExtentTest> testReport = new ThreadLocal<ExtentTest>();
-
+    private static String getTestMethodName(ITestResult result) {
+        return result.getMethod().getConstructorOrMethod().getName();
+    }
+    
 	@Override
     public void onStart(ITestContext context) {
-		extentReports = (ExtentReports) context.getAttribute("ExtentReports");
-		extentTest = extentReports.createTest("Test Case Name: " + context.getName());
-        extentTest.assignAuthor("Shelly Mutu-Grigg");
-        context.setAttribute("ExtentTest", extentTest);
-        testReport.set(extentTest);
-        context.setAttribute("TestReport", testReport);
+        context.setAttribute("WebDriver", this.webDriver);
     }	
 
 	@Override
     public void onTestStart(ITestResult result) {
-
+		System.out.println(MessageFormat.format("{0} test is starting", getTestMethodName(result)));
+    }
+	
+	@Override
+    public void onFinish(ITestContext context) {
+        
     }
  
-	@SuppressWarnings("unchecked")
 	@Override
     public void onTestSuccess(ITestResult result) {
-    	ITestContext context = result.getTestContext();
-        webDriver = (WebDriver) context.getAttribute("WebDriver");
-        extentTest = (ExtentTest)context.getAttribute("ExtentTest");
-        testReport = (ThreadLocal<ExtentTest>)context.getAttribute("TestReport");       
+		System.out.println(MessageFormat.format("Test {0} has succeeded", getTestMethodName(result)));
+     
     	try {
             String fileName = captureScreenshot(result.getMethod().getMethodName());
-            extentTest.pass("<font color=" + "green>" + "Screenshot of success" + "</font>",
+            ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case successfully ended at:" + "</font>",
              MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
          } catch (Exception e) {
          	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
          } 
-    	testReport.get().log(Status.PASS, MarkupHelper.createLabel(result.getMethod().getMethodName() + " PASS", ExtentColor.GREEN));
+    	ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(result.getMethod().getMethodName() + " PASS", ExtentColor.GREEN));
     }
  
-    @SuppressWarnings("unchecked")
 	@Override
     public void onTestFailure(ITestResult result) { 
-    	ITestContext context = result.getTestContext();
-        webDriver = (WebDriver) context.getAttribute("WebDriver");
-        extentTest = (ExtentTest)context.getAttribute("ExtentTest");
-        testReport = (ThreadLocal<ExtentTest>)context.getAttribute("TestReport");
+    	System.out.println(MessageFormat.format("Test {0} has failed", getTestMethodName(result)));
+
      	String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
-     	testReport.get().fail("Exception Occured: <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
+     	ExtentTestManager.getTest().fail("Exception Occured: <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
                 + "</font>" + "</summary>" + exceptionMessage.replaceAll(",", "<br>")+"</details>"+" \n");
      	try {
            String fileName = captureScreenshot(result.getMethod().getMethodName());
-           extentTest.fail("<font color=" + "red>" + "Screenshot of failure" + "</font>",
+           ExtentTestManager.getTest().fail("<font color=" + "red>" + "Screenshot of location of failure" + "</font>",
             MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
         } catch (Exception e) {
         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
         }
-         testReport.get().log(Status.FAIL, MarkupHelper.createLabel(result.getMethod().getMethodName() + " FAIL", ExtentColor.RED));
+        ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(result.getMethod().getMethodName() + " FAIL", ExtentColor.RED));
     }
  
     @Override
     public void onTestSkipped(ITestResult result) {
+		System.out.println(MessageFormat.format("Test {0} has been skipped", getTestMethodName(result)));
+    	ExtentTestManager.getTest().info(getTestMethodName(result) + " test has been skipped.");
+    	ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped");
     }
  
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
     }
- 
-    @Override
-    public void onFinish(ITestContext context) {
-    	if (extentReports != null) {
-            extentReports.flush();
-        }
-    }
     
-    @Override
-    public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-      System.out.println(method.getTestMethod().getMethodName());
+    public String captureScreenshot(String testCaseName) throws IOException {
+		ITestContext context = Reporter.getCurrentTestResult().getTestContext();
+		webDriver = (WebDriver) context.getAttribute("WebDriver");
+		Date calendarDate = Calendar.getInstance().getTime();  
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+        String date = dateFormat.format(calendarDate);  
+        TakesScreenshot takeScreenshot = (TakesScreenshot)webDriver;
+        File screenshot = takeScreenshot.getScreenshotAs(OutputType.FILE);
+        File screenshotOutputFile = new File(System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString().replace(":", "_").replace(" ", "_") + ".png");
+		FileUtils.copyFile(screenshot, screenshotOutputFile);
+		return System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString().replace(":", "_").replace(" ", "_") + ".png";
     }
 }

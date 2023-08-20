@@ -3,11 +3,16 @@
 <!-- Smoke Tests -->
 <!-- <suite parallel = "tests" name="Suite"> -->
 <suite name="Smoke Test Suite">
+
 	<groups>
 		<run>
 			<include name="Smoke"/>
 		</run>
 	</groups>
+	
+	<listeners>
+        <listener class-name="resources.ExtentListeners"/>
+    </listeners>
 	
 	<test thread-count="5" name="Login Success Test">
     	<classes>
