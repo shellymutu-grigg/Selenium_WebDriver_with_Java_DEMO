@@ -15,13 +15,13 @@ import testComponents.TestSetup;
 public class LoginSuccessTest extends TestSetup{
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
-	@Test(groups = { "Smoke", "Login" }, priority = 2, description = "Successful login scenario")
+	@Test(groups = { "Smoke", "Login" }, priority = 1, description = "Successful login scenario")
 	
 	public void loginSuccessTest(Method method) throws Exception {
 		ExtentTestManager.startTest(method.getName(), "Successful login scenario");
 		
-		String email = helperFunctions.GetParameter("EMAIL");
-		String password = helperFunctions.GetParameter("PASSWORD_SUCCESS");
+		String email = System.getenv("AMAZON_USERNAME");
+		String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
 		
 		LogoutPage logoutPage = loginPage.loginApplication(email, password);
 		

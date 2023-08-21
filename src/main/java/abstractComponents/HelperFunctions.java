@@ -10,8 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 public class HelperFunctions {
 	
 	public String getGlobalProperty(String parameter) throws IOException {;
@@ -25,17 +23,6 @@ public class HelperFunctions {
 		String browser = System.getProperty(parameter) != null ? System.getProperty(parameter)
 				: properties.getProperty(parameter);
 		return browser;
-	}
-	
-	public String GetParameter(String parameter){
-		// Load .env file variables
-		Dotenv dotenv = Dotenv
-				   .configure()
-				   .ignoreIfMissing()
-				   .load();
-		String fileParameter = dotenv.get(parameter);
-		return fileParameter;
-		
 	}
 	
 	public void validatePageTitle(String globalProperty, String pageTitle) throws IOException {

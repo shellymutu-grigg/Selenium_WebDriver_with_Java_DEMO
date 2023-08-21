@@ -14,12 +14,12 @@ import testComponents.TestSetup;
 public class LoginFailureTest extends TestSetup {
 	HelperFunctions helperFunctions = new HelperFunctions();
 	
-	@Test(groups = { "Smoke", "ErrorHandling" }, priority = 3, description = "Unsuccessful login scenario")
+	@Test(groups = { "Smoke", "ErrorHandling" }, priority = 1, description = "Unsuccessful login scenario")
 	public void loginFailureTest(Method method) throws Exception {		
 		ExtentTestManager.startTest(method.getName(), "Unsuccessful login scenario");
 		
-		String email = helperFunctions.GetParameter("EMAIL");
-		String password = helperFunctions.GetParameter("PASSWORD_FAIL");
+		String email = System.getenv("AMAZON_USERNAME");
+		String password = System.getenv("AMAZON_PASSWORD_FAIL");
 		
 		loginPage.loginApplicationFail(email, password);
 	}

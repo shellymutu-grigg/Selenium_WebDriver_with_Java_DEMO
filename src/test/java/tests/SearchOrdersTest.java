@@ -20,8 +20,8 @@ public class SearchOrdersTest extends TestSetup{
 	public void searchOrdersTest(Method method) throws Exception {		
 		ExtentTestManager.startTest(method.getName(), "Verify user is able search order history");
 		
-		String email = helperFunctions.GetParameter("EMAIL");
-		String password = helperFunctions.GetParameter("PASSWORD_SUCCESS");
+		String email = System.getenv("AMAZON_USERNAME");
+		String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
 		
 		// Login to site
 		OrdersPage ordersPage = loginPage.loginApplicationOrders(email, password);
