@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
 
 public class SearchPage extends AbstractComponents {
 
@@ -37,13 +38,13 @@ public class SearchPage extends AbstractComponents {
 
 	public ResultsPage searchForProducts(String product) throws InterruptedException, IOException {
 		
-		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		searchField.sendKeys(product);
 		searchButton.click();
 		
 		waitForElementToAppear(departmentsBy);
-		helperFunctions.validatePageTitle("resultsTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 		
 		ResultsPage resultsPage = new ResultsPage(webDriver);
 		return resultsPage;

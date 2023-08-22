@@ -11,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
 
 public class CartPage extends AbstractComponents {
 	
@@ -36,7 +37,7 @@ public class CartPage extends AbstractComponents {
 		webDriver.findElement(By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']")).click();
 		
 		waitForElementToAppear(subTotalBy);
-		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 	}
 	
 	public LogoutPage deleteCart() throws InterruptedException, IOException {
@@ -45,7 +46,7 @@ public class CartPage extends AbstractComponents {
 		deleteItems.get(0).click();
 		
 		waitForElementToAppear(cartHeaderBy);
-		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 		
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;

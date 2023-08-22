@@ -7,6 +7,10 @@
 			<include name="Login"/>
 		</run>
 	</groups>
+	
+	<listeners>
+        <listener class-name="resources.ExtentListeners"/>
+    </listeners>
   	
 	<test thread-count="5" name="Login Success">
     	<classes>

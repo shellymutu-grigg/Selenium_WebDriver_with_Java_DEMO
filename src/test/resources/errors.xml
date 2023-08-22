@@ -8,6 +8,10 @@
 		</run>
 	</groups>
 	
+	<listeners>
+        <listener class-name="resources.ExtentListeners"/>
+    </listeners>
+	
 	<test thread-count="5" name="Error Handling Test">
     	<classes>
       		<class name="tests.LoginFailureTest"/>

@@ -49,7 +49,6 @@ public class TestSetup {
 		}
 
 		webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		webDriver.manage().window().maximize();
 		ITestContext context = Reporter.getCurrentTestResult().getTestContext();
 		context.setAttribute("WebDriver", webDriver);
 		return webDriver;

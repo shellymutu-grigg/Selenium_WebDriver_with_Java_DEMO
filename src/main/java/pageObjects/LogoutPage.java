@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
 
 public class LogoutPage extends AbstractComponents {
 	
@@ -44,6 +45,6 @@ public class LogoutPage extends AbstractComponents {
 		signOutLink.click();
 		
 		waitForElementToAppear(loggedOutBy);
-		helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 	}
 }

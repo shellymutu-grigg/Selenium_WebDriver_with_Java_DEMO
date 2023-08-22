@@ -14,6 +14,8 @@ import org.testng.Assert;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
+import data.TextData;
 
 public class OrdersPage extends AbstractComponents {
 
@@ -48,22 +50,20 @@ public class OrdersPage extends AbstractComponents {
 		ordersLink.click();
 		
 		waitForElementToAppear(orderHeaderBy);
-		helperFunctions.validatePageTitle("ordersTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 	}
 	
 	public LogoutPage searchForOrders() throws IOException { 
 		WebElement searchField = webDriver.findElement(searchOrdersFieldBy);
-		String searchText = helperFunctions.getGlobalProperty("orderSearchText");
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		searchField.sendKeys(searchText);
+		searchField.sendKeys(TextData.ORDER_SEARCH_TEXT);
 		WebElement searchOrdersButton = wait.until(ExpectedConditions.elementToBeClickable(searchOrdersButtonBy));
 		searchOrdersButton.click();
 		
 		WebElement order = webDriver.findElement(By.cssSelector("label[for='orderFilter']"));
 		String orderFilterText = order.getText();
 		
-		String expectedText = helperFunctions.getGlobalProperty("orderFilterText");
-		Assert.assertEquals(orderFilterText, expectedText);
+		Assert.assertEquals(orderFilterText, TextData.ORDER_FILTER_TEXT);
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}	

@@ -6,6 +6,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
 import pageObjects.LogoutPage;
 import resources.ExtentListeners;
 import resources.ExtentTestManager;
@@ -27,7 +28,7 @@ public class LoginSuccessTest extends TestSetup{
 		
 		logoutPage.openAccountMenu();
 		
-		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		logoutPage.logout();
 	}

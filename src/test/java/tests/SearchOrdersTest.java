@@ -6,6 +6,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
 import pageObjects.LogoutPage;
 import pageObjects.OrdersPage;
 import resources.ExtentListeners;
@@ -32,7 +33,7 @@ public class SearchOrdersTest extends TestSetup{
 
 		LogoutPage logoutPage = ordersPage.searchForOrders();
 		
-		helperFunctions.validatePageTitle("ordersTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 		
 		logoutPage.openAccountMenu();	
 		

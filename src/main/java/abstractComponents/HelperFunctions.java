@@ -25,9 +25,8 @@ public class HelperFunctions {
 		return browser;
 	}
 	
-	public void validatePageTitle(String globalProperty, String pageTitle) throws IOException {
-		String resultsTitle = getGlobalProperty(globalProperty);
-		Assert.assertEquals(resultsTitle, pageTitle);
+	public void validatePageTitle(String expectedPageTitle, String pageTitle) throws IOException {
+		Assert.assertEquals(expectedPageTitle, pageTitle);
 	}
 	
 	public boolean isElementPresent(By by, WebDriver webDriver) {

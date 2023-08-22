@@ -12,6 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
 
 public class ResultsPage extends AbstractComponents {
 
@@ -44,7 +45,7 @@ public class ResultsPage extends AbstractComponents {
 	
 	public List<WebElement> getProductList() throws InterruptedException, IOException{
 		waitForElementToAppear(productsBy);
-		helperFunctions.validatePageTitle("resultsTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 
 		return products;
 	}
@@ -102,7 +103,7 @@ public class ResultsPage extends AbstractComponents {
 		addToCartButton.click();
 		
 		waitForElementToAppear(checkoutButtonBy);
-		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 		
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;

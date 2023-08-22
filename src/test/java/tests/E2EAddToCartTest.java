@@ -13,6 +13,9 @@ import pageObjects.ResultsPage;
 import pageObjects.SearchPage;
 import testComponents.TestSetup;
 import abstractComponents.HelperFunctions;
+import data.ConfigData;
+import data.PageTitleData;
+import data.TextData;
 import interfaces.IHelper;
 import resources.ExtentListeners;
 import resources.ExtentTestManager;
@@ -30,10 +33,10 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 
 		SearchPage searchPage = loginPage.loginApplicationSuccess(email, password);		
 				
-		ResultsPage resultsPage = searchPage.searchForProducts(helperFunctions.getGlobalProperty("searchText"));
+		ResultsPage resultsPage = searchPage.searchForProducts(TextData.SEARCH_TEXT);
 		
 		List<WebElement> productList = resultsPage.getProductList();
-		int resultIndex = Integer.parseInt(helperFunctions.getGlobalProperty("resultIndex"));
+		int resultIndex = ConfigData.RESULTS_INDEX;
 
 		String[] productStrings = productList.get(resultIndex).getText().split("\n");
 		
@@ -50,7 +53,7 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 				
 		logoutPage.openAccountMenu();
 		
-		helperFunctions.validatePageTitle("cartTitle", webDriver.getTitle());
+		helperFunctions.validatePageTitle(PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 		
 		logoutPage.logout();
 

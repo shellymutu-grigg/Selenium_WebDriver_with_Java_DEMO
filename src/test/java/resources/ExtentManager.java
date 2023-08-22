@@ -9,8 +9,11 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
+// https://www.swtestacademy.com/extent-reports-in-selenium-with-testng/
 public class ExtentManager {
+	
     public static final ExtentReports extentReports = new ExtentReports();
+    
     public synchronized static ExtentReports createExtentReports() {
     	Date calendarDate = Calendar.getInstance().getTime();  
 	    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  

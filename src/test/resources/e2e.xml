@@ -7,6 +7,10 @@
 			<include name="E2E"/>
 		</run>
 	</groups>
+	
+	<listeners>
+        <listener class-name="resources.ExtentListeners"/>
+    </listeners>
   	
 	<test thread-count="5" name="End to End Add to Cart Test">
     	<classes>

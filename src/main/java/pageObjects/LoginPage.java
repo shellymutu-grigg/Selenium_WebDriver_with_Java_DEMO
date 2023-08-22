@@ -14,6 +14,8 @@ import org.testng.ITestListener;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
+import data.PageTitleData;
+import data.TextData;
 
 public class LoginPage extends AbstractComponents implements ITestListener{
 
@@ -59,14 +61,22 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public void navigateToLanding() throws InterruptedException, IOException {
-		if(yourAccountLink != null) {
-			yourAccountLink.click();
-		}
-		accountLink.click();
+	public LogoutPage loginApplication(String email, String password) throws InterruptedException, IOException {
 		
-		waitForElementToAppear(signInPageBy);
-		helperFunctions.validatePageTitle("signInTitle", webDriver.getTitle());
+		login(email, password);
+		
+		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		
+		LogoutPage logoutPage = new LogoutPage(webDriver);
+		return logoutPage;
+	}
+	
+	public void login(String email, String password) throws InterruptedException, IOException {
+		navigateToLanding();
+		
+		enterUserDetails(email, password);
+		
+		waitForElementToAppear(userPasswordBy);
 	}
 	
 	public void enterUserDetails(String email, String password) throws InterruptedException {
@@ -78,46 +88,67 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 		userPassword.sendKeys(password);
 		login.click();
 	}
+	
+	public void navigateToLanding() throws InterruptedException, IOException {
+		if(yourAccountLink != null) {
+			yourAccountLink.click();
+		}
+		accountLink.click();
+		
+		waitForElementToAppear(signInPageBy);
+		helperFunctions.validatePageTitle(PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+	}
+
+	public SearchPage loginApplicationSuccess(String email, String password) throws InterruptedException, IOException {
+		
+		login(email, password);
+		
+		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		
+		SearchPage searchPage = new SearchPage(webDriver);
+		return searchPage;
+	}
+	
 	public void loginApplicationFail(String email, String password) throws InterruptedException, IOException {
 
 		navigateToLanding();
 		enterUserDetails(email, password);
 		
 		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
-			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, "loginFailAlertMessageText", "signInTitle");
+			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT, PageTitleData.SIGN_IN_PAGE_TITLE);
 		}
 		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
-			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, "loginPuzzleMessageText", "loginFailTitle");
+			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT, PageTitleData.LOGIN_FAILURE_PAGE_TITLE);
 		}
 		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
-			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, "loginFailImportantMessageText", "signInTitle");
+			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT, PageTitleData.SIGN_IN_PAGE_TITLE);
 		}
 	}
 	
-	public void login(String email, String password) throws InterruptedException, IOException {
-		navigateToLanding();
-		
-		enterUserDetails(email, password);
-		
-		waitForElementToAppear(userPasswordBy);
-	}
-	
-	public void validateMessageText(By text, String property) throws IOException {
-		WebElement message = webDriver.findElement(text);
-		String messageText = message.getText();
-		String expectedMessage = helperFunctions.getGlobalProperty(property);
-		Assert.assertEquals(messageText, expectedMessage);
-	}
-	
-	public void validateLoginFailure(By elementHandle, By elementMessageText, String globalProperty, String pageTitle) throws InterruptedException, IOException {
+	public void validateLoginFailure(By elementHandle, By elementMessageText, String expectedText, String pageTitle) throws InterruptedException, IOException {
 		waitForElementToAppear(elementHandle);
-		validateMessageText(elementMessageText, globalProperty);
+		validateMessageText(elementMessageText, expectedText);
 		
 		helperFunctions.validatePageTitle(pageTitle, webDriver.getTitle());
 	}
 	
+	public void validateMessageText(By elementMessageText, String expectedText) throws IOException {
+		WebElement message = webDriver.findElement(elementMessageText);
+		String messageText = message.getText();
+		Assert.assertEquals(messageText, expectedText);
+	}
+	
+	public OrdersPage loginApplicationOrders(String email, String password) throws InterruptedException, IOException {
+		
+		login(email, password);
+		
+		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		
+		OrdersPage ordersPage = new OrdersPage(webDriver);
+		return ordersPage;
+	}
+	
 	public void navigateToURL() throws IOException, InterruptedException {
-		// Read in properties file
 		Properties properties = new Properties();
 		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
 				+ "//src//test//resources//globalData.properties");
@@ -128,41 +159,11 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 		
 		if(helperFunctions.isElementPresent(landingPageBy, webDriver)) {
 			waitForElementToAppear(landingPageBy);
-			helperFunctions.validatePageTitle("landingTitle", webDriver.getTitle());
+			helperFunctions.validatePageTitle(PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		}
 		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
 			waitForElementToAppear(landingPageAltBy);
-			helperFunctions.validatePageTitle("landingTitle", webDriver.getTitle());
+			helperFunctions.validatePageTitle(PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		}
-	}
-
-	public SearchPage loginApplicationSuccess(String email, String password) throws InterruptedException, IOException {
-		
-		login(email, password);
-		
-		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
-		
-		SearchPage searchPage = new SearchPage(webDriver);
-		return searchPage;
-	}
-	
-	public LogoutPage loginApplication(String email, String password) throws InterruptedException, IOException {
-			
-		login(email, password);
-		
-		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
-		
-		LogoutPage logoutPage = new LogoutPage(webDriver);
-		return logoutPage;
-	}
-	
-	public OrdersPage loginApplicationOrders(String email, String password) throws InterruptedException, IOException {
-		
-		login(email, password);
-		
-		helperFunctions.validatePageTitle("loggedInLandingTitle", webDriver.getTitle());
-		
-		OrdersPage ordersPage = new OrdersPage(webDriver);
-		return ordersPage;
 	}
 }
