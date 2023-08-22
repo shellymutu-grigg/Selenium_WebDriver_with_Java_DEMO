@@ -8,7 +8,7 @@ This repoistory requires three user environment variables to be setup:
 `AMAZON_PASSWORD_FAIL`
 for a legitimate account for www.amazon.com.
 
-If using Eclipse IDE please follow these instructions to set up environment variables
+If using Eclipse IDE please follow these instructions to set up environment variables locally
 1. Go to `Run` menu > `Run Configurations`
 2. Open `Enviornment` tab
 3. Select `Add`
@@ -22,6 +22,9 @@ If using Eclipse IDE please follow these instructions to set up environment vari
 ## Maven commands
 - Run smoke test suite: `mvn test -DsuiteXmlFile="src/test/resources/smoke.xml"`
 - Run profiles: `mvn test -P<profile-id> e.g. ErrorHandling` e.g `mvn test -PErrorHandling`
+
+## Environment variables 
+- View environment variable `Get-ChildItem env:amazon_username`
 
 ## Functionality covered
 Automation Tests built:

@@ -2,8 +2,10 @@ package abstractComponents;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -36,6 +38,12 @@ public class HelperFunctions {
 	      exists = true;
 	  }
 	  return exists;
+	}
+	
+	public String convertTestCaseName(String testCaseName) {
+		String testName = Arrays.stream(testCaseName.split("(?=\\p{Lu})")).map(str -> str.substring(0, 1).
+                toUpperCase() + str.substring(1)).collect(Collectors.joining(" "));
+		return testName;
 	}
 	
 }

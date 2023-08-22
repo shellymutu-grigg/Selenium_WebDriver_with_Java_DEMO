@@ -19,7 +19,7 @@ public class SearchOrdersTest extends TestSetup{
 	
 	@Test(groups = { "Smoke" }, priority = 1, description = "Verify user is able search order history")
 	public void searchOrdersTest(Method method) throws Exception {		
-		ExtentTestManager.startTest(method.getName(), "Verify user is able search order history");
+		ExtentTestManager.startTest(helperFunctions.convertTestCaseName(method.getName()), "Verify user is able search order history");
 		
 		String email = System.getenv("AMAZON_USERNAME");
 		String password = System.getenv("AMAZON_PASSWORD_SUCCESS");

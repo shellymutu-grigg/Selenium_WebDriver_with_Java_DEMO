@@ -19,7 +19,7 @@ public class LoginSuccessTest extends TestSetup{
 	@Test(groups = { "Smoke", "Login" }, priority = 1, description = "Successful login scenario")
 	
 	public void loginSuccessTest(Method method) throws Exception {
-		ExtentTestManager.startTest(method.getName(), "Successful login scenario");
+		ExtentTestManager.startTest(helperFunctions.convertTestCaseName(method.getName()), "Successful login scenario");
 		
 		String email = System.getenv("AMAZON_USERNAME");
 		String password = System.getenv("AMAZON_PASSWORD_SUCCESS");

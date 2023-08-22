@@ -1,7 +1,9 @@
 package tests;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -28,8 +30,8 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 
 	
 	@Test(groups = { "E2E" }, priority = 1, description = "End to End scenario")
-	public void addToCartTest(Method method) throws Exception {	
-		ExtentTestManager.startTest(method.getName(), "Verify a user is able to login, add an item to their cart, remove it and log out successfully.");
+	public void addToCartTest(Method method) throws Exception {
+		ExtentTestManager.startTest(helperFunctions.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove it and log out successfully.");
 
 		SearchPage searchPage = loginPage.loginApplicationSuccess(email, password);		
 				

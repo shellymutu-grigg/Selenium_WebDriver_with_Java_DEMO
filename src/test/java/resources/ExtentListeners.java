@@ -24,12 +24,15 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
+import abstractComponents.HelperFunctions;
 import testComponents.TestSetup;
  
 public class ExtentListeners extends TestSetup implements ITestListener, IInvokedMethodListener {
     
+	static HelperFunctions helperFunctions = new HelperFunctions();
+	
     private static String getTestMethodName(ITestResult result) {
-        return result.getMethod().getConstructorOrMethod().getName();
+        return helperFunctions.convertTestCaseName(result.getMethod().getConstructorOrMethod().getName());
     }
     
 	@Override
@@ -39,7 +42,7 @@ public class ExtentListeners extends TestSetup implements ITestListener, IInvoke
 
 	@Override
     public void onTestStart(ITestResult result) {
-		System.out.println(MessageFormat.format("{0} test is starting", getTestMethodName(result)));
+		System.out.println(MessageFormat.format("\"{0}\" is starting", getTestMethodName(result)));
     }
 	
 	@Override
@@ -49,7 +52,7 @@ public class ExtentListeners extends TestSetup implements ITestListener, IInvoke
  
 	@Override
     public void onTestSuccess(ITestResult result) {
-		System.out.println(MessageFormat.format("Test {0} has succeeded", getTestMethodName(result)));
+		System.out.println(MessageFormat.format("\"{0}\" has succeeded", getTestMethodName(result)));
      
     	try {
             String fileName = captureScreenshot(result.getMethod().getMethodName());
@@ -58,12 +61,12 @@ public class ExtentListeners extends TestSetup implements ITestListener, IInvoke
          } catch (Exception e) {
          	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
          } 
-    	ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(result.getMethod().getMethodName() + " PASS", ExtentColor.GREEN));
+    	ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(helperFunctions.convertTestCaseName(result.getMethod().getMethodName()) + " - PASS", ExtentColor.GREEN));
     }
  
 	@Override
     public void onTestFailure(ITestResult result) { 
-    	System.out.println(MessageFormat.format("Test {0} has failed", getTestMethodName(result)));
+    	System.out.println(MessageFormat.format("\"{0}\" has failed", getTestMethodName(result)));
 
      	String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
      	ExtentTestManager.getTest().fail("Exception Occured: <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
@@ -75,18 +78,17 @@ public class ExtentListeners extends TestSetup implements ITestListener, IInvoke
         } catch (Exception e) {
         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
         }
-     	System.out.println(MessageFormat.format("Screenshot capture failure completed: {0}", result.getMethod().getMethodName()));
      	try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-        ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(result.getMethod().getMethodName() + " FAIL", ExtentColor.RED));
+        ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(helperFunctions.convertTestCaseName(result.getMethod().getMethodName()) + " - FAIL", ExtentColor.RED));
     }
  
     @Override
     public void onTestSkipped(ITestResult result) {
-		System.out.println(MessageFormat.format("Test {0} has been skipped", getTestMethodName(result)));
+		System.out.println(MessageFormat.format("\"{0}\" has been skipped", getTestMethodName(result)));
     	ExtentTestManager.getTest().info(getTestMethodName(result) + " test has been skipped.");
     	ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped");
     }
