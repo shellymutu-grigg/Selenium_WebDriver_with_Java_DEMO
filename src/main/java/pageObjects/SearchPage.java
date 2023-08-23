@@ -1,7 +1,5 @@
 package pageObjects;
 
-import java.io.IOException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -36,8 +34,13 @@ public class SearchPage extends AbstractComponents {
 		searchButton.click();
 	}
 
-	public ResultsPage searchForProducts(String product) throws InterruptedException, IOException {
-		waitForElementToAppear(departmentsBy);		
+	public ResultsPage searchForProducts(String product) {
+		try {
+			waitForElementToAppear(departmentsBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		ResultsPage resultsPage = new ResultsPage(webDriver);
 		return resultsPage;
 	}

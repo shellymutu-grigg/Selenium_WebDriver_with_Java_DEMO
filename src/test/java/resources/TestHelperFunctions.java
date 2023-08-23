@@ -31,6 +31,6 @@ public class TestHelperFunctions {
                 toUpperCase() + str.substring(1));
 		
 		// Join words in test case name with a space between each
-		return testNameCapitalize.unordered().collect(Collectors.joining(" "));
+		return testNameCapitalize.collect(Collectors.joining(" "));
 	}
 }

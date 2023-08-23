@@ -1,6 +1,5 @@
 package pageObjects;
 
-import java.io.IOException;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
@@ -34,20 +33,30 @@ public class OrdersPage extends AbstractComponents {
 		actions = new Actions(webDriver);
 	}
 
-	public void openAccountMenu() throws InterruptedException, IOException {
+	public void openAccountMenu() {
 		WebElement acountMenu = webDriver.findElement(accountLinkBy);
 		actions.moveToElement(acountMenu).perform();
-		waitForElementToAppear(accountMenuBy);
+		try {
+			waitForElementToAppear(accountMenuBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void openOrderPage() throws InterruptedException, IOException {
+	public void openOrderPage(){
 		WebElement ordersLink = webDriver.findElement(orderPageLinkBy);
 		actions.moveToElement(ordersLink).perform();
 		ordersLink.click();		
-		waitForElementToAppear(orderHeaderBy);
+		try {
+			waitForElementToAppear(orderHeaderBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public LogoutPage searchForOrders() throws IOException { 
+	public LogoutPage searchForOrders(){ 
 		WebElement searchField = webDriver.findElement(searchOrdersFieldBy);
 		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 		searchField.sendKeys(TextData.ORDER_SEARCH_TEXT);

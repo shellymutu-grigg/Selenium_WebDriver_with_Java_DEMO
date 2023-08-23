@@ -62,7 +62,7 @@ public class TestSetup {
 
 	@AfterClass(alwaysRun = true)
 	public void teardown() {
-		webDriver.quit();
+		webDriver.close();
 	}
 	
 	@AfterSuite(alwaysRun = true)

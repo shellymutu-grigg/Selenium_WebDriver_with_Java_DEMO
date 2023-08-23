@@ -1,7 +1,5 @@
 package pageObjects;
 
-import java.io.IOException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,18 +26,28 @@ public class LogoutPage extends AbstractComponents {
 		actions = new Actions(webDriver);
 	}
 	
-	public void openAccountMenu() throws InterruptedException, IOException {
+	public void openAccountMenu() {
 		WebElement logoutMenu = webDriver.findElement(accountLinkBy);
 		actions.moveToElement(logoutMenu).perform();
 		
-		waitForElementToAppear(accountMenuBy);
+		try {
+			waitForElementToAppear(accountMenuBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void logout() throws InterruptedException, IOException {
+	public void logout() {
 		WebElement signOutLink = webDriver.findElement(logoutLinkBy);
 		actions.moveToElement(signOutLink).perform();
 		signOutLink.click();
 		
-		waitForElementToAppear(loggedOutBy);
+		try {
+			waitForElementToAppear(loggedOutBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

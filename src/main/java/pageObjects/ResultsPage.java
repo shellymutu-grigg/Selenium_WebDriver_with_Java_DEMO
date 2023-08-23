@@ -1,6 +1,5 @@
 package pageObjects;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -40,65 +39,84 @@ public class ResultsPage extends AbstractComponents {
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public List<WebElement> getProductList() throws InterruptedException, IOException{
-		waitForElementToAppear(productsBy);
+	public List<WebElement> getProductList(){
+		try {
+			waitForElementToAppear(productsBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return products;
 	}
 	
-	public WebElement getProductByName(String productName, int index) throws Exception {
+	public WebElement getProductByName(String productName, int index) {
 		WebElement product = products.stream()
 				.filter(product_ -> 
 					product_.getText().split("\n")[index].trim().contains(productName) 
 				).findFirst()
 				.orElse(null);
 
-		setTitle(product);
+		try {
+			setTitle(product);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return product;
 	}
 	
-	public void selectProduct(WebElement product) throws Exception{
+	public void selectProduct(WebElement product){
 		product.click();
-		setTitle(product);
-	}
-	
-	public void checkProductLink(WebElement productCheck) throws Exception {
-		if(productCheck != null) {
-			productCheck.click();
-		} else {
-			throw new Exception("Product not found");
+		try {
+			setTitle(product);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	public void setTitle(WebElement product) throws Exception {
+	public void checkProductLink(WebElement productCheck){
+		if(productCheck != null) {
+			productCheck.click();
+		} else {
+			System.out.println(MessageFormat.format("{0} product not found", productCheck));
+		}
+	}
+	
+	public void setTitle(WebElement product){
 		int productIndex = products.indexOf(product);
 		if(productIndex >=0) {
 			WebElement productImage = productsImages.get(productIndex);		
 			bookTitle = productImage.getAttribute("alt");
 		} else {
-			throw new Exception("Index of product is incorrect");
+			System.out.println(MessageFormat.format("Index {0} of product is incorrect", productIndex));
 		}
 	}
 	
-	public CartPage addProductToCart(String productName, int index) throws Exception {
+	public CartPage addProductToCart(String productName, int index){
 		WebElement product = getProductByName(productName, index);
 			
-		waitForElementToAppear(resultsTitle);
-		
-		setTitle(product);
-		
-		checkProductLink(product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
-		
-		waitForElementToAppear(productTitleBy);
-		webDriver.getTitle().contains(bookTitle);
-		
-		if(!isElementPresent(By.id("add-to-cart-button"))) {
-			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
+		try {
+			waitForElementToAppear(resultsTitle);
+			setTitle(product);
+			
+			checkProductLink(product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
+			
+			waitForElementToAppear(productTitleBy);
+			webDriver.getTitle().contains(bookTitle);
+			
+			if(!isElementPresent(By.id("add-to-cart-button"))) {
+				System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
+			}
+			addToCartButton.click();
+			
+			waitForElementToAppear(checkoutButtonBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		addToCartButton.click();
-		
-		waitForElementToAppear(checkoutButtonBy);
-		
+
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;
 	}

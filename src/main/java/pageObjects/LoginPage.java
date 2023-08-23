@@ -23,38 +23,39 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 	
 	HelperFunctions helperFunctions = new HelperFunctions();
 
-	// PageFactory Pattern
+	@FindBy(xpath="//span[normalize-space()='Account & Lists']")
+	WebElement accountLink;
+	
+	@FindBy(id = "continue")
+	WebElement continueButton;
+	
+	@FindBy(id = "signInSubmit")
+	WebElement login;
+	
 	@FindBy(id = "ap_email")
 	WebElement userEmail;
 
 	@FindBy(id = "ap_password")
 	WebElement userPassword;
 
-	@FindBy(id = "continue")
-	WebElement continueButton;
-
-	@FindBy(xpath="//span[normalize-space()='Account & Lists']")
-	WebElement accountLink;
-	
 	@FindBy(linkText="Your Account")
 	WebElement yourAccountLink;
+
 	
-	@FindBy(id = "signInSubmit")
-	WebElement login;
-	
-	By yourAccountLinkBy = By.cssSelector(".ya-personalized");
-	By signInPageBy = By.id("ap_email");
-	By userEmailBy = By.cssSelector(".a-form-label");
-	By userPasswordBy = By.id("nav-global-location-popover-link");
 	By landingPageBy = By.cssSelector(".navFooterLine");
 	By landingPageAltBy = By.cssSelector(".nav-footer-copyright");
+	By loggedOutText = By.id("nav-link-accountList-nav-line-1");
 	By loginFailPuzzle = By.id("cvf-page-content");
 	By loginFailPuzzleMessageText = By.cssSelector(".a-spacing-mini");
 	By loginFailImportantMessage = By.cssSelector(".a-list-item");
 	By loginFailImportantMessageText = By.cssSelector(".a-list-item");
 	By loginFailAlert = By.id("auth-error-message-box");
 	By loginFailAlertMessageText = By.cssSelector(".a-alert-content");
-
+	By signInPageBy = By.id("ap_email");
+	By userEmailBy = By.cssSelector(".a-form-label");
+	By userPasswordBy = By.id("nav-global-location-popover-link");
+	By yourAccountLinkBy = By.cssSelector(".ya-personalized");
+	
 	public LoginPage(WebDriver webDriver) {
 		super(webDriver);
 		this.webDriver = webDriver;
@@ -99,6 +100,16 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		checkForPreviousFailure();
+	}
+	
+	public void checkForPreviousFailure() {
+		String accountListText = webDriver.findElement(By.id("nav-link-accountList-nav-line-1")).getText();
+		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
+			logout().openAccountMenu();
+			logout().logout();
+			navigateToURL();
 		}
 	}
 	

@@ -1,6 +1,5 @@
 package pageObjects;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -28,15 +27,25 @@ public class CartPage extends AbstractComponents {
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public void openCart() throws InterruptedException, IOException {
+	public void openCart() {
 		webDriver.findElement(By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']")).click();		
-		waitForElementToAppear(subTotalBy);
+		try {
+			waitForElementToAppear(subTotalBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public LogoutPage deleteCart() throws InterruptedException, IOException {
-		waitForElementToAppear(cartBy);		
-		deleteItems.get(0).click();		
-		waitForElementToAppear(cartHeaderBy);		
+	public LogoutPage deleteCart() {
+		try {
+			waitForElementToAppear(cartBy);
+			deleteItems.get(0).click();		
+			waitForElementToAppear(cartHeaderBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}
