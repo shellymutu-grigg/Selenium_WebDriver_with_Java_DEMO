@@ -6,9 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 
-import abstractComponents.AbstractComponents;
+import functions.HelperFunctions;
 
-public class LogoutPage extends AbstractComponents {
+public class LogoutPage extends HelperFunctions {
 	
 	WebDriver webDriver;
 
@@ -30,12 +30,7 @@ public class LogoutPage extends AbstractComponents {
 		WebElement logoutMenu = webDriver.findElement(accountLinkBy);
 		actions.moveToElement(logoutMenu).perform();
 		
-		try {
-			waitForElementToAppear(accountMenuBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(accountMenuBy, webDriver);
 	}
 	
 	public void logout() {
@@ -43,11 +38,6 @@ public class LogoutPage extends AbstractComponents {
 		actions.moveToElement(signOutLink).perform();
 		signOutLink.click();
 		
-		try {
-			waitForElementToAppear(loggedOutBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(loggedOutBy, webDriver);
 	}
 }

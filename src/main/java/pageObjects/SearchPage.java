@@ -6,9 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import abstractComponents.AbstractComponents;
+import functions.HelperFunctions;
 
-public class SearchPage extends AbstractComponents {
+public class SearchPage extends HelperFunctions {
 
 	WebDriver webDriver;
 	
@@ -35,12 +35,7 @@ public class SearchPage extends AbstractComponents {
 	}
 
 	public ResultsPage searchForProducts(String product) {
-		try {
-			waitForElementToAppear(departmentsBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
+		waitForElementToAppear(departmentsBy, webDriver);		
 		ResultsPage resultsPage = new ResultsPage(webDriver);
 		return resultsPage;
 	}

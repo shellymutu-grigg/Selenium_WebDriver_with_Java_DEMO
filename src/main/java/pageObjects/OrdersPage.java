@@ -11,10 +11,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import abstractComponents.AbstractComponents;
 import data.TextData;
+import functions.HelperFunctions;
 
-public class OrdersPage extends AbstractComponents {
+public class OrdersPage extends HelperFunctions {
 
 	WebDriver webDriver;
 	Actions actions;
@@ -36,24 +36,14 @@ public class OrdersPage extends AbstractComponents {
 	public void openAccountMenu() {
 		WebElement acountMenu = webDriver.findElement(accountLinkBy);
 		actions.moveToElement(acountMenu).perform();
-		try {
-			waitForElementToAppear(accountMenuBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(accountMenuBy, webDriver);
 	}
 	
 	public void openOrderPage(){
 		WebElement ordersLink = webDriver.findElement(orderPageLinkBy);
 		actions.moveToElement(ordersLink).perform();
 		ordersLink.click();		
-		try {
-			waitForElementToAppear(orderHeaderBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(orderHeaderBy, webDriver);
 	}
 	
 	public LogoutPage searchForOrders(){ 

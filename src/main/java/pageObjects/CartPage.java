@@ -8,9 +8,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import abstractComponents.AbstractComponents;
+import functions.HelperFunctions;
 
-public class CartPage extends AbstractComponents {
+public class CartPage extends HelperFunctions {
 	
 	WebDriver webDriver;
 		
@@ -29,23 +29,13 @@ public class CartPage extends AbstractComponents {
 	
 	public void openCart() {
 		webDriver.findElement(By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']")).click();		
-		try {
-			waitForElementToAppear(subTotalBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(subTotalBy, webDriver);
 	}
 	
 	public LogoutPage deleteCart() {
-		try {
-			waitForElementToAppear(cartBy);
-			deleteItems.get(0).click();		
-			waitForElementToAppear(cartHeaderBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}			
+		waitForElementToAppear(cartBy, webDriver);
+		deleteItems.get(0).click();		
+		waitForElementToAppear(cartHeaderBy, webDriver);			
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}

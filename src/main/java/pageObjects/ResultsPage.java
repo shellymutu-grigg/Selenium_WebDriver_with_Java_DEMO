@@ -9,9 +9,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import abstractComponents.AbstractComponents;
+import functions.HelperFunctions;
 
-public class ResultsPage extends AbstractComponents {
+public class ResultsPage extends HelperFunctions {
 
 	WebDriver webDriver;
 	
@@ -40,12 +40,7 @@ public class ResultsPage extends AbstractComponents {
 	}
 	
 	public List<WebElement> getProductList(){
-		try {
-			waitForElementToAppear(productsBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(productsBy, webDriver);
 		return products;
 	}
 	
@@ -95,28 +90,17 @@ public class ResultsPage extends AbstractComponents {
 	}
 	
 	public CartPage addProductToCart(String productName, int index){
-		WebElement product = getProductByName(productName, index);
-			
-		try {
-			waitForElementToAppear(resultsTitle);
-			setTitle(product);
-			
-			checkProductLink(product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
-			
-			waitForElementToAppear(productTitleBy);
-			webDriver.getTitle().contains(bookTitle);
-			
-			if(!isElementPresent(By.id("add-to-cart-button"))) {
-				System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
-			}
-			addToCartButton.click();
-			
-			waitForElementToAppear(checkoutButtonBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		WebElement product = getProductByName(productName, index);	
+		waitForElementToAppear(resultsTitle, webDriver);
+		setTitle(product);
+		checkProductLink(product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
+		waitForElementToAppear(productTitleBy, webDriver);
+		webDriver.getTitle().contains(bookTitle);
+		if(!isElementPresent(By.id("add-to-cart-button"))) {
+			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
 		}
-
+		addToCartButton.click();
+		waitForElementToAppear(checkoutButtonBy, webDriver);
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;
 	}

@@ -13,15 +13,14 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.ITestListener;
 
-import abstractComponents.AbstractComponents;
-import abstractComponents.HelperFunctions;
 import data.TextData;
+import functions.HelperFunctions;
 
-public class LoginPage extends AbstractComponents implements ITestListener{
+public class LoginPage extends HelperFunctions implements ITestListener{
 
 	WebDriver webDriver;
 	
-	HelperFunctions helperFunctions = new HelperFunctions();
+	HelperFunctions helperFunctions = new HelperFunctions(webDriver);
 
 	@FindBy(xpath="//span[normalize-space()='Account & Lists']")
 	WebElement accountLink;
@@ -86,20 +85,10 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 		webDriver.get(url);
 		
 		if(helperFunctions.isElementPresent(landingPageBy, webDriver)) {
-			try {
-				waitForElementToAppear(landingPageBy);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			waitForElementToAppear(landingPageBy, webDriver);
 		}
 		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
-			try {
-				waitForElementToAppear(landingPageAltBy);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			waitForElementToAppear(landingPageAltBy, webDriver);
 		}
 		checkForPreviousFailure();
 	}
@@ -114,24 +103,14 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 	}
 	
 	public void pause() {
-		try {
-			waitForElementToAppear(userPasswordBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(userPasswordBy, webDriver);
 	}
 	
 	public void enterUserDetails(String email, String password) {
 		userEmail.sendKeys(email);
 		continueButton.click();
 		
-		try {
-			waitForElementToAppear(userEmailBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(userEmailBy, webDriver);
 		
 		userPassword.sendKeys(password);
 		login.click();
@@ -143,12 +122,7 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 		}
 		accountLink.click();
 		
-		try {
-			waitForElementToAppear(signInPageBy);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(signInPageBy, webDriver);
 	}
 
 	public SearchPage searchPage(String email, String password) {		
@@ -173,12 +147,7 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 	}
 	
 	public void validateLoginFailure(By elementHandle, By elementMessageText, String expectedText) {
-		try {
-			waitForElementToAppear(elementHandle);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		waitForElementToAppear(elementHandle, webDriver);
 		WebElement message = webDriver.findElement(elementMessageText);
 		String messageText = message.getText();
 		Assert.assertEquals(messageText, expectedText);
