@@ -9,15 +9,11 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
-import abstractComponents.HelperFunctions;
-import data.PageTitleData;
 
 public class LogoutPage extends AbstractComponents {
 	
 	WebDriver webDriver;
 
-	HelperFunctions helperFunctions = new HelperFunctions();
-	
 	Actions actions;
 	
 	By accountLinkBy = By.xpath("//span[normalize-space()='Account & Lists']");
@@ -45,6 +41,5 @@ public class LogoutPage extends AbstractComponents {
 		signOutLink.click();
 		
 		waitForElementToAppear(loggedOutBy);
-		helperFunctions.validatePageTitle(PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 	}
 }

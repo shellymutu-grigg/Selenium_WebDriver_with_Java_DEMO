@@ -8,5 +8,6 @@ public class TextData {
 	//public final static String NOT_AVAILABLE_TEXT = "Have you moved recently?";
 	public final static String ORDER_FILTER_TEXT = "1 order matching \"Jayflex CrossGrips\"";
 	public final static String ORDER_SEARCH_TEXT = "Jayflex CrossGrips";
+	public static final String PREVIOUSLY_VIEWED = "Previously viewed";
 	public final static String SEARCH_TEXT = "ISTQB Foundation Exam";		
 }

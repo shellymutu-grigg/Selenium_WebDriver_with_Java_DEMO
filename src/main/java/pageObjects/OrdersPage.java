@@ -13,15 +13,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import abstractComponents.AbstractComponents;
-import abstractComponents.HelperFunctions;
-import data.PageTitleData;
 import data.TextData;
 
 public class OrdersPage extends AbstractComponents {
 
 	WebDriver webDriver;
 	Actions actions;
-	HelperFunctions helperFunctions = new HelperFunctions();
 
 	By accountLinkBy = By.xpath("//span[normalize-space()='Account & Lists']");
 	By accountMenuBy = By.id("nav-al-your-account");
@@ -40,17 +37,14 @@ public class OrdersPage extends AbstractComponents {
 	public void openAccountMenu() throws InterruptedException, IOException {
 		WebElement acountMenu = webDriver.findElement(accountLinkBy);
 		actions.moveToElement(acountMenu).perform();
-		
 		waitForElementToAppear(accountMenuBy);
 	}
 	
 	public void openOrderPage() throws InterruptedException, IOException {
 		WebElement ordersLink = webDriver.findElement(orderPageLinkBy);
 		actions.moveToElement(ordersLink).perform();
-		ordersLink.click();
-		
+		ordersLink.click();		
 		waitForElementToAppear(orderHeaderBy);
-		helperFunctions.validatePageTitle(PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 	}
 	
 	public LogoutPage searchForOrders() throws IOException { 

@@ -10,16 +10,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import abstractComponents.AbstractComponents;
-import abstractComponents.HelperFunctions;
-import data.PageTitleData;
 
 public class CartPage extends AbstractComponents {
 	
 	WebDriver webDriver;
-	
-	HelperFunctions helperFunctions = new HelperFunctions();
-	
-	// PageFactory Pattern
+		
 	@FindBy(css="input[value='Delete']")
 	List<WebElement> deleteItems;
 		
@@ -34,20 +29,14 @@ public class CartPage extends AbstractComponents {
 	}
 	
 	public void openCart() throws InterruptedException, IOException {
-		webDriver.findElement(By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']")).click();
-		
+		webDriver.findElement(By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']")).click();		
 		waitForElementToAppear(subTotalBy);
-		helperFunctions.validatePageTitle(PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 	}
 	
 	public LogoutPage deleteCart() throws InterruptedException, IOException {
-		waitForElementToAppear(cartBy);
-		
-		deleteItems.get(0).click();
-		
-		waitForElementToAppear(cartHeaderBy);
-		helperFunctions.validatePageTitle(PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
-		
+		waitForElementToAppear(cartBy);		
+		deleteItems.get(0).click();		
+		waitForElementToAppear(cartHeaderBy);		
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}

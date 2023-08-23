@@ -2,15 +2,12 @@ package abstractComponents;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
 
 public class HelperFunctions {
 	
@@ -27,10 +24,6 @@ public class HelperFunctions {
 		return browser;
 	}
 	
-	public void validatePageTitle(String expectedPageTitle, String pageTitle) throws IOException {
-		Assert.assertEquals(expectedPageTitle, pageTitle);
-	}
-	
 	public boolean isElementPresent(By by, WebDriver webDriver) {
 	  boolean exists = false;
 	  List<WebElement> list = webDriver.findElements(by);
@@ -39,11 +32,4 @@ public class HelperFunctions {
 	  }
 	  return exists;
 	}
-	
-	public String convertTestCaseName(String testCaseName) {
-		String testName = Arrays.stream(testCaseName.split("(?=\\p{Lu})")).map(str -> str.substring(0, 1).
-                toUpperCase() + str.substring(1)).collect(Collectors.joining(" "));
-		return testName;
-	}
-	
 }

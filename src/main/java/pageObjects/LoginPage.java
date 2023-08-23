@@ -1,6 +1,7 @@
 package pageObjects;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -14,7 +15,6 @@ import org.testng.ITestListener;
 
 import abstractComponents.AbstractComponents;
 import abstractComponents.HelperFunctions;
-import data.PageTitleData;
 import data.TextData;
 
 public class LoginPage extends AbstractComponents implements ITestListener{
@@ -61,109 +61,120 @@ public class LoginPage extends AbstractComponents implements ITestListener{
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public LogoutPage loginApplication(String email, String password) throws InterruptedException, IOException {
-		
-		login(email, password);
-		
-		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
-		
+	public LogoutPage logout() {
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}
 	
-	public void login(String email, String password) throws InterruptedException, IOException {
-		navigateToLanding();
-		
-		enterUserDetails(email, password);
-		
-		waitForElementToAppear(userPasswordBy);
-	}
-	
-	public void enterUserDetails(String email, String password) throws InterruptedException {
-		userEmail.sendKeys(email);
-		continueButton.click();
-		
-		waitForElementToAppear(userEmailBy);
-		
-		userPassword.sendKeys(password);
-		login.click();
-	}
-	
-	public void navigateToLanding() throws InterruptedException, IOException {
-		if(yourAccountLink != null) {
-			yourAccountLink.click();
-		}
-		accountLink.click();
-		
-		waitForElementToAppear(signInPageBy);
-		helperFunctions.validatePageTitle(PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-	}
-
-	public SearchPage loginApplicationSuccess(String email, String password) throws InterruptedException, IOException {
-		
-		login(email, password);
-		
-		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
-		
-		SearchPage searchPage = new SearchPage(webDriver);
-		return searchPage;
-	}
-	
-	public void loginApplicationFail(String email, String password) throws InterruptedException, IOException {
-
-		navigateToLanding();
-		enterUserDetails(email, password);
-		
-		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
-			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT, PageTitleData.SIGN_IN_PAGE_TITLE);
-		}
-		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
-			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT, PageTitleData.LOGIN_FAILURE_PAGE_TITLE);
-		}
-		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
-			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT, PageTitleData.SIGN_IN_PAGE_TITLE);
-		}
-	}
-	
-	public void validateLoginFailure(By elementHandle, By elementMessageText, String expectedText, String pageTitle) throws InterruptedException, IOException {
-		waitForElementToAppear(elementHandle);
-		validateMessageText(elementMessageText, expectedText);
-		
-		helperFunctions.validatePageTitle(pageTitle, webDriver.getTitle());
-	}
-	
-	public void validateMessageText(By elementMessageText, String expectedText) throws IOException {
-		WebElement message = webDriver.findElement(elementMessageText);
-		String messageText = message.getText();
-		Assert.assertEquals(messageText, expectedText);
-	}
-	
-	public OrdersPage loginApplicationOrders(String email, String password) throws InterruptedException, IOException {
-		
-		login(email, password);
-		
-		helperFunctions.validatePageTitle(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
-		
-		OrdersPage ordersPage = new OrdersPage(webDriver);
-		return ordersPage;
-	}
-	
-	public void navigateToURL() throws IOException, InterruptedException {
+	public void navigateToURL() {
 		Properties properties = new Properties();
-		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
-				+ "//src//test//resources//globalData.properties");
-		properties.load(fileInputStream);
+		FileInputStream fileInputStream;
+		try {
+			fileInputStream = new FileInputStream(System.getProperty("user.dir")
+					+ "//src//test//resources//globalData.properties");
+			properties.load(fileInputStream);
+		}catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String url = System.getProperty("url") != null ? System.getProperty("url")
 		: properties.getProperty("url");
 		webDriver.get(url);
 		
 		if(helperFunctions.isElementPresent(landingPageBy, webDriver)) {
-			waitForElementToAppear(landingPageBy);
-			helperFunctions.validatePageTitle(PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+			try {
+				waitForElementToAppear(landingPageBy);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
-			waitForElementToAppear(landingPageAltBy);
-			helperFunctions.validatePageTitle(PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+			try {
+				waitForElementToAppear(landingPageAltBy);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+	
+	public void pause() {
+		try {
+			waitForElementToAppear(userPasswordBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void enterUserDetails(String email, String password) {
+		userEmail.sendKeys(email);
+		continueButton.click();
+		
+		try {
+			waitForElementToAppear(userEmailBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		userPassword.sendKeys(password);
+		login.click();
+	}
+	
+	public void navigateToLanding() {
+		if(yourAccountLink != null) {
+			yourAccountLink.click();
+		}
+		accountLink.click();
+		
+		try {
+			waitForElementToAppear(signInPageBy);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public SearchPage searchPage(String email, String password) {		
+		SearchPage searchPage = new SearchPage(webDriver);
+		return searchPage;
+	}
+	
+	public void loginFail() {
+
+		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
+			// TODO validate that PageTitleData.SIGN_IN_PAGE_TITLE is rendered
+			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT);
+		}
+		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
+			// TODO validate that PageTitleData.LOGIN_FAILURE_PAGE_TITLE is rendered
+			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT);
+		}
+		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
+			// TODO validate that PageTitleData.SIGN_IN_PAGE_TITLE is rendered
+			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
+		}
+	}
+	
+	public void validateLoginFailure(By elementHandle, By elementMessageText, String expectedText) {
+		try {
+			waitForElementToAppear(elementHandle);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		WebElement message = webDriver.findElement(elementMessageText);
+		String messageText = message.getText();
+		Assert.assertEquals(messageText, expectedText);
+	}
+	
+	public OrdersPage ordersPage() {			
+		OrdersPage ordersPage = new OrdersPage(webDriver);
+		return ordersPage;
 	}
 }

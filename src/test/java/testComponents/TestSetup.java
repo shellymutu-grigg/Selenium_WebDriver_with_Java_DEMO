@@ -26,6 +26,7 @@ public class TestSetup {
 	public WebDriver webDriver;
 	public LoginPage loginPage;
 	HelperFunctions helperFunctions = new HelperFunctions();
+	public String loginFailureStatus;
 	
 	@BeforeClass(alwaysRun = true)
 	public WebDriver initializeDriver() throws IOException{
@@ -56,8 +57,7 @@ public class TestSetup {
 
 	@BeforeMethod(alwaysRun = true)
 	protected void launchApplication() throws IOException, InterruptedException {
-		loginPage = new LoginPage(webDriver);
-		loginPage.navigateToURL();		
+		loginPage = new LoginPage(webDriver);	
 	}
 
 	@AfterClass(alwaysRun = true)
