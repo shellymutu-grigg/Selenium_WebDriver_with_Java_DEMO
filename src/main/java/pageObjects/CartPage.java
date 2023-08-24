@@ -17,8 +17,8 @@ public class CartPage extends HelperFunctions {
 	@FindBy(css="input[value='Delete']")
 	List<WebElement> deleteItems;
 		
-	By cartBy = By.id("sc-active-cart");
-	By cartHeaderBy = By.cssSelector(".sc-cart-header");
+	By cartBy = By.cssSelector(".sc-gift-option");
+	By cartHeaderBy = By.cssSelector(".sc-list-item-removed-msg");
 	By subTotalBy = By.id("sc-subtotal-label-buybox");
 
 	public CartPage(WebDriver webDriver) {
@@ -34,7 +34,20 @@ public class CartPage extends HelperFunctions {
 	
 	public LogoutPage deleteCart() {
 		waitForElementToAppear(cartBy, webDriver);
-		deleteItems.get(0).click();		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		waitForElementToAppear(cartBy, webDriver);
+		deleteItems.get(0).click();	
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		waitForElementToAppear(cartHeaderBy, webDriver);			
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;

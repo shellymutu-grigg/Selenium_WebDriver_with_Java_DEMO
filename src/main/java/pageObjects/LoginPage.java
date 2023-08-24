@@ -13,6 +13,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.ITestListener;
 
+import data.PageTitleData;
 import data.TextData;
 import functions.HelperFunctions;
 
@@ -23,7 +24,7 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	HelperFunctions helperFunctions = new HelperFunctions(webDriver);
 
 	@FindBy(xpath="//span[normalize-space()='Account & Lists']")
-	WebElement accountLink;
+	WebElement signInLink;
 	
 	@FindBy(id = "continue")
 	WebElement continueButton;
@@ -40,7 +41,8 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	@FindBy(linkText="Your Account")
 	WebElement yourAccountLink;
 
-	
+	By accountLinkBy = By.id("nav-global-location-popover-link");
+	By accountMenuBy = By.id("nav-link-accountList-nav-line-1");
 	By landingPageBy = By.cssSelector(".navFooterLine");
 	By landingPageAltBy = By.cssSelector(".nav-footer-copyright");
 	By loggedOutText = By.id("nav-link-accountList-nav-line-1");
@@ -50,9 +52,8 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	By loginFailImportantMessageText = By.cssSelector(".a-list-item");
 	By loginFailAlert = By.id("auth-error-message-box");
 	By loginFailAlertMessageText = By.cssSelector(".a-alert-content");
-	By signInPageBy = By.id("ap_email");
-	By userEmailBy = By.cssSelector(".a-form-label");
-	By userPasswordBy = By.id("nav-global-location-popover-link");
+	By userEmailBy = By.id("ap_email");
+	By userPasswordBy = By.id("ap_password");
 	By yourAccountLinkBy = By.cssSelector(".ya-personalized");
 	
 	public LoginPage(WebDriver webDriver) {
@@ -61,7 +62,7 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public LogoutPage logout() {
+	public LogoutPage initialiseLogoutPage() {
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}
@@ -89,59 +90,91 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 		}
 		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
 			waitForElementToAppear(landingPageAltBy, webDriver);
-		}
-		checkForPreviousFailure();
-	}
-	
-	public void checkForPreviousFailure() {
-		String accountListText = webDriver.findElement(By.id("nav-link-accountList-nav-line-1")).getText();
-		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
-			logout().openAccountMenu();
-			logout().logout();
-			navigateToURL();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
-	public void pause() {
-		waitForElementToAppear(userPasswordBy, webDriver);
+	public SearchPage pauseForSearchPage() {
+		waitForElementToAppear(accountLinkBy, webDriver);
+		SearchPage searchPage = new SearchPage(webDriver);
+		return searchPage;
 	}
 	
-	public void enterUserDetails(String email, String password) {
+	public OrdersPage pauseForOrdersPage() {
+		waitForElementToAppear(accountLinkBy, webDriver);
+		OrdersPage ordersPage = new OrdersPage(webDriver);
+		return ordersPage;
+	}	
+	
+	public void enterUserEmail(String email) {
+		waitForElementToAppear(userEmailBy, webDriver);
 		userEmail.sendKeys(email);
 		continueButton.click();
-		
-		waitForElementToAppear(userEmailBy, webDriver);
-		
+	}
+	
+	public void enterUserPassword(String password) {
+		waitForElementToAppear(userPasswordBy, webDriver);
 		userPassword.sendKeys(password);
 		login.click();
+		
+	}
+	
+	public boolean checkIfSignedIn() {
+		waitForElementToAppear(accountLinkBy, webDriver);
+		if(webDriver.getTitle().contains(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE)) {
+			return true;
+		}
+		else return false;
 	}
 	
 	public void navigateToLanding() {
 		if(yourAccountLink != null) {
 			yourAccountLink.click();
 		}
-		accountLink.click();
-		
-		waitForElementToAppear(signInPageBy, webDriver);
+		checkForPreviousLoginFailure();
+		signInLink.click();
+		waitForElementToAppear(userEmailBy, webDriver);
 	}
-
-	public SearchPage searchPage(String email, String password) {		
-		SearchPage searchPage = new SearchPage(webDriver);
-		return searchPage;
+	
+	public void checkForPreviousLoginFailure() {
+		String accountListText = webDriver.findElement(accountMenuBy).getText();
+		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
+			initialiseLogoutPage().openAccountMenu();
+			initialiseLogoutPage().logout();
+			navigateToURL();
+		}
+	}
+	
+	public String findLoginFailureText() {
+		String failureText = "";
+		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
+			failureText = TextData.LOGIN_FAILURE_ALERT_TEXT;
+		}
+		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
+			failureText =  TextData.LOGIN_PUZZLE_TEXT;
+		}
+		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
+			failureText =  TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
+		}
+		return failureText;
 	}
 	
 	public void loginFail() {
-
 		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
-			// TODO validate that PageTitleData.SIGN_IN_PAGE_TITLE is rendered
+			System.setProperty("LoginFailStatus", TextData.LOGIN_FAILURE_ALERT_TEXT);
 			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT);
 		}
 		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
-			// TODO validate that PageTitleData.LOGIN_FAILURE_PAGE_TITLE is rendered
+			System.setProperty("LoginFailStatus", TextData.LOGIN_PUZZLE_TEXT);
 			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT);
 		}
 		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
-			// TODO validate that PageTitleData.SIGN_IN_PAGE_TITLE is rendered
+			System.setProperty("LoginFailStatus", TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
 			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
 		}
 	}
@@ -151,10 +184,5 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 		WebElement message = webDriver.findElement(elementMessageText);
 		String messageText = message.getText();
 		Assert.assertEquals(messageText, expectedText);
-	}
-	
-	public OrdersPage ordersPage() {			
-		OrdersPage ordersPage = new OrdersPage(webDriver);
-		return ordersPage;
 	}
 }

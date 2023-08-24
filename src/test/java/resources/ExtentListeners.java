@@ -13,7 +13,6 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.IInvokedMethodListener;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -26,7 +25,7 @@ import com.aventstack.extentreports.markuputils.MarkupHelper;
 
 import testComponents.TestSetup;
  
-public class ExtentListeners extends TestSetup implements ITestListener, IInvokedMethodListener {
+public class ExtentListeners extends TestSetup implements ITestListener {
     
 	static TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
 	
@@ -41,7 +40,7 @@ public class ExtentListeners extends TestSetup implements ITestListener, IInvoke
 
 	@Override
     public void onTestStart(ITestResult result) {
-		System.out.println(MessageFormat.format("{0} is starting", getTestMethodName(result)));
+		System.out.println(MessageFormat.format("{0} has started", getTestMethodName(result)));
     }
 	
 	@Override
@@ -66,6 +65,7 @@ public class ExtentListeners extends TestSetup implements ITestListener, IInvoke
 	@Override
     public void onTestFailure(ITestResult result) { 
     	System.out.println(MessageFormat.format("{0} has failed", getTestMethodName(result)));
+    	ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has failed", getTestMethodName(result)));
 
      	String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
      	ExtentTestManager.getTest().fail("Exception Occured: <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"

@@ -1,26 +1,26 @@
 package testComponents;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.time.Duration;
 
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
-import functions.HelperFunctions;
-
 import org.testng.Reporter;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import pageObjects.LoginPage;
+import resources.ChromeDriverConfig;
+import resources.EdgeDriverConfig;
 import resources.ExtentManager;
+import resources.FirefoxDriverConfig;
+import functions.HelperFunctions;
 
 public class TestSetup {
 
@@ -40,22 +40,16 @@ public class TestSetup {
 		}
 		if(browserNameString != null) {
 			if (browserNameString.contains("chrome")) {
-				ChromeOptions chromeOptions = new ChromeOptions();
-				chromeOptions.addArguments("--ignore-ssl-errors=yes");
-				chromeOptions.addArguments("--ignore-certificate-errors");
-				chromeOptions.addArguments("--user-data-dir=" + System.getProperty("java.io.tmpdir"));
-				WebDriverManager.chromedriver().setup();
-				if (browserNameString.contains("headless")) {
-					chromeOptions.addArguments("headless");
-				}
-				webDriver = new ChromeDriver(chromeOptions);
-	
+				final WebDriver chromeDriver = ChromeDriverConfig.setUpChromeDriver(browserNameString, webDriver);
+				webDriver = chromeDriver;
 			} else if (browserNameString.equalsIgnoreCase("firefox")) {
-				webDriver = new FirefoxDriver();
+				final WebDriver firefoxDriver = FirefoxDriverConfig.setUpFirefoxDriver(browserNameString, webDriver);
+				webDriver = firefoxDriver;
 			} else if (browserNameString.equalsIgnoreCase("edge")) {
-				webDriver = new EdgeDriver();
+				final WebDriver edgeDriver = EdgeDriverConfig.setUpEdgeDriver(browserNameString, webDriver);
+				webDriver = edgeDriver;
 			}
-	
+			webDriver.manage().window().setSize(new Dimension(1050, 650));
 			webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 			ITestContext context = Reporter.getCurrentTestResult().getTestContext();
 			context.setAttribute("WebDriver", webDriver);
@@ -66,18 +60,31 @@ public class TestSetup {
 	}
 
 	@BeforeMethod(alwaysRun = true)
-	protected void launchApplication(){
-		loginPage = new LoginPage(webDriver);	
+	protected void launchApplication(Method method){
+		loginPage = new LoginPage(webDriver);
+		String methodName = method.getName();
+		System.setProperty("MethodName", methodName);
 	}
 
 	@AfterClass(alwaysRun = true)
 	public void teardown() {
-		webDriver.close();
+		if(!webDriver.toString().contains("null")) {
+			webDriver.close();
+		}
 	}
 	
 	@AfterSuite(alwaysRun = true)
 	public void closeReports() {
 		ExtentManager.extentReports.flush();
+		if (!webDriver.toString().contains("null")) {
+			try {
+				webDriver.quit();
+			// Firefox generates a "NoSuchSessionException: Tried to run command without establishing a connection exception" 
+			// if .quit() called directly
+			} catch (NoSuchSessionException e) {
+		        return;
+			} 
+			// Edge generates a SocketException: Connection reset
+		}
 	}
-
 }

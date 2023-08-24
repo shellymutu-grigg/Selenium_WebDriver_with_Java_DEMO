@@ -29,15 +29,11 @@ public class SearchPage extends HelperFunctions {
 		PageFactory.initElements(webDriver, this);
 	}
 	
-	public void searchForProducts1(String product) {
+	public ResultsPage searchForProducts(String product) {
 		searchField.sendKeys(product);
 		searchButton.click();
-	}
-
-	public ResultsPage searchForProducts(String product) {
 		waitForElementToAppear(departmentsBy, webDriver);		
 		ResultsPage resultsPage = new ResultsPage(webDriver);
 		return resultsPage;
 	}
-
 }

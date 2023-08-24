@@ -16,42 +16,48 @@ import testComponents.TestSetup;
 @Listeners(ExtentListeners.class)
 public class SearchOrdersTest extends TestSetup{
 	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
+	String email = System.getenv("AMAZON_USERNAME");
+	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
 	
 	@Test(groups = { "Smoke" }, priority = 1, description = "Verify user is able search order history")
 	public void searchOrdersTest(Method method) throws Exception {		
 		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify user is able search order history");
-		
-		String email = System.getenv("AMAZON_USERNAME");
-		String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
+
+		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
 		
 		loginPage.navigateToURL();
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("navigateToURL()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 
 		loginPage.navigateToLanding();
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("navigateToLanding()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 
-		loginPage.enterUserDetails(email, password);
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		loginPage.enterUserEmail(email);
+		testHelperFunctions.validatePageTitle("enterUserEmail(email)", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 		
-		loginPage.pause();
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		loginPage.enterUserPassword(password);
+		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
 		
-		OrdersPage ordersPage = loginPage.ordersPage();
+		OrdersPage ordersPage = loginPage.pauseForOrdersPage();
+		testHelperFunctions.validatePageTitle("pauseForOrdersPage()", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		ordersPage.openAccountMenu();
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("openAccountMenu()", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		ordersPage.openOrderPage();
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("openOrderPage()", PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 
 		LogoutPage logoutPage = ordersPage.searchForOrders();
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("searchForOrders()", PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
+		
+		// 1 order matching text
 		
 		logoutPage.openAccountMenu();	
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("openAccountMenu()", PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 		
 		logoutPage.logout();
-		testHelperFunctions.validatePageTitle(testHelperFunctions.convertTestCaseName(method.getName()), PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("logout()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+
+		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has finished."));
 	}
 
 }
