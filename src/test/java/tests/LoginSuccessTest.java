@@ -13,12 +13,14 @@ import pageObjects.LogoutPage;
 import resources.ExtentListeners;
 import resources.ExtentTestManager;
 import testComponents.LoginProcess;
+import testComponents.LogoutProcess;
 import testComponents.TestSetup;
 
 @Listeners(ExtentListeners.class)
 public class LoginSuccessTest extends TestSetup{
 	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
-	LoginProcess loginSuccessProcess = new LoginProcess();
+	LoginProcess loginProcess = new LoginProcess();
+	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
 	WebElement webElement;
 	
@@ -26,13 +28,15 @@ public class LoginSuccessTest extends TestSetup{
 	
 	public void loginSuccessTest(Method method) {
 		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Successful login scenario");
-		
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
 
-		loginSuccessProcess.completeLogin(password, loginPage, webDriver);
+		loginPage.navigateToURL();
+		ExtentListeners extentListener = new ExtentListeners();
+		extentListener.onTestStartScreenshot(method.getName());
+		loginProcess.completeLogin(password, loginPage, webDriver);
 		
 		if(loginPage.checkIfSignedIn()) {
-			testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+			testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		} else {
 			if(loginPage.findLoginFailureText() == TextData.LOGIN_FAILURE_ALERT_TEXT) {
 				webElement = testHelperFunctions.getElement(webDriver, TextData.LOGIN_FAILURE_ALERT_TEXT);
@@ -50,19 +54,7 @@ public class LoginSuccessTest extends TestSetup{
 		}
 		
 		LogoutPage logoutPage = loginPage.initialiseLogoutPage();
-		testHelperFunctions.validatePageTitle("initialiseLogoutPage()", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
-		
-		logoutPage.openAccountMenu();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.ACCOUNT_MENU_TEXT);
-		testHelperFunctions.validateElement(webElement, "openAccountMenu()");
-		testHelperFunctions.validatePageTitle("openAccountMenu()", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
-		
-		logoutPage.logout();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.SIGNIN_TEXT);
-		testHelperFunctions.validateElement(webElement, "logout()");
-		testHelperFunctions.validatePageTitle("logout()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		
-		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has finished."));
+		logoutProcess.completeLogout(logoutPage, webDriver, "");	
 	}
 
 }

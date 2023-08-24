@@ -34,6 +34,7 @@ public class TestSetup {
 		String browserNameString = "";
 		try {
 			browserNameString = helperFunctions.getGlobalProperty("browser");
+			System.setProperty("Browser", browserNameString);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -48,8 +48,8 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	By loggedOutText = By.id("nav-link-accountList-nav-line-1");
 	By loginFailPuzzle = By.id("cvf-page-content");
 	By loginFailPuzzleMessageText = By.cssSelector(".a-spacing-mini");
-	By loginFailImportantMessage = By.cssSelector(".a-list-item");
-	By loginFailImportantMessageText = By.cssSelector(".a-list-item");
+	By loginFailImportantMessage = By.xpath("//*[contains(text(), '" + TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]");
+	By loginFailImportantMessageText = By.xpath("//*[contains(text(), '" + TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]");
 	By loginFailAlert = By.id("auth-error-message-box");
 	By loginFailAlertMessageText = By.cssSelector(".a-alert-content");
 	By userEmailBy = By.id("ap_email");
@@ -91,10 +91,14 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
 			waitForElementToAppear(landingPageAltBy, webDriver);
 			try {
-				Thread.sleep(10);
+				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			if(yourAccountLink != null) {
+				System.setProperty("YourAccount", "Your Account");
+				yourAccountLink.click();
 			}
 		}
 	}
@@ -126,17 +130,13 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	
 	public boolean checkIfSignedIn() {
 		waitForElementToAppear(accountLinkBy, webDriver);
-		if(webDriver.getTitle().contains(PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE)) {
+		if(webDriver.getTitle().contains(PageTitleData.LANDING_PAGE_TITLE)) {
 			return true;
 		}
 		else return false;
 	}
 	
 	public void navigateToLanding() {
-		if(yourAccountLink != null) {
-			yourAccountLink.click();
-		}
-		checkForPreviousLoginFailure();
 		signInLink.click();
 		waitForElementToAppear(userEmailBy, webDriver);
 	}

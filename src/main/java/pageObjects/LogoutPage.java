@@ -15,7 +15,7 @@ public class LogoutPage extends HelperFunctions {
 
 	Actions actions;
 	
-	By accountLinkBy = By.xpath("//span[normalize-space()='Account & Lists']");
+	By accountLinkBy = By.xpath("//*[contains(text(), 'Account & Lists')]");
 	By accountMenuBy = By.cssSelector(".nav-action-signin-button");
 	By logoutLinkBy = By.id("nav-item-signout");
 	By userEmailBy = By.id("ap_email");

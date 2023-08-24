@@ -12,6 +12,7 @@ import pageObjects.LogoutPage;
 import pageObjects.ResultsPage;
 import pageObjects.SearchPage;
 import testComponents.LoginProcess;
+import testComponents.LogoutProcess;
 import testComponents.TestSetup;
 import data.ConfigData;
 import data.PageTitleData;
@@ -24,25 +25,29 @@ import resources.TestHelperFunctions;
 @Listeners(ExtentListeners.class)
 public class E2EAddToCartTest extends TestSetup implements IHelper{	
 	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
-	LoginProcess loginSuccessProcess = new LoginProcess();
+	LoginProcess loginProcess = new LoginProcess();
+	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
 	WebElement webElement;
 	
 	@Test(groups = { "E2E" }, priority = 1, description = "End to End scenario")
 	public void addToCartTest(Method method) throws Exception {
 		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove it and log out successfully.");
-
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
 
-		loginSuccessProcess.completeLogin(password, loginPage, webDriver);
+		loginPage.navigateToURL();
+		ExtentListeners extentListener = new ExtentListeners();
+		extentListener.onTestStartScreenshot(method.getName());
+		
+		loginProcess.completeLogin(password, loginPage, webDriver);
 		webElement = testHelperFunctions.getElement(webDriver, TextData.RETURNS_AND_ORDERS_TEXT);
 		testHelperFunctions.validateElement(webElement, "enterUserPassword(password)");
-		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		SearchPage searchPage = loginPage.pauseForSearchPage();	
 		webElement = testHelperFunctions.getElement(webDriver, TextData.DELIVER_TO_TEXT);
 		testHelperFunctions.validateElement(webElement, "pauseForSearchPage()");
-		testHelperFunctions.validatePageTitle("pauseForSearchPage()", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("pauseForSearchPage()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 
 		ResultsPage resultsPage = searchPage.searchForProducts(TextData.SEARCH_TEXT);
 		webElement = testHelperFunctions.getElement(webDriver, TextData.RESULTS_TEXT);
@@ -74,22 +79,12 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 		testHelperFunctions.validateElement(webElement, "openCart()");
 		testHelperFunctions.validatePageTitle("openCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 				
-		LogoutPage logoutPage =  cartPage.deleteCart();
+		LogoutPage logoutPage =  cartPage.deleteCart();	
 		webElement = testHelperFunctions.getElement(webDriver, TextData.REMOVED_FROM_CART_TEXT);
 		testHelperFunctions.validateElement(webElement, "deleteCart()");
 		testHelperFunctions.validatePageTitle("deleteCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
-		
-		logoutPage.openAccountMenu();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.ACCOUNT_MENU_TEXT);
-		testHelperFunctions.validateElement(webElement, "openAccountMenu()");
-		testHelperFunctions.validatePageTitle("openAccountMenu()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
-		
-		logoutPage.logout();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.SIGNIN_TEXT);
-		testHelperFunctions.validateElement(webElement, "logout()");
-		testHelperFunctions.validatePageTitle("logout()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		
-		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has finished."));
+
+		logoutProcess.completeCartLogout(logoutPage, webDriver);
 	}
 
 	@Override

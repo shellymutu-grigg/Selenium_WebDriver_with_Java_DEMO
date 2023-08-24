@@ -24,11 +24,13 @@ public class LoginFailureTest extends TestSetup {
 	@Test(groups = { "Smoke", "ErrorHandling" }, priority = 1, description = "Unsuccessful login scenario")
 	public void loginFailureTest(Method method) throws Exception {		
 		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Unsuccessful login scenario");
-
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
+
+		loginPage.navigateToURL();
+		ExtentListeners extentListener = new ExtentListeners();
+		extentListener.onTestStartScreenshot(method.getName());
 		
 		loginSuccessProcess.completeLogin(password, loginPage, webDriver);
-		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 		
 		String loginFailStatus = loginPage.loginFail();
 		if(loginFailStatus == TextData.LOGIN_FAILURE_ALERT_TEXT) {
@@ -44,7 +46,5 @@ public class LoginFailureTest extends TestSetup {
 			testHelperFunctions.validateElement(webElement, "enterUserDetails(email, password) with an important message page presented");
 			testHelperFunctions.validatePageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());				
 		}
-		
-		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has finished."));
 	}
 }

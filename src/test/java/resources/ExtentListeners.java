@@ -54,11 +54,12 @@ public class ExtentListeners extends TestSetup implements ITestListener {
      
     	try {
             String fileName = captureScreenshot(result.getMethod().getMethodName());
-            ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case successfully ended at:" + "</font>",
-             MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
+            ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + getTestMethodName(result) + " successfully ended at:" + "</font>",
+            		MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
          } catch (Exception e) {
          	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
          } 
+    	ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(result.getMethod().getMethodName() + " has finished."));
     	ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(testHelperFunctions.convertTestCaseName(result.getMethod().getMethodName()) + " - PASS", ExtentColor.GREEN));
     }
  
@@ -68,12 +69,12 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     	ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has failed", getTestMethodName(result)));
 
      	String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
-     	ExtentTestManager.getTest().fail("Exception Occured: <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
+     	ExtentTestManager.getTest().fail("Exception Occured in test case: " + getTestMethodName(result) + " <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
                 + "</font>" + "</summary>" + exceptionMessage.replaceAll(",", "<br>")+"</details>"+" \n");
      	try {
            String fileName = captureScreenshot(result.getMethod().getMethodName());
            ExtentTestManager.getTest().fail("<font color=" + "red>" + "Screenshot of location of failure" + "</font>",
-            MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
+        		   MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
         } catch (Exception e) {
         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
         }
@@ -94,6 +95,16 @@ public class ExtentListeners extends TestSetup implements ITestListener {
  
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+    }
+    
+    public void onTestStartScreenshot(String testCaseName) {
+     	try {
+            String fileName = captureScreenshot(testCaseName);
+            ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + testHelperFunctions.convertTestCaseName(testCaseName) + " successfully started at:" + "</font>",
+            MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
+         } catch (Exception e) {
+         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
+         } 
     }
     
     public String captureScreenshot(String testCaseName) throws IOException {
