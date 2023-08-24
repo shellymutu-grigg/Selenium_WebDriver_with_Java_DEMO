@@ -1,7 +1,9 @@
 package tests;
 
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -28,7 +30,8 @@ public class LoginSuccessTest extends TestSetup{
 	
 	public void loginSuccessTest(Method method) {
 		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Successful login scenario");
-		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
+		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.", 
+				testHelperFunctions.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
 
 		loginPage.navigateToURL();
 		ExtentListeners extentListener = new ExtentListeners();

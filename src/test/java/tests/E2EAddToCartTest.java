@@ -1,8 +1,10 @@
 package tests;
 
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.testng.annotations.Listeners;
@@ -33,8 +35,9 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 	@Test(groups = { "E2E" }, priority = 1, description = "End to End scenario")
 	public void addToCartTest(Method method) throws Exception {
 		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove it and log out successfully.");
-		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
-
+		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.", 
+				testHelperFunctions.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
+		
 		loginPage.navigateToURL();
 		ExtentListeners extentListener = new ExtentListeners();
 		extentListener.onTestStartScreenshot(method.getName());

@@ -14,7 +14,7 @@ public class LogoutProcess {
 	
 	public void completeCartLogout(LogoutPage logoutPage, WebDriver webDriver) {	
 		logoutPage.openAccountMenu();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.ACCOUNT_MENU_TEXT);
+		webElement = testHelperFunctions.getElement(webDriver, TextData.YOUR_ACCOUNT_TEXT);
 		testHelperFunctions.validateElement(webElement, "openAccountMenu()");
 		testHelperFunctions.validatePageTitle("openAccountMenu()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 		
@@ -32,7 +32,7 @@ public class LogoutProcess {
 		testHelperFunctions.validatePageTitle("initialiseLogoutPage()", pageTitle, webDriver.getTitle());
 		
 		logoutPage.openAccountMenu();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.ACCOUNT_MENU_TEXT);
+		webElement = testHelperFunctions.getElement(webDriver, TextData.YOUR_ACCOUNT_TEXT);
 		testHelperFunctions.validateElement(webElement, "openAccountMenu()");
 		testHelperFunctions.validatePageTitle("openAccountMenu()", pageTitle, webDriver.getTitle());
 		

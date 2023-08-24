@@ -1,7 +1,7 @@
 package data;
 
 public class TextData {
-	public static final String ACCOUNT_MENU_TEXT = "Your Account";
+	public static final String ACCOUNT_MENU_LINK_TEXT = "Account & Lists";
 	public static final String ADDED_TO_CART_TEXT = "Added to Cart";
 	public static final String CREATE_ACCOUNT_TEXT = "Create your Amazon";
 	public static final String DELIVER_TO_TEXT = "Deliver to";
@@ -19,7 +19,10 @@ public class TextData {
 	public static final String REMOVED_FROM_CART_TEXT = "Your Amazon Cart is empty";
 	public static final String RESULTS_TEXT = "results for"; 
 	public static final String RETURNS_AND_ORDERS_TEXT = "Returns";
+	public final static String SEARCH_RESULTS_TEXT = "Search results";
 	public final static String SEARCH_TEXT = "ISTQB Foundation Exam";
 	public final static String SHOPPING_CART_TEXT = "Shopping Cart";
 	public static final String SIGNIN_TEXT = "phone number";
+	public static final String YOUR_ACCOUNT_TEXT = "Your Account";
+	public static final String YOUR_ORDERS_TEXT = "Your Orders";
 }

@@ -18,9 +18,9 @@ public class LoginProcess {
 		
 		String pageTitle;
 		String pageText;
-		if(System.getProperty("YourAccount") == TextData.ACCOUNT_MENU_TEXT) {
+		if(System.getProperty("YourAccount") == TextData.YOUR_ACCOUNT_TEXT) {
 			pageTitle = PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE;
-			pageText = TextData.KEEP_SIGNED_IN_TEXT;
+			pageText = TextData.DELIVER_TO_TEXT;
 		} else {
 			pageTitle = PageTitleData.LANDING_PAGE_TITLE;
 			pageText = TextData.LANDING_PAGE_SIGNIN_TEXT;
