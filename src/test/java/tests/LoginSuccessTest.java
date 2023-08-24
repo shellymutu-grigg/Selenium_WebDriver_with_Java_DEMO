@@ -12,13 +12,14 @@ import data.TextData;
 import pageObjects.LogoutPage;
 import resources.ExtentListeners;
 import resources.ExtentTestManager;
+import testComponents.LoginProcess;
 import testComponents.TestSetup;
 
 @Listeners(ExtentListeners.class)
 public class LoginSuccessTest extends TestSetup{
 	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
-	String email = System.getenv("AMAZON_USERNAME");
-	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
+	LoginProcess loginSuccessProcess = new LoginProcess();
+	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
 	WebElement webElement;
 	
 	@Test(groups = { "Smoke", "Login" }, priority = 1, description = "Successful login scenario")
@@ -28,21 +29,7 @@ public class LoginSuccessTest extends TestSetup{
 		
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
 
-		loginPage.navigateToURL();
-		testHelperFunctions.validatePageTitle("navigateToURL()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
-		webElement = testHelperFunctions.getElement(webDriver, TextData.LANDING_PAGE_SIGNIN_TEXT);
-		testHelperFunctions.validateElement(webElement, "navigateToURL()"); 
-
-		loginPage.navigateToLanding();
-		testHelperFunctions.validatePageTitle("navigateToLanding()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		webElement = testHelperFunctions.getElement(webDriver, TextData.SIGNIN_TEXT);
-		testHelperFunctions.validateElement(webElement, "navigateToLanding()");
-		
-		loginPage.enterUserEmail(email); 		
-		webElement = testHelperFunctions.getElement(webDriver, TextData.KEEP_SIGNED_IN_TEXT);
-		testHelperFunctions.validateElement(webElement, "enterUserEmail(email)");
-		
-		loginPage.enterUserPassword(password);
+		loginSuccessProcess.completeLogin(password, loginPage, webDriver);
 		
 		if(loginPage.checkIfSignedIn()) {
 			testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());

@@ -11,6 +11,7 @@ import pageObjects.CartPage;
 import pageObjects.LogoutPage;
 import pageObjects.ResultsPage;
 import pageObjects.SearchPage;
+import testComponents.LoginProcess;
 import testComponents.TestSetup;
 import data.ConfigData;
 import data.PageTitleData;
@@ -23,8 +24,8 @@ import resources.TestHelperFunctions;
 @Listeners(ExtentListeners.class)
 public class E2EAddToCartTest extends TestSetup implements IHelper{	
 	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
-	String email = System.getenv("AMAZON_USERNAME");
-	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
+	LoginProcess loginSuccessProcess = new LoginProcess();
+	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
 	WebElement webElement;
 	
 	@Test(groups = { "E2E" }, priority = 1, description = "End to End scenario")
@@ -33,21 +34,7 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
 
-		loginPage.navigateToURL();
-		testHelperFunctions.validatePageTitle("navigateToURL()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
-		webElement = testHelperFunctions.getElement(webDriver, TextData.LANDING_PAGE_SIGNIN_TEXT);
-		testHelperFunctions.validateElement(webElement, "navigateToURL()"); 
-
-		loginPage.navigateToLanding();
-		testHelperFunctions.validatePageTitle("navigateToLanding()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		webElement = testHelperFunctions.getElement(webDriver, TextData.SIGNIN_TEXT);
-		testHelperFunctions.validateElement(webElement, "navigateToLanding()");
-		
-		loginPage.enterUserEmail(email); 		
-		webElement = testHelperFunctions.getElement(webDriver, TextData.KEEP_SIGNED_IN_TEXT);
-		testHelperFunctions.validateElement(webElement, "enterUserEmail(email)");
-		
-		loginPage.enterUserPassword(password);
+		loginSuccessProcess.completeLogin(password, loginPage, webDriver);
 		webElement = testHelperFunctions.getElement(webDriver, TextData.RETURNS_AND_ORDERS_TEXT);
 		testHelperFunctions.validateElement(webElement, "enterUserPassword(password)");
 		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE, webDriver.getTitle());

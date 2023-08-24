@@ -2,20 +2,24 @@ package tests;
 
 import java.lang.reflect.Method;
 
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import data.PageTitleData;
+import data.TextData;
 import resources.ExtentListeners;
 import resources.ExtentTestManager;
 import resources.TestHelperFunctions;
+import testComponents.LoginProcess;
 import testComponents.TestSetup;
 
 @Listeners(ExtentListeners.class)
 public class LoginFailureTest extends TestSetup {
 	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
-	String email = System.getenv("AMAZON_USERNAME");
-	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
+	LoginProcess loginSuccessProcess = new LoginProcess();
+	String password = System.getenv("AMAZON_PASSWORD_FAIL");
+	WebElement webElement;
 	
 	@Test(groups = { "Smoke", "ErrorHandling" }, priority = 1, description = "Unsuccessful login scenario")
 	public void loginFailureTest(Method method) throws Exception {		
@@ -23,20 +27,23 @@ public class LoginFailureTest extends TestSetup {
 
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has started."));
 		
-		loginPage.navigateToURL();
-		testHelperFunctions.validatePageTitle("navigateToURL()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
-
-		loginPage.navigateToLanding();
-		testHelperFunctions.validatePageTitle("navigateToLanding()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		
-		loginPage.enterUserEmail(email);
-		testHelperFunctions.validatePageTitle("enterUserEmail(email)", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		
-		loginPage.enterUserPassword(password);
+		loginSuccessProcess.completeLogin(password, loginPage, webDriver);
 		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 		
-		loginPage.loginFail();
-		//TODO validate page title
+		String loginFailStatus = loginPage.loginFail();
+		if(loginFailStatus == TextData.LOGIN_FAILURE_ALERT_TEXT) {
+			webElement = testHelperFunctions.getElement(webDriver, TextData.LOGIN_FAILURE_ALERT_TEXT);
+			testHelperFunctions.validateElement(webElement, "enterUserDetails(email, password) with incorrect password");
+			testHelperFunctions.validatePageTitle("enterUserDetails(email, password) with incorrect password", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());	
+		} else if(loginFailStatus == TextData.LOGIN_PUZZLE_TEXT) {
+			webElement = testHelperFunctions.getElement(webDriver, TextData.LOGIN_PUZZLE_TEXT);
+			testHelperFunctions.validateElement(webElement, "enterUserDetails(email, password) with puzzle page presented");
+			testHelperFunctions.validatePageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());				
+		} else if(loginFailStatus == TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT) {
+			webElement = testHelperFunctions.getElement(webDriver, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
+			testHelperFunctions.validateElement(webElement, "enterUserDetails(email, password) with an important message page presented");
+			testHelperFunctions.validatePageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());				
+		}
 		
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), testHelperFunctions.convertTestCaseName(method.getName() + " has finished."));
 	}

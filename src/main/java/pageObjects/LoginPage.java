@@ -164,19 +164,21 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 		return failureText;
 	}
 	
-	public void loginFail() {
+	public String loginFail() {
+		String loginFailStatus = "";
 		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
-			System.setProperty("LoginFailStatus", TextData.LOGIN_FAILURE_ALERT_TEXT);
+			loginFailStatus = TextData.LOGIN_FAILURE_ALERT_TEXT;
 			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT);
 		}
 		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
-			System.setProperty("LoginFailStatus", TextData.LOGIN_PUZZLE_TEXT);
+			loginFailStatus =  TextData.LOGIN_PUZZLE_TEXT;
 			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT);
 		}
 		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
-			System.setProperty("LoginFailStatus", TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
+			loginFailStatus = TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
 			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
 		}
+		return loginFailStatus;
 	}
 	
 	public void validateLoginFailure(By elementHandle, By elementMessageText, String expectedText) {
