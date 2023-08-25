@@ -27,9 +27,14 @@ public class LoginSuccessTest extends TestSetup{
 	WebElement webElement;
 	
 	@Test(groups = { "Smoke", "Login" }, priority = 1, description = "Successful login scenario")
-	
+	/*
+		GIVEN a user enters a correct email and password combination
+		WHEN they access the Enter Email and Enter Password screens
+		THEN the application will log the user in
+			AND the user will be able to review their account
+	 */
 	public void loginSuccessTest(Method method) {
-		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Successful login scenario");
+		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "A user is able to successfully login with a valid email and password combo");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.", 
 				testHelperFunctions.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
 

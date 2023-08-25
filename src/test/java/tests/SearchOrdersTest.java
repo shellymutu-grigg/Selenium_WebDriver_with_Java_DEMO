@@ -27,9 +27,17 @@ public class SearchOrdersTest extends TestSetup{
 	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
 	WebElement webElement;
 	
-	@Test(groups = { "Smoke" }, priority = 1, description = "Verify user is able search order history")
+	@Test(groups = { "Smoke" }, priority = 1, description = "Verify user is able to login, search their order history and log out")
+	/*
+		GIVEN a user enters a correct email and password combination
+		WHEN they access the Enter Email and Enter Password screens
+		THEN the application will log the user in
+			AND the user will be able to access their previous orders list
+			AND the user will be able to search previous orders
+			AND the user will be able to log out.
+	 */
 	public void searchOrdersTest(Method method) throws Exception {		
-		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify user is able search order history");
+		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify user is able to login, search their order history and log out");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.", 
 				testHelperFunctions.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
 		

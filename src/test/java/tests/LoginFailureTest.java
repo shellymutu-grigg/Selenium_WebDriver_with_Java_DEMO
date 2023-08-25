@@ -23,9 +23,15 @@ public class LoginFailureTest extends TestSetup {
 	String password = System.getenv("AMAZON_PASSWORD_FAIL");
 	WebElement webElement;
 	
-	@Test(groups = { "Smoke", "ErrorHandling" }, priority = 1, description = "Unsuccessful login scenario")
-	public void loginFailureTest(Method method) throws Exception {		
-		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Unsuccessful login scenario");
+	@Test(groups = { "Smoke", "ErrorHandling" }, priority = 1, description = "Entering an incorrect password will result in an error page being displayed to the user")
+	/*
+		GIVEN a user enters an incorrect password
+		WHEN they are on the Enter Password screen
+		THEN the application will return an error page
+			AND the user will not be logged in
+	 */
+	public void loginFailureTest(Method method) throws Exception {
+		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Entering an incorrect password will result in an error page being displayed to the user");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.", 
 				testHelperFunctions.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
 		

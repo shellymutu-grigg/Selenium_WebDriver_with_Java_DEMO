@@ -32,9 +32,18 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
 	WebElement webElement;
 	
-	@Test(groups = { "E2E" }, priority = 1, description = "End to End scenario")
+	@Test(groups = { "E2E" }, priority = 1, description = "Add to Cart End to End scenario")
+	/*
+		GIVEN a user enters a correct email and password combination
+		WHEN they access the Enter Email and Enter Password screens
+		THEN the application will log the user in
+			AND the user will be able to search for products
+			AND add a product to their cart
+			AND remove the product from their cart
+			AND logout from their account
+	 */
 	public void addToCartTest(Method method) throws Exception {
-		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove it and log out successfully.");
+		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove the item from their cart and log out successfully.");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.", 
 				testHelperFunctions.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
 		
