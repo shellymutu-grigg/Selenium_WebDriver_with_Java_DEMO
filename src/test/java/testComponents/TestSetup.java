@@ -16,10 +16,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.Reporter;
 
 import pageObjects.LoginPage;
-import resources.ChromeDriverConfig;
-import resources.EdgeDriverConfig;
+import configuration.ChromeDriverConfig;
+import configuration.EdgeDriverConfig;
 import resources.ExtentManager;
-import resources.FirefoxDriverConfig;
+import configuration.FirefoxDriverConfig;
 import functions.HelperFunctions;
 
 public class TestSetup {
