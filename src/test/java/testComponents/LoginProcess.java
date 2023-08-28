@@ -1,5 +1,7 @@
 package testComponents;
 
+import functions.AssertElementNotNull;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -7,6 +9,7 @@ import data.PageTitleData;
 import data.TextData;
 import pageObjects.LoginPage;
 import resources.TestHelperFunctions;
+import webElement.FindElement;
 
 public class LoginProcess {
 	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
@@ -26,17 +29,14 @@ public class LoginProcess {
 			pageText = TextData.LANDING_PAGE_SIGNIN_TEXT;
 		}
 		testHelperFunctions.validatePageTitle("navigateToURL()", pageTitle, webDriver.getTitle());
-		webElement = testHelperFunctions.getElement(webDriver, pageText);
-		testHelperFunctions.validateElement(webElement, "navigateToURL()"); 
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ pageText +"')]"), webDriver), "navigateToURL()");
 		
 		loginPage.navigateToLanding();
 		testHelperFunctions.validatePageTitle("navigateToLanding()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		webElement = testHelperFunctions.getElement(webDriver, TextData.SIGNIN_TEXT);
-		testHelperFunctions.validateElement(webElement, "navigateToLanding()");
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.SIGNIN_TEXT +"')]"), webDriver), "navigateToLanding()");
 		
-		loginPage.enterUserEmail(email); 		
-		webElement = testHelperFunctions.getElement(webDriver, TextData.KEEP_SIGNED_IN_TEXT);
-		testHelperFunctions.validateElement(webElement, "enterUserEmail(email)");
+		loginPage.enterUserEmail(email);
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.KEEP_SIGNED_IN_TEXT +"')]"), webDriver), "enterUserEmail(email)");
 		
 		loginPage.enterUserPassword(password);
 	}

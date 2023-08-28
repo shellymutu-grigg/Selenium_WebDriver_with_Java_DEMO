@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import functions.HelperFunctions;
+import webElement.FindElement;
 
 public class SearchPage extends HelperFunctions {
 
@@ -32,7 +33,7 @@ public class SearchPage extends HelperFunctions {
 	public ResultsPage searchForProducts(String product) {
 		searchField.sendKeys(product);
 		searchButton.click();
-		waitForElementToAppear(departmentsBy, webDriver);		
+		FindElement.getWebElement(departmentsBy, webDriver);
 		ResultsPage resultsPage = new ResultsPage(webDriver);
 		return resultsPage;
 	}

@@ -1,18 +1,15 @@
 package pageObjects;
 
-import java.time.Duration;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import data.TextData;
 import functions.HelperFunctions;
+import webElement.FindElement;
 
 public class OrdersPage extends HelperFunctions {
 
@@ -20,7 +17,8 @@ public class OrdersPage extends HelperFunctions {
 	Actions actions;
 
 	By accountLinkBy = By.xpath("//span[normalize-space()='Account & Lists']");
-	By accountMenuBy = By.id("nav-al-your-account");
+	By accountMenuBy = By.id("nav-link-accountList");
+	By orderFilter = By.cssSelector("label[for='orderFilter']");
 	By orderPageLinkBy = By.id("nav_prefetch_yourorders");
 	By orderHeaderBy = By.xpath("//h1[normalize-space()='Your Orders']");
 	By searchOrdersFieldBy = By.id("searchOrdersInput");
@@ -34,27 +32,27 @@ public class OrdersPage extends HelperFunctions {
 	}
 
 	public void openAccountMenu() {
-		WebElement acountMenu = webDriver.findElement(accountLinkBy);
-		actions.moveToElement(acountMenu).perform();
-		waitForElementToAppear(accountMenuBy, webDriver);
+		try{
+			FindElement.getWebElement(accountMenuBy, webDriver);
+			actions.moveToElement(FindElement.getWebElement(accountMenuBy, webDriver)).perform();
+		}catch(MoveTargetOutOfBoundsException e){
+			e.getMessage();
+		}
 	}
 	
-	public void openOrderPage(){
-		WebElement ordersLink = webDriver.findElement(orderPageLinkBy);
-		actions.moveToElement(ordersLink).perform();
-		ordersLink.click();		
-		waitForElementToAppear(orderHeaderBy, webDriver);
+	public void openOrdersPage(){
+		try{
+			actions.moveToElement(FindElement.getWebElement(orderPageLinkBy, webDriver)).perform();
+			FindElement.getWebElement(orderPageLinkBy, webDriver).click();
+		}catch(MoveTargetOutOfBoundsException e){
+			e.getMessage();
+		}
 	}
 	
 	public LogoutPage searchForOrders(){ 
-		WebElement searchField = webDriver.findElement(searchOrdersFieldBy);
-		WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-		searchField.sendKeys(TextData.ORDER_SEARCH_TEXT);
-		WebElement searchOrdersButton = wait.until(ExpectedConditions.elementToBeClickable(searchOrdersButtonBy));
-		searchOrdersButton.click();
-		
-		WebElement order = webDriver.findElement(By.cssSelector("label[for='orderFilter']"));
-		String orderFilterText = order.getText();
+		FindElement.getWebElement(searchOrdersFieldBy, webDriver).sendKeys(TextData.ORDER_SEARCH_TEXT);
+		FindElement.getWebElement(searchOrdersButtonBy, webDriver).click();
+		String orderFilterText = FindElement.getWebElement(orderFilter, webDriver).getText();
 		
 		Assert.assertEquals(orderFilterText, TextData.ORDER_FILTER_TEXT);
 		LogoutPage logoutPage = new LogoutPage(webDriver);

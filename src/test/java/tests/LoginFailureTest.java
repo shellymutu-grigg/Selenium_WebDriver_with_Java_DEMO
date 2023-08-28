@@ -3,7 +3,9 @@ package tests;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
+import functions.AssertElementNotNull;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -15,6 +17,7 @@ import resources.ExtentTestManager;
 import resources.TestHelperFunctions;
 import testComponents.LoginProcess;
 import testComponents.TestSetup;
+import webElement.FindElement;
 
 @Listeners(ExtentListeners.class)
 public class LoginFailureTest extends TestSetup {
@@ -49,16 +52,13 @@ public class LoginFailureTest extends TestSetup {
 			pageTitle = PageTitleData.LANDING_PAGE_TITLE;
 		}
 		if(loginFailStatus == TextData.LOGIN_FAILURE_ALERT_TEXT) {
-			webElement = testHelperFunctions.getElement(webDriver, TextData.LOGIN_FAILURE_ALERT_TEXT);
-			testHelperFunctions.validateElement(webElement, "enterUserDetails(email, password) with incorrect password");
+			AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with incorrect password");
 			testHelperFunctions.validatePageTitle("enterUserDetails(email, password) with incorrect password", pageTitle, webDriver.getTitle());	
 		} else if(loginFailStatus == TextData.LOGIN_PUZZLE_TEXT) {
-			webElement = testHelperFunctions.getElement(webDriver, TextData.LOGIN_PUZZLE_TEXT);
-			testHelperFunctions.validateElement(webElement, "enterUserDetails(email, password) with puzzle page presented");
+			AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_PUZZLE_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with puzzle page presented");
 			testHelperFunctions.validatePageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.AUTHENTICATION_REQUIRED_PAGE_TITLE, webDriver.getTitle());				
 		} else if(loginFailStatus == TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT) {
-			webElement = testHelperFunctions.getElement(webDriver, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
-			testHelperFunctions.validateElement(webElement, "enterUserDetails(email, password) with an important message page presented");
+			AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with an important message page presented");
 			testHelperFunctions.validatePageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());				
 		}
 	}

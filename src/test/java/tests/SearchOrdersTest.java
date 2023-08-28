@@ -3,7 +3,9 @@ package tests;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
+import functions.AssertElementNotNull;
 import org.apache.commons.lang3.StringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -18,6 +20,7 @@ import resources.TestHelperFunctions;
 import testComponents.LoginProcess;
 import testComponents.LogoutProcess;
 import testComponents.TestSetup;
+import webElement.FindElement;
 
 @Listeners(ExtentListeners.class)
 public class SearchOrdersTest extends TestSetup{
@@ -46,31 +49,31 @@ public class SearchOrdersTest extends TestSetup{
 		extentListener.onTestStartScreenshot(method.getName());
 		
 		loginSuccessProcess.completeLogin(password, loginPage, webDriver);
-		webElement = testHelperFunctions.getElement(webDriver, TextData.RETURNS_AND_ORDERS_TEXT);
-		testHelperFunctions.validateElement(webElement, "enterUserPassword(password)");
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.RETURNS_AND_ORDERS_TEXT +"')]"), webDriver), "enterUserPassword(password)");
 		
-		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+		testHelperFunctions.validatePageTitle("completeLogin()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		
-		OrdersPage ordersPage = loginPage.pauseForOrdersPage();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.ACCOUNT_MENU_LINK_TEXT);
-		testHelperFunctions.validateElement(webElement, "pauseForOrdersPage()");
-		testHelperFunctions.validatePageTitle("pauseForOrdersPage()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+		OrdersPage ordersPage = loginPage.generateOrdersPage();
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.ACCOUNT_MENU_LINK_TEXT +"')]"), webDriver), "pauseForOrdersPage()");
+		testHelperFunctions.validatePageTitle("generateOrdersPage()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		ordersPage.openAccountMenu();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.YOUR_ACCOUNT_TEXT);
-		testHelperFunctions.validateElement(webElement, "openAccountMenu()");
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.YOUR_ACCOUNT_TEXT +"')]"), webDriver), "openAccountMenu()");
 		testHelperFunctions.validatePageTitle("openAccountMenu()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		
-		ordersPage.openOrderPage();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.YOUR_ORDERS_TEXT);
-		testHelperFunctions.validateElement(webElement, "openOrderPage()");
+		ordersPage.openOrdersPage();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//h1[normalize-space()='"+ TextData.YOUR_ORDERS_TEXT +"']") , webDriver), "openOrderPage()");
 		testHelperFunctions.validatePageTitle("openOrderPage()", PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 
 		LogoutPage logoutPage = ordersPage.searchForOrders();
-		webElement = testHelperFunctions.getElement(webDriver, TextData.SEARCH_RESULTS_TEXT);
-		testHelperFunctions.validateElement(webElement, "searchForOrders()");
+		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.SEARCH_RESULTS_TEXT +"')]"), webDriver), "searchForOrders()");
 		testHelperFunctions.validatePageTitle("searchForOrders()", PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 		
-		logoutProcess.completeLogout(logoutPage, webDriver, "searchOrdersTest");	
+		logoutProcess.logout(logoutPage, webDriver, "searchOrdersTest");
 	}
 }

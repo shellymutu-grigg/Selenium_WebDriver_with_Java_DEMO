@@ -3,8 +3,10 @@ package pageObjects;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Properties;
 
+import functions.IsElementPresent;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,12 +18,11 @@ import org.testng.ITestListener;
 import data.PageTitleData;
 import data.TextData;
 import functions.HelperFunctions;
+import webElement.FindElement;
 
 public class LoginPage extends HelperFunctions implements ITestListener{
 
 	WebDriver webDriver;
-	
-	HelperFunctions helperFunctions = new HelperFunctions(webDriver);
 
 	@FindBy(xpath="//span[normalize-space()='Account & Lists']")
 	WebElement signInLink;
@@ -85,17 +86,11 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 		: properties.getProperty("url");
 		webDriver.get(url);
 		
-		if(helperFunctions.isElementPresent(landingPageBy, webDriver)) {
-			waitForElementToAppear(landingPageBy, webDriver);
+		if(FindElement.getWebElement(landingPageBy, webDriver) != null) {
+			FindElement.getWebElement(landingPageBy, webDriver);
 		}
-		else if(helperFunctions.isElementPresent(landingPageAltBy, webDriver)) {
-			waitForElementToAppear(landingPageAltBy, webDriver);
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		else if(FindElement.getWebElement(landingPageAltBy, webDriver) != null) {
+			FindElement.getWebElement(landingPageAltBy, webDriver);
 			if(yourAccountLink != null) {
 				System.setProperty("YourAccount", "Your Account");
 				yourAccountLink.click();
@@ -103,33 +98,34 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 		}
 	}
 	
-	public SearchPage pauseForSearchPage() {
-		waitForElementToAppear(accountLinkBy, webDriver);
+	public SearchPage generateSearchPage() {
+		FindElement.getWebElement(accountLinkBy, webDriver);
 		SearchPage searchPage = new SearchPage(webDriver);
 		return searchPage;
 	}
 	
-	public OrdersPage pauseForOrdersPage() {
-		waitForElementToAppear(accountLinkBy, webDriver);
+	public OrdersPage generateOrdersPage() {
+		System.out.println(MessageFormat.format("Account Link element: {0}", FindElement.getWebElement(accountLinkBy, webDriver).getText()));
+		FindElement.getWebElement(accountLinkBy, webDriver);
 		OrdersPage ordersPage = new OrdersPage(webDriver);
 		return ordersPage;
 	}	
 	
 	public void enterUserEmail(String email) {
-		waitForElementToAppear(userEmailBy, webDriver);
+		FindElement.getWebElement(userEmailBy, webDriver);
 		userEmail.sendKeys(email);
 		continueButton.click();
 	}
 	
 	public void enterUserPassword(String password) {
-		waitForElementToAppear(userPasswordBy, webDriver);
+		FindElement.getWebElement(userPasswordBy, webDriver);
 		userPassword.sendKeys(password);
 		login.click();
 		
 	}
 	
 	public boolean checkIfSignedIn() {
-		waitForElementToAppear(accountLinkBy, webDriver);
+		FindElement.getWebElement(accountLinkBy, webDriver);
 		if(webDriver.getTitle().contains(PageTitleData.LANDING_PAGE_TITLE)) {
 			return true;
 		}
@@ -138,11 +134,11 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	
 	public void navigateToLanding() {
 		signInLink.click();
-		waitForElementToAppear(userEmailBy, webDriver);
+		FindElement.getWebElement(userEmailBy, webDriver);
 	}
 	
 	public void checkForPreviousLoginFailure() {
-		String accountListText = webDriver.findElement(accountMenuBy).getText();
+		String accountListText = FindElement.getWebElement(accountMenuBy, webDriver).getText();
 		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
 			initialiseLogoutPage().openAccountMenu();
 			initialiseLogoutPage().logout();
@@ -152,13 +148,13 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	
 	public String findLoginFailureText() {
 		String failureText = "";
-		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
+		if(IsElementPresent.isElementPresent(loginFailAlert, webDriver)) {
 			failureText = TextData.LOGIN_FAILURE_ALERT_TEXT;
 		}
-		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
+		else if(IsElementPresent.isElementPresent(loginFailPuzzle, webDriver)) {
 			failureText =  TextData.LOGIN_PUZZLE_TEXT;
 		}
-		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
+		else if(IsElementPresent.isElementPresent(loginFailImportantMessage, webDriver)) {
 			failureText =  TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
 		}
 		return failureText;
@@ -166,15 +162,15 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	
 	public String loginFail() {
 		String loginFailStatus = "";
-		if(helperFunctions.isElementPresent(loginFailAlert, webDriver)) {
+		if(IsElementPresent.isElementPresent(loginFailAlert, webDriver)) {
 			loginFailStatus = TextData.LOGIN_FAILURE_ALERT_TEXT;
 			validateLoginFailure(loginFailAlert, loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT);
 		}
-		else if(helperFunctions.isElementPresent(loginFailPuzzle, webDriver)) {
+		else if(IsElementPresent.isElementPresent(loginFailPuzzle, webDriver)) {
 			loginFailStatus =  TextData.LOGIN_PUZZLE_TEXT;
 			validateLoginFailure(loginFailPuzzle, loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT);
 		}
-		else if(helperFunctions.isElementPresent(loginFailImportantMessage, webDriver)) {
+		else if(IsElementPresent.isElementPresent(loginFailImportantMessage, webDriver)) {
 			loginFailStatus = TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
 			validateLoginFailure(loginFailImportantMessage, loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
 		}
@@ -182,9 +178,8 @@ public class LoginPage extends HelperFunctions implements ITestListener{
 	}
 	
 	public void validateLoginFailure(By elementHandle, By elementMessageText, String expectedText) {
-		waitForElementToAppear(elementHandle, webDriver);
-		WebElement message = webDriver.findElement(elementMessageText);
-		String messageText = message.getText();
+		FindElement.getWebElement(elementHandle, webDriver);
+		String messageText = FindElement.getWebElement(elementMessageText, webDriver).getText();
 		Assert.assertEquals(messageText, expectedText);
 	}
 }

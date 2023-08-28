@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import functions.HelperFunctions;
+import webElement.FindElement;
 
 public class ResultsPage extends HelperFunctions {
 
@@ -26,7 +27,8 @@ public class ResultsPage extends HelperFunctions {
 	WebElement addToCartButton;
 	
 	String bookTitle;
-	
+
+	By addToCartBy = By.id("add-to-cart-button");
 	By productsBy = By.cssSelector(".s-card-container");
 	By productTitleBy = By.id("productTitle");
 	By resultsBy = By.id("a-autoid-0-announce");
@@ -40,7 +42,7 @@ public class ResultsPage extends HelperFunctions {
 	}
 	
 	public List<WebElement> getProductList(){
-		waitForElementToAppear(productsBy, webDriver);
+		FindElement.getWebElement(productsBy, webDriver);
 		return products;
 	}
 	
@@ -90,17 +92,17 @@ public class ResultsPage extends HelperFunctions {
 	}
 	
 	public CartPage addProductToCart(String productName, int index){
-		WebElement product = getProductByName(productName, index);	
-		waitForElementToAppear(resultsTitle, webDriver);
+		WebElement product = getProductByName(productName, index);
+		FindElement.getWebElement(resultsTitle, webDriver);
 		setTitle(product);
 		checkProductLink(product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
-		waitForElementToAppear(productTitleBy, webDriver);
+		FindElement.getWebElement(productTitleBy, webDriver);
 		webDriver.getTitle().contains(bookTitle);
-		if(!isElementPresent(By.id("add-to-cart-button"))) {
+		if(!isElementPresent(addToCartBy)) {
 			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
 		}
 		addToCartButton.click();
-		waitForElementToAppear(checkoutButtonBy, webDriver);
+		FindElement.getWebElement(checkoutButtonBy, webDriver);
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;
 	}

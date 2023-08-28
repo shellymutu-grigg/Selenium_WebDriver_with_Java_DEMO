@@ -20,30 +20,4 @@ public class HelperFunctions {
 		HelperFunctions.webDriver = webDriver;
 		PageFactory.initElements(webDriver, this);
 	}
-	public String getGlobalProperty(String parameter) throws IOException {;
-		// Read in properties file
-		Properties properties = new Properties();
-		FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
-				+ "//src//test//resources//globalData.properties");
-		properties.load(fileInputStream);
-		
-		// If the value is sent via Maven commands use that otherwise use the globalData.properties file
-		String browser = System.getProperty(parameter) != null ? System.getProperty(parameter)
-				: properties.getProperty(parameter);
-		return browser;
-	}
-	
-	public boolean isElementPresent(By by, WebDriver webDriver) {
-	  boolean exists = false;
-	  List<WebElement> list = webDriver.findElements(by);
-	  if(!list.isEmpty()) {
-	      exists = true;
-	  }
-	  return exists;
-	}
-	
-	public static void waitForElementToAppear(By findBy, WebDriver providedWebDriver) {
-		WebDriverWait wait = new WebDriverWait(providedWebDriver, Duration.ofSeconds(5));
-		wait.until(ExpectedConditions.visibilityOfElementLocated(findBy));
-	}
 }

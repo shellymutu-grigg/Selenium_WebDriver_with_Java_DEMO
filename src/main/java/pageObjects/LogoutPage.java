@@ -8,6 +8,7 @@ import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 import org.openqa.selenium.support.PageFactory;
 
 import functions.HelperFunctions;
+import webElement.FindElement;
 
 public class LogoutPage extends HelperFunctions {
 	
@@ -16,7 +17,6 @@ public class LogoutPage extends HelperFunctions {
 	Actions actions;
 	
 	By accountLinkBy = By.xpath("//*[contains(text(), 'Account & Lists')]");
-	By accountMenuBy = By.cssSelector(".nav-action-signin-button");
 	By logoutLinkBy = By.id("nav-item-signout");
 	By userEmailBy = By.id("ap_email");
 
@@ -28,28 +28,20 @@ public class LogoutPage extends HelperFunctions {
 	}
 	
 	public void openAccountMenu() {
-		WebElement logoutMenu = webDriver.findElement(accountLinkBy);
-		
 		try{
-	        actions.moveToElement(logoutMenu).perform();
+	        actions.moveToElement(FindElement.getWebElement(accountLinkBy, webDriver)).perform();
 	    }catch(MoveTargetOutOfBoundsException e){
 	        e.getMessage();
 	    }
 	}
 	
 	public void logout() {
-		waitForElementToAppear(logoutLinkBy, webDriver);
-		WebElement signOutLink = webDriver.findElement(logoutLinkBy);
 		try{
-			actions.moveToElement(signOutLink).perform();
-			signOutLink.click();
-			waitForElementToAppear(userEmailBy, webDriver);
+			actions.moveToElement(FindElement.getWebElement(logoutLinkBy, webDriver)).perform();
+			FindElement.getWebElement(logoutLinkBy, webDriver).click();
+			FindElement.getWebElement(userEmailBy, webDriver);
 	    }catch(MoveTargetOutOfBoundsException e){
 	        e.getMessage();
 	    }
-	}
-	
-	public void waitForLogoutPage() {
-		waitForElementToAppear(userEmailBy, webDriver);
 	}
 }

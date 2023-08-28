@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import com.aventstack.extentreports.Status;
+import webElement.FindElement;
 
 public class TestHelperFunctions {
 
@@ -24,15 +25,6 @@ public class TestHelperFunctions {
 		}	
 	}
 	
-	public void validateElement(WebElement webElement, String testCaseStepName) {
-		Assert.assertNotNull(webElement);
-		if(ExtentTestManager.getTest().getStatus() == Status.PASS) {
-			ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("The \"{0}\" step element with text \"{1}\", was successfully located in page." + "<br />"+"Step {2}ed", testCaseStepName, webElement.getText(), ExtentTestManager.getTest().getStatus()));
-		}else if(ExtentTestManager.getTest().getStatus() == Status.FAIL) {
-			ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("The \"{0}\" step element with text \"{1}\", was NOT located in page." + "<br />" +"<font color=" + "red>" + "Step {2}ed", testCaseStepName, webElement.getText(), ExtentTestManager.getTest().getStatus()));
-		}
-	}
-	
 	public String convertTestCaseName(String testCaseName) {
 		// Read the test case method name and split it based on capital letters
 		Stream<String> convertTestMethodName = Arrays.stream(testCaseName.split("(?=\\p{Lu})"));
@@ -42,16 +34,5 @@ public class TestHelperFunctions {
 		
 		// Join words in test case name with a space between each
 		return testNameCapitalize.collect(Collectors.joining(" "));
-	}
-	
-	public WebElement getElement(WebDriver webDriver, String string) {
-		try {
-			Thread.sleep(5);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		waitForElementToAppear(By.xpath("//*[contains(text(), '"+ string +"')]"), webDriver);
-		return webDriver.findElement(By.xpath("//*[contains(text(), '"+ string +"')]"));
 	}
 }

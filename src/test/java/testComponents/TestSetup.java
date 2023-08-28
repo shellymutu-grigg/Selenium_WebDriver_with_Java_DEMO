@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 
+import functions.GetGlobalProperty;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
@@ -26,14 +27,13 @@ public class TestSetup {
 
 	public WebDriver webDriver;
 	public LoginPage loginPage;
-	HelperFunctions helperFunctions = new HelperFunctions(webDriver);
 	public String loginFailureStatus;
 	
 	@BeforeClass(alwaysRun = true)
 	public WebDriver initializeDriver() {
 		String browserNameString = "";
 		try {
-			browserNameString = helperFunctions.getGlobalProperty("browser");
+			browserNameString = GetGlobalProperty.getGlobalProperty("browser");
 			System.setProperty("Browser", browserNameString);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

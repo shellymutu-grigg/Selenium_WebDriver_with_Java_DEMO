@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import functions.HelperFunctions;
+import webElement.FindElement;
 
 public class CartPage extends HelperFunctions {
 	
@@ -19,6 +20,7 @@ public class CartPage extends HelperFunctions {
 		
 	By cartBy = By.cssSelector(".sc-gift-option");
 	By cartHeaderBy = By.cssSelector(".sc-list-item-removed-msg");
+	By cartLinkBy = By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']");
 	By subTotalBy = By.id("sc-subtotal-label-buybox");
 
 	public CartPage(WebDriver webDriver) {
@@ -28,27 +30,15 @@ public class CartPage extends HelperFunctions {
 	}
 	
 	public void openCart() {
-		webDriver.findElement(By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']")).click();		
-		waitForElementToAppear(subTotalBy, webDriver);
+		FindElement.getWebElement(cartLinkBy, webDriver).click();
+		FindElement.getWebElement(subTotalBy, webDriver);
 	}
 	
 	public LogoutPage deleteCart() {
-		waitForElementToAppear(cartBy, webDriver);
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		waitForElementToAppear(cartBy, webDriver);
-		deleteItems.get(0).click();	
-		try {
-			Thread.sleep(5);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		waitForElementToAppear(cartHeaderBy, webDriver);			
+		FindElement.getWebElement(cartBy, webDriver);
+		FindElement.getWebElement(cartBy, webDriver);
+		deleteItems.get(0).click();
+		FindElement.getWebElement(cartHeaderBy, webDriver);
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}
