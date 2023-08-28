@@ -4,36 +4,35 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.List;
 
-import functions.AssertElementNotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 import org.testng.annotations.Listeners;
 
+import data.ConfigData;
+import data.PageTitleData;
+import data.TextData;
+import functions.AssertElementNotNull;
+import functions.AssertPageTitle;
+import functions.ConvertTestCaseName;
+import interfaces.IHelper;
 import pageObjects.CartPage;
 import pageObjects.LogoutPage;
 import pageObjects.ResultsPage;
 import pageObjects.SearchPage;
+import resources.ExtentListeners;
+import resources.ExtentTestManager;
 import testComponents.LoginProcess;
 import testComponents.LogoutProcess;
 import testComponents.TestSetup;
-import data.ConfigData;
-import data.PageTitleData;
-import data.TextData;
-import interfaces.IHelper;
-import resources.ExtentListeners;
-import resources.ExtentTestManager;
-import resources.TestHelperFunctions;
 import webElement.FindElement;
 
 @Listeners(ExtentListeners.class)
-public class E2EAddToCartTest extends TestSetup implements IHelper{	
-	TestHelperFunctions testHelperFunctions = new TestHelperFunctions();
+public class E2EAddToCartTest extends TestSetup implements IHelper{
 	LoginProcess loginProcess = new LoginProcess();
 	LogoutProcess logoutProcess = new LogoutProcess();
-	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");	
-	WebElement webElement;
+	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
 	
 	@Test(groups = { "E2E" }, priority = 1, description = "Add to Cart End to End scenario")
 	/*
@@ -46,9 +45,9 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 			AND logout from their account
 	 */
 	public void addToCartTest(Method method) throws Exception {
-		ExtentTestManager.startTest(testHelperFunctions.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove the item from their cart and log out successfully.");
-		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.", 
-				testHelperFunctions.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
+		ExtentTestManager.startTest(ConvertTestCaseName.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove the item from their cart and log out successfully.");
+		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
+				ConvertTestCaseName.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
 		
 		loginPage.navigateToURL();
 		ExtentListeners extentListener = new ExtentListeners();
@@ -56,18 +55,18 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 		
 		loginProcess.completeLogin(password, loginPage, webDriver);
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.RETURNS_AND_ORDERS_TEXT +"')]"), webDriver), "enterUserPassword(password)");
-		testHelperFunctions.validatePageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+		AssertPageTitle.assertPageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		SearchPage searchPage = loginPage.generateSearchPage();
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.DELIVER_TO_TEXT +"')]"), webDriver), "pauseForSearchPage()");
-		testHelperFunctions.validatePageTitle("pauseForSearchPage()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+		AssertPageTitle.assertPageTitle("pauseForSearchPage()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 
 		ResultsPage resultsPage = searchPage.searchForProducts(TextData.SEARCH_TEXT);
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.RESULTS_TEXT +"')]"), webDriver), "searchForProducts(TextData.SEARCH_TEXT)");
-		testHelperFunctions.validatePageTitle("searchForProducts(TextData.SEARCH_TEXT)", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
+		AssertPageTitle.assertPageTitle("searchForProducts(TextData.SEARCH_TEXT)", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 
 		List<WebElement> productList = resultsPage.getProductList();
-		testHelperFunctions.validatePageTitle("getProductList()", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
+		AssertPageTitle.assertPageTitle("getProductList()", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 
 		int resultIndex = ConfigData.RESULTS_INDEX;
 
@@ -82,15 +81,15 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 		
 		CartPage cartPage = resultsPage.addProductToCart(productName, index);
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.ADDED_TO_CART_TEXT +"')]"), webDriver), "addProductToCart(productName, index)");
-		testHelperFunctions.validatePageTitle("addProductToCart(productName, index)", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
+		AssertPageTitle.assertPageTitle("addProductToCart(productName, index)", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 		
 		cartPage.openCart();
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//h1[normalize-space()='"+ TextData.SHOPPING_CART_TEXT +"']"), webDriver), "openCart()");
-		testHelperFunctions.validatePageTitle("openCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
+		AssertPageTitle.assertPageTitle("openCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 				
 		LogoutPage logoutPage =  cartPage.deleteCart();
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.REMOVED_FROM_CART_TEXT +"')]"), webDriver), "deleteCart()");
-		testHelperFunctions.validatePageTitle("deleteCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
+		AssertPageTitle.assertPageTitle("deleteCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 
 		logoutProcess.cartLogout(logoutPage, webDriver);
 	}
