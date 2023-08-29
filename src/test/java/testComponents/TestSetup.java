@@ -21,7 +21,6 @@ import configuration.ChromeDriverConfig;
 import configuration.EdgeDriverConfig;
 import resources.ExtentManager;
 import configuration.FirefoxDriverConfig;
-import functions.HelperFunctions;
 
 public class TestSetup {
 

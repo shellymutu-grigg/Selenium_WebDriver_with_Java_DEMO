@@ -44,7 +44,7 @@ public class LoginFailureTest extends TestSetup {
 		
 		String loginFailStatus = loginPage.loginFail();
 		String pageTitle;
-		if(System.getProperty("Browser").contains("edge")) {
+		if(System.getProperty("Browser").contains("chrome") ||System.getProperty("Browser").contains("edge")) {
 			pageTitle = PageTitleData.SIGN_IN_PAGE_TITLE;
 		} else {
 			pageTitle = PageTitleData.LANDING_PAGE_TITLE;
