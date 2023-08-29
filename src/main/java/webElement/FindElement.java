@@ -16,7 +16,7 @@ public class FindElement {
         try{
             webElement = fetchWebElement(locator, webDriver);
         } catch(NoSuchElementException e){
-            // TODO: Implement Retry
+            // TODO: Implement Retry functionality
             System.out.println(MessageFormat.format("NoSuchElementException:  {0}", e.getMessage()));
         }
         return webElement;
