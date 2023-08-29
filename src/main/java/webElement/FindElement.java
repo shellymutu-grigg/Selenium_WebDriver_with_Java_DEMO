@@ -2,9 +2,9 @@ package webElement;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import wait.Wait;
 
 import java.text.MessageFormat;
-import java.time.Duration;
 import java.util.List;
 
 public class FindElement {
@@ -23,11 +23,7 @@ public class FindElement {
     }
 
     private static WebElement fetchWebElement(By locator, WebDriver webDriver) {
-        webDriverWait = new WebDriverWait(
-                webDriver,
-                Duration.ofSeconds(10),
-                Duration.ofMillis(500));
-        WebElement webElement= webDriverWait.until(d -> d.findElement(locator));
+        WebElement webElement= Wait.setWait(webDriverWait, webDriver).until(d -> d.findElement(locator));
 
         if(webElement.isDisplayed() && webElement.isEnabled()){
             return webElement;
@@ -47,11 +43,7 @@ public class FindElement {
     }
 
     private static List<WebElement> fetchWebElements(By locator, WebDriver webDriver) {
-        WebDriverWait webDriverWait = new WebDriverWait(
-                webDriver,
-                Duration.ofSeconds(10),
-                Duration.ofMillis(500));
-        List<WebElement> webElements= webDriverWait.until(d -> d.findElements(locator));
+        List<WebElement> webElements= Wait.setWait(webDriverWait, webDriver).until(d -> d.findElements(locator));
 
         if (!webElements.isEmpty()) {
             return webElements;
