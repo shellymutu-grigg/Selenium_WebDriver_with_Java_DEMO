@@ -6,47 +6,27 @@ import wait.Wait;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 
 public class FindElement {
 
     static WebDriverWait webDriverWait;
     public static WebElement getWebElement(By locator, WebDriver webDriver){
-    // Check that element is visible & enabled before returning it
-        WebElement webElement = null;
-        try{
-            webElement = fetchWebElement(locator, webDriver);
-        } catch(NoSuchElementException e){
-            // TODO: Implement Retry functionality
-            System.out.println(MessageFormat.format("NoSuchElementException:  {0}", e.getMessage()));
-        }
-        return webElement;
-    }
-
-    private static WebElement fetchWebElement(By locator, WebDriver webDriver) {
-        WebElement webElement= Wait.setWait(webDriverWait, webDriver).until(d -> d.findElement(locator));
-
+        Objects.requireNonNull(locator, MessageFormat.format("{0} must not be null", locator));
+        WebElement webElement = Wait.setWait(webDriverWait, webDriver).until(d -> d.findElement(locator));
+        // Check that the element is visible & enabled before returning it
         if(webElement.isDisplayed() && webElement.isEnabled()){
             return webElement;
-        } else throw new NoSuchElementException(MessageFormat.format("WebElement with locator: {0} could not be found", locator));
+        // TODO: Need to find a more elegant solution here
+        } else return null;
     }
 
     public static List<WebElement> getWebElements(By locator, WebDriver webDriver){
-        // Check that element is visible & enabled before returning it
-        List<WebElement> webElements = null;
-        try{
-            webElements = fetchWebElements(locator, webDriver);
-        } catch(NoSuchElementException e){
-            // TODO: Implement Retry
-            System.out.println(MessageFormat.format("NoSuchElementException:  {0}", e.getMessage()));
-        }
-        return webElements;
-    }
-
-    private static List<WebElement> fetchWebElements(By locator, WebDriver webDriver) {
         List<WebElement> webElements= Wait.setWait(webDriverWait, webDriver).until(d -> d.findElements(locator));
-
+        // Check that the element list is not empty before returning it
         if (!webElements.isEmpty()) {
             return webElements;
-        } else throw new NoSuchElementException(MessageFormat.format("List<WebElement> with locator: {0} could not be found", locator));
+        // TODO: Need to find a more elegant solution here
+        } else return null;
     }
 }
