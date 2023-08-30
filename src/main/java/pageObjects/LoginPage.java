@@ -1,11 +1,7 @@
 package pageObjects;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-
-import functions.IsElementPresent;
+import functions.Element;
+import functions.Url;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -24,8 +20,6 @@ public class LoginPage implements ITestListener{
 	By accountMenuBy = By.id("nav-link-accountList-nav-line-1");
 	By landingPageBy = By.cssSelector(".navFooterLine");
 	By landingPageAltBy = By.cssSelector(".nav-footer-copyright");
-	By loggedOutText = By.id("nav-link-accountList-nav-line-1");
-
 	By loginButtonBy = By.id("signInSubmit");
 	By loginFailPuzzle = By.id("cvf-page-content");
 	By loginFailPuzzleMessageText = By.cssSelector(".a-spacing-mini");
@@ -48,23 +42,6 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void navigateToURL() {
-		Properties properties = new Properties();
-		FileInputStream fileInputStream;
-		try {
-			fileInputStream = new FileInputStream(System.getProperty("user.dir")
-					+ "//src//test//resources//globalData.properties");
-			properties.load(fileInputStream);
-		}catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String url = System.getProperty("url") != null ? System.getProperty("url")
-		: properties.getProperty("url");
-		webDriver.get(url);
-		
 		if(FindElement.getWebElement(landingPageBy, webDriver) != null) {
 			FindElement.getWebElement(landingPageBy, webDriver);
 		}
@@ -115,19 +92,19 @@ public class LoginPage implements ITestListener{
 		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
 			initialiseLogoutPage().openAccountMenu();
 			initialiseLogoutPage().logout();
-			navigateToURL();
+			webDriver.get(Url.getUrl());
 		}
 	}
 	
 	public String findLoginFailureText() {
 		String failureText = "";
-		if(IsElementPresent.isElementPresent(loginFailAlert, webDriver)) {
+		if(Element.isElementPresent(loginFailAlert, webDriver)) {
 			failureText = TextData.LOGIN_FAILURE_ALERT_TEXT;
 		}
-		else if(IsElementPresent.isElementPresent(loginFailPuzzle, webDriver)) {
+		else if(Element.isElementPresent(loginFailPuzzle, webDriver)) {
 			failureText =  TextData.LOGIN_PUZZLE_TEXT;
 		}
-		else if(IsElementPresent.isElementPresent(loginFailImportantMessage, webDriver)) {
+		else if(Element.isElementPresent(loginFailImportantMessage, webDriver)) {
 			failureText =  TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
 		}
 		return failureText;
@@ -135,15 +112,15 @@ public class LoginPage implements ITestListener{
 	
 	public String loginFail() {
 		String loginFailStatus = "";
-		if(IsElementPresent.isElementPresent(loginFailAlert, webDriver)) {
+		if(Element.isElementPresent(loginFailAlert, webDriver)) {
 			loginFailStatus = TextData.LOGIN_FAILURE_ALERT_TEXT;
 			validateLoginFailure(loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT);
 		}
-		else if(IsElementPresent.isElementPresent(loginFailPuzzle, webDriver)) {
+		else if(Element.isElementPresent(loginFailPuzzle, webDriver)) {
 			loginFailStatus =  TextData.LOGIN_PUZZLE_TEXT;
 			validateLoginFailure(loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT);
 		}
-		else if(IsElementPresent.isElementPresent(loginFailImportantMessage, webDriver)) {
+		else if(Element.isElementPresent(loginFailImportantMessage, webDriver)) {
 			loginFailStatus = TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
 			validateLoginFailure(loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
 		}

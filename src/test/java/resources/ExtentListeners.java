@@ -12,11 +12,9 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-import org.testng.Reporter;
 
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
@@ -49,42 +47,48 @@ public class ExtentListeners extends TestSetup implements ITestListener {
  
 	@Override
     public void onTestSuccess(ITestResult result) {
-		System.out.println(MessageFormat.format("{0} has succeeded", getTestMethodName(result)));
-     
-    	try {
-            String fileName = captureScreenshot(result.getMethod().getMethodName());
-            ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + getTestMethodName(result) + " successfully ended at:" + "</font>",
-            		MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
-         } catch (Exception e) {
-         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
-         } 
-    	ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName() + " has finished."));
-    	ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName()) + " - PASS", ExtentColor.GREEN));
+        if(ExtentTestManager.getTest() !=null) {
+            System.out.println(MessageFormat.format("{0} has succeeded", getTestMethodName(result)));
+
+            try {
+                String fileName = captureScreenshot(result.getMethod().getMethodName());
+                ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + getTestMethodName(result) + " successfully ended at:" + "</font>",
+                        MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
+            } catch (Exception e) {
+                System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage()));
+            }
+            ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName() + " has finished."));
+            ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName()) + " - PASS", ExtentColor.GREEN));
+        }
     }
  
 	@Override
-    public void onTestFailure(ITestResult result) { 
-    	System.out.println(MessageFormat.format("{0} has failed", getTestMethodName(result)));
-    	ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has failed", getTestMethodName(result)));
+    public void onTestFailure(ITestResult result) {
+        if(ExtentTestManager.getTest() !=null){
+            System.out.println(MessageFormat.format("{0} has failed", getTestMethodName(result)));
+            ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has failed", getTestMethodName(result)));
 
-     	String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
-     	ExtentTestManager.getTest().fail("Exception Occured in test case: " + getTestMethodName(result) + " <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
-                + "</font>" + "</summary>" + exceptionMessage.replaceAll(",", "<br>")+"</details>"+" \n");
-     	try {
-           String fileName = captureScreenshot(result.getMethod().getMethodName());
-           ExtentTestManager.getTest().fail("<font color=" + "red>" + "Screenshot of location of failure" + "</font>",
-        		   MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
-        } catch (Exception e) {
-        	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
+            String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
+            ExtentTestManager.getTest().fail("Exception Occured in test case: " + getTestMethodName(result) + " <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
+                    + "</font>" + "</summary>" + exceptionMessage.replaceAll(",", "<br>")+"</details>"+" \n");
+            try {
+               String fileName = captureScreenshot(result.getMethod().getMethodName());
+               ExtentTestManager.getTest().fail("<font color=" + "red>" + "Screenshot of location of failure" + "</font>",
+                       MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
+            } catch (Exception e) {
+                System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage()));
+            }
+            ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName()) + " - FAIL", ExtentColor.RED));
         }
-        ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName()) + " - FAIL", ExtentColor.RED));
     }
  
     @Override
     public void onTestSkipped(ITestResult result) {
-		System.out.println(MessageFormat.format("{0} has been skipped", getTestMethodName(result)));
-    	ExtentTestManager.getTest().info(getTestMethodName(result) + " test has been skipped.");
-    	ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped");
+        if(ExtentTestManager.getTest() !=null) {
+            System.out.println(MessageFormat.format("{0} has been skipped", getTestMethodName(result)));
+            ExtentTestManager.getTest().info(getTestMethodName(result) + " test has been skipped.");
+            ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped");
+        }
     }
  
     @Override
@@ -92,22 +96,22 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     }
     
     public void onTestStartScreenshot(String testCaseName) {
-     	try {
-            String fileName = captureScreenshot(testCaseName);
-            ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + ConvertTestCaseName.convertTestCaseName(testCaseName) + " successfully started at:" + "</font>",
-            MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
-         } catch (Exception e) {
-         	System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage())); 
-         } 
+        if(ExtentTestManager.getTest() !=null) {
+            try {
+                String fileName = captureScreenshot(testCaseName);
+                ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + ConvertTestCaseName.convertTestCaseName(testCaseName) + " successfully started at:" + "</font>",
+                        MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
+            } catch (Exception e) {
+                System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage()));
+            }
+        }
     }
     
     public String captureScreenshot(String testCaseName) throws IOException {
-		ITestContext context = Reporter.getCurrentTestResult().getTestContext();
-		webDriver = (WebDriver) context.getAttribute("WebDriver");
 		Date calendarDate = Calendar.getInstance().getTime();  
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
         String date = dateFormat.format(calendarDate);  
-        TakesScreenshot takeScreenshot = (TakesScreenshot)webDriver;
+        TakesScreenshot takeScreenshot = (TakesScreenshot)getDriver();
         File screenshot = takeScreenshot.getScreenshotAs(OutputType.FILE);
         File screenshotOutputFile = new File(System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString().replace(":", "_").replace(" ", "_") + ".png");
 		FileUtils.copyFile(screenshot, screenshotOutputFile);

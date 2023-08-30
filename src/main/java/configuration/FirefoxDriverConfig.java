@@ -6,8 +6,11 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class FirefoxDriverConfig {
 
-	public static WebDriver setUpFirefoxDriver(String browserNameString, WebDriver webDriver) {
-		FirefoxOptions options = new FirefoxOptions();
-		return webDriver = new FirefoxDriver(options);
+	public static WebDriver setUpFirefoxDriver(String browserNameString) {
+		FirefoxOptions firefoxOptions = new FirefoxOptions();
+		if (browserNameString.contains("headless")) {
+			firefoxOptions.addArguments("--headless=new");
+		}
+		return new FirefoxDriver(firefoxOptions);
 	}
 }

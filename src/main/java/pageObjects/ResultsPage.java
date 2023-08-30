@@ -3,10 +3,12 @@ package pageObjects;
 import java.text.MessageFormat;
 import java.util.List;
 
+import functions.Element;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import org.testng.TestException;
 import webElement.FindElement;
 
 public class ResultsPage {
@@ -43,25 +45,25 @@ public class ResultsPage {
 		return product;
 	}
 	
-	public void checkProductLink(String productTitle, WebElement productCheck){
+	public void clickProductLink(String productTitle, WebElement productCheck){
 		if(productCheck != null) {
 			productCheck.click();
 		} else {
 			System.out.println(MessageFormat.format("{0} product not found", productTitle));
+			throw new TestException(MessageFormat.format("{0} product not found", productTitle));
 		}
 	}
 	
-	public CartPage addProductToCart(String productName, int index){
-		WebElement product = getProductByName(productName, index);
-		setTitle(product);
-		checkProductLink(bookTitle, product.findElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
-		webDriver.getTitle().contains(bookTitle);
-		if(!isElementPresent(addToCartButtonBy)) {
-			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
-		}
+	public CartPage addProductToCart(){
 		FindElement.getWebElement(addToCartButtonBy, webDriver).click();
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;
+	}
+
+	public String setProduct(String productName, int index){
+		WebElement product = getProductByName(productName, index);
+		setTitle(product);
+		return bookTitle;
 	}
 
 	public void setTitle(WebElement product){
@@ -72,14 +74,5 @@ public class ResultsPage {
 		} else {
 			System.out.println(MessageFormat.format("Index {0} of product is incorrect", productIndex));
 		}
-	}
-	
-	public boolean isElementPresent(By by) {
-	  boolean exists = false;
-	  List<WebElement> list = webDriver.findElements(by);
-	  if(!list.isEmpty()) {
-	      exists = true;
-	  }
-	  return exists;
 	}
 }

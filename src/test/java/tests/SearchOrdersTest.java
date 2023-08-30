@@ -37,7 +37,7 @@ public class SearchOrdersTest extends TestSetup{
 			AND the user will be able to search previous orders
 			AND the user will be able to log out.
 	 */
-	public void searchOrdersTest(Method method) throws Exception {		
+	public void searchOrdersTest(Method method) {
 		ExtentTestManager.startTest(ConvertTestCaseName.convertTestCaseName(method.getName()), "Verify user is able to login, search their order history and log out");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
 				ConvertTestCaseName.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
@@ -60,11 +60,7 @@ public class SearchOrdersTest extends TestSetup{
 		AssertPageTitle.assertPageTitle("openAccountMenu()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		ordersPage.openOrdersPage();
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//h1[normalize-space()='"+ TextData.YOUR_ORDERS_TEXT +"']") , webDriver), "openOrderPage()");
 		AssertPageTitle.assertPageTitle("openOrderPage()", PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());
 

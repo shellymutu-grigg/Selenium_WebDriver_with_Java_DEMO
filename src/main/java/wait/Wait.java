@@ -7,8 +7,8 @@ import java.time.Duration;
 
 public class Wait {
 
-    public static WebDriverWait setWait(WebDriverWait webDriverWait, WebDriver webDriver){
-        webDriverWait = new WebDriverWait(
+    public static WebDriverWait setDriverWait(WebDriver webDriver){
+        WebDriverWait webDriverWait = new WebDriverWait(
                 webDriver,
                 Duration.ofSeconds(10),
                 Duration.ofMillis(500));

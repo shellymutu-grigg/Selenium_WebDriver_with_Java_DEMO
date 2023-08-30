@@ -10,7 +10,6 @@ public class CartPage {
 	WebDriver webDriver;
 
 	By cartBy = By.cssSelector(".sc-gift-option");
-	By cartHeaderBy = By.cssSelector(".sc-list-item-removed-msg");
 	By cartLinkBy = By.cssSelector(".a-button-text[href='/cart?ref_=sw_gtc']");
 	By deleteItemBy = By.cssSelector("input[value='Delete']");
 

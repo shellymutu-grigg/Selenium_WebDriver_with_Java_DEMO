@@ -28,15 +28,13 @@ public class LogoutProcess {
 		String pageTitle;
 		if(testCaseName.contains("searchOrdersTest")) {
 			pageTitle = PageTitleData.ORDERS_PAGE_TITLE;
+		} else if(testCaseName.contains("TestException")){
+			pageTitle = testCaseName.replace("TestException: ", "");
 		} else pageTitle = PageTitleData.LANDING_PAGE_TITLE;
 		AssertPageTitle.assertPageTitle("initialiseLogoutPage()", pageTitle, webDriver.getTitle());
 		
 		logoutPage.openAccountMenu();
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.YOUR_ACCOUNT_TEXT +"')]"), webDriver), "openAccountMenu()");
 		AssertPageTitle.assertPageTitle("openAccountMenu()", pageTitle, webDriver.getTitle());
 		

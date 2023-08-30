@@ -4,9 +4,11 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.List;
 
+import functions.Element;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.TestException;
 import org.testng.annotations.Test;
 import org.testng.annotations.Listeners;
 
@@ -44,7 +46,7 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 			AND remove the product from their cart
 			AND logout from their account
 	 */
-	public void addToCartTest(Method method) throws Exception {
+	public void addToCartTest(Method method) {
 		ExtentTestManager.startTest(ConvertTestCaseName.convertTestCaseName(method.getName()), "Verify a user is able to login, add an item to their cart, remove the item from their cart and log out successfully.");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
 				ConvertTestCaseName.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
@@ -78,20 +80,31 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 		productName = productList.get(resultIndex).getText().split("\n")[index];
 
 		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.RESULTS_TEXT +"')]"), webDriver), "getProductList()");
-		
-		CartPage cartPage = resultsPage.addProductToCart(productName, index);
-		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.ADDED_TO_CART_TEXT +"')]"), webDriver), "addProductToCart(productName, index)");
-		AssertPageTitle.assertPageTitle("addProductToCart(productName, index)", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
-		
-		cartPage.openCart();
-		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//h1[normalize-space()='"+ TextData.SHOPPING_CART_TEXT +"']"), webDriver), "openCart()");
-		AssertPageTitle.assertPageTitle("openCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
-				
-		LogoutPage logoutPage =  cartPage.deleteCart();
-		AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.REMOVED_FROM_CART_TEXT +"')]"), webDriver), "deleteCart()");
-		AssertPageTitle.assertPageTitle("deleteCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 
-		logoutProcess.cartLogout(logoutPage, webDriver);
+		String bookTitle = resultsPage.setProduct(productName, index);
+		AssertPageTitle.assertPageTitle("setProduct(productName, index)", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
+
+		resultsPage.clickProductLink(bookTitle, FindElement.getWebElement(By.cssSelector("img[alt='"+ bookTitle +"']"), webDriver));
+
+		if(Element.isElementPresent(By.xpath("//*[contains(text(), '"+ TextData.ADD_TO_CART_TEXT +"')]"), webDriver)){
+			CartPage cartPage = resultsPage.addProductToCart();
+			AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.ADDED_TO_CART_TEXT +"')]"), webDriver), "addProductToCart(productName, index)");
+			AssertPageTitle.assertPageTitle("addProductToCart(productName, index)", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
+
+			cartPage.openCart();
+			AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//h1[normalize-space()='"+ TextData.SHOPPING_CART_TEXT +"']"), webDriver), "openCart()");
+			AssertPageTitle.assertPageTitle("openCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
+
+			LogoutPage logoutPage =  cartPage.deleteCart();
+			AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.REMOVED_FROM_CART_TEXT +"')]"), webDriver), "deleteCart()");
+			AssertPageTitle.assertPageTitle("deleteCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
+			logoutProcess.cartLogout(logoutPage, webDriver);
+		} else{
+			LogoutPage logoutPage = loginPage.initialiseLogoutPage();
+			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
+			logoutProcess.logout(logoutPage, webDriver, "TestException: "+productName);
+			throw new TestException(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
+		}
 	}
 
 	@Override

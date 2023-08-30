@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class GetGlobalProperty {
+public class GlobalProperty {
     public static String getGlobalProperty(String parameter) throws IOException {;
         // Read in properties file
         Properties properties = new Properties();

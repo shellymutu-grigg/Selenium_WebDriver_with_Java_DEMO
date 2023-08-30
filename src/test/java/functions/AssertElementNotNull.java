@@ -3,9 +3,10 @@ package functions;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-import resources.ExtentTestManager;
 
 import java.text.MessageFormat;
+
+import resources.ExtentTestManager;
 
 public class AssertElementNotNull {
 

@@ -6,11 +6,13 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class IsElementPresent {
+import webElement.FindElement;
+
+public class Element {
     public static boolean isElementPresent(By by, WebDriver webDriver) {
         boolean exists = false;
-        List<WebElement> list = webDriver.findElements(by);
-        if(!list.isEmpty()) {
+        List<WebElement> list = FindElement.getWebElements(by, webDriver);
+        if(list !=null && !list.isEmpty()) {
             exists = true;
         }
         return exists;
