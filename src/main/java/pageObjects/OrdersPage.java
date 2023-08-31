@@ -1,5 +1,7 @@
 package pageObjects;
 
+import data.ConfigData;
+import data.LocalStore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
@@ -10,8 +12,6 @@ import data.TextData;
 import webElement.Element;
 
 public class OrdersPage {
-
-	WebDriver webDriver;
 	Actions actions;
 
 	By accountMenuBy = By.id("nav-link-accountList");
@@ -20,14 +20,14 @@ public class OrdersPage {
 	By searchOrdersFieldBy = By.id("searchOrdersInput");
 	By searchOrdersButtonBy = By.id("a-autoid-0");
 
-	public OrdersPage(WebDriver webDriver) {
-		this.webDriver = webDriver;
+	public OrdersPage() {
+		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
 		actions = new Actions(webDriver);
 	}
 
 	public void openAccountMenu() {
 		try{
-			actions.moveToElement(Element.getElement(accountMenuBy, webDriver)).perform();
+			actions.moveToElement(Element.getElement(accountMenuBy)).perform();
 		}catch(MoveTargetOutOfBoundsException e){
 			e.getMessage();
 		}
@@ -35,20 +35,20 @@ public class OrdersPage {
 	
 	public void openOrdersPage(){
 		try{
-			actions.moveToElement(Element.getElement(orderPageLinkBy, webDriver)).perform();
-			Element.getElement(orderPageLinkBy, webDriver).click();
+			actions.moveToElement(Element.getElement(orderPageLinkBy)).perform();
+			Element.getElement(orderPageLinkBy).click();
 		}catch(MoveTargetOutOfBoundsException e){
 			e.getMessage();
 		}
 	}
 	
 	public LogoutPage searchForOrders(){ 
-		Element.getElement(searchOrdersFieldBy, webDriver).sendKeys(TextData.ORDER_SEARCH_TEXT);
-		Element.getElement(searchOrdersButtonBy, webDriver).click();
-		String orderFilterText = Element.getElement(orderFilter, webDriver).getText();
+		Element.getElement(searchOrdersFieldBy).sendKeys(TextData.ORDER_SEARCH_TEXT);
+		Element.getElement(searchOrdersButtonBy).click();
+		String orderFilterText = Element.getElement(orderFilter).getText();
 		
 		Assert.assertEquals(orderFilterText, TextData.ORDER_FILTER_TEXT);
-		LogoutPage logoutPage = new LogoutPage(webDriver);
+		LogoutPage logoutPage = new LogoutPage();
 		return logoutPage;
 	}	
 }

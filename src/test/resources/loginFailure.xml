@@ -4,7 +4,7 @@
 <suite name="Suite">
 	<groups>
 		<run>
-			<include name="ErrorHandling"/>
+			<include name="LoginFailure"/>
 		</run>
 	</groups>
 	
@@ -12,7 +12,7 @@
         <listener class-name="resources.ExtentListeners"/>
     </listeners>
 	
-	<test thread-count="5" name="Error Handling Test">
+	<test thread-count="5" name="Login Failure Test">
     	<classes>
       		<class name="tests.LoginFailureTest"/>
     	</classes>

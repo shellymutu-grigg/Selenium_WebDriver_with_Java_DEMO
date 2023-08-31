@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 import data.ConfigData;
+import data.LocalStore;
+import data.TextData;
 import functions.Get;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
@@ -17,7 +19,7 @@ import resources.ExtentManager;
 public class TestSetup {
 
 	public LoginPage loginPage;
-	public WebDriver webDriver;
+	public static WebDriver webDriver;
 
 	protected static ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
 
@@ -28,9 +30,7 @@ public class TestSetup {
 
 	@BeforeMethod(alwaysRun = true)
 	protected void launchApplication (Method method){
-		loginPage = new LoginPage(getDriver());
-		String methodName = method.getName();
-		System.setProperty(ConfigData.SYSTEM_PROPERTY_METHOD_NAME, methodName);
+		loginPage = new LoginPage();
 	}
 
 	@BeforeTest

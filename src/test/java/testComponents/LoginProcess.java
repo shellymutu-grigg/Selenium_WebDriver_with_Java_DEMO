@@ -1,6 +1,7 @@
 package testComponents;
 
 import data.ConfigData;
+import data.LocalStore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -13,12 +14,13 @@ import webElement.Element;
 public class LoginProcess {
 	String email = System.getenv(ConfigData.AMAZON_USERNAME);
 	
-	public void completeLogin(String password, LoginPage loginPage, WebDriver webDriver) {
+	public void completeLogin(String password, LoginPage loginPage) {
+		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
 		loginPage.checkForPreviousLoginFailure();
 		
 		String pageTitle;
 		String pageText;
-		if(System.getProperty(ConfigData.SYSTEM_PROPERTY_YOUR_ACCOUNT) == TextData.YOUR_ACCOUNT_TEXT) {
+		if(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_YOUR_ACCOUNT) == TextData.YOUR_ACCOUNT_TEXT) {
 			pageTitle = PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE;
 			pageText = TextData.DELIVER_TO_TEXT;
 		} else {
@@ -26,14 +28,14 @@ public class LoginProcess {
 			pageText = TextData.LANDING_PAGE_SIGNIN_TEXT;
 		}
 		TestAssert.pageTitle("navigateToURL()", pageTitle, webDriver.getTitle());
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ pageText +"')]"), webDriver), "navigateToURL()");
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ pageText +"')]")), "navigateToURL()");
 		
 		loginPage.navigateToLanding();
 		TestAssert.pageTitle("navigateToLanding()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.SIGNIN_TEXT +"')]"), webDriver), "navigateToLanding()");
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.SIGNIN_TEXT +"')]")), "navigateToLanding()");
 		
 		loginPage.enterUserEmail(email);
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.KEEP_SIGNED_IN_TEXT +"')]"), webDriver), "enterUserEmail(email)");
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.KEEP_SIGNED_IN_TEXT +"')]")), "enterUserEmail(email)");
 		
 		loginPage.enterUserPassword(password);
 	}

@@ -21,7 +21,7 @@ If using Eclipse IDE please follow these instructions to set up environment vari
 
 ## Maven commands
 - Run smoke test suite: `mvn test -DsuiteXmlFile="src/test/resources/smoke.xml"`
-- Run profiles: `mvn test -P<profile-id> e.g. ErrorHandling` e.g `mvn test -PErrorHandling`
+- Run profiles: `mvn test -P<profile-id> e.g. LoginFailure` e.g `mvn test -PLoginFailure`
 
 ## Environment variables 
 - View environment variable `Get-ChildItem env:amazon_username`
@@ -35,10 +35,10 @@ Automation Tests built:
 	- Remove product from cart
 	- Logout
 2. Smoke Test Suite
-	- Login Failure Test
-	- Review Orders Test
+	- Login Success Test
+	- Search Orders Test
 	- E2E Add to Cart Test 
-3. Error Handling Test
+3. Login Failure Test
 	- Login Failure Test
 4. Selenium Grid Tests
 	- Selenium Grid Google Test

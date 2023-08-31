@@ -3,6 +3,7 @@ package functions;
 import data.ConfigData;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -13,12 +14,17 @@ public class Get {
         return url;
     }
 
-    public static String globalProperty(String parameter) throws IOException {;
+    public static String globalProperty(String parameter) {
         // Read in properties file
         Properties properties = new Properties();
-        FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")
-                + "//src//test//resources//globalData.properties");
-        properties.load(fileInputStream);
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(System.getProperty("user.dir")
+                    + "//src//test//resources//globalData.properties");
+            properties.load(fileInputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // If the value is sent via Maven commands use that otherwise use the globalData.properties file
         String browser = System.getProperty(parameter) != null ? System.getProperty(parameter)

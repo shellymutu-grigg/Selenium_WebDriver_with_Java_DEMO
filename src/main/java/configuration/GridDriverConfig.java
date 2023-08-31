@@ -15,7 +15,7 @@ import java.text.MessageFormat;
 import java.time.Duration;
 
 public class GridDriverConfig {
-    static WebDriver webDriver;
+    public static WebDriver webDriver;
     public static WebDriver gridDriverSetup(String browserName) {
         if (browserName != null) {
             DesiredCapabilities capabilities = new DesiredCapabilities();

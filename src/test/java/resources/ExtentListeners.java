@@ -33,7 +33,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     
 	@Override
     public void onStart(ITestContext context) {
-        context.setAttribute(ConfigData.SYSTEM_PROPERTY_WEBDRIVER, this.webDriver);
+        context.setAttribute(ConfigData.SYSTEM_PROPERTY_WEBDRIVER, webDriver);
     }	
 
 	@Override
@@ -70,7 +70,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
             ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has failed", getTestMethodName(result)));
 
             String exceptionMessage = Arrays.toString(result.getThrowable().getStackTrace());
-            ExtentTestManager.getTest().fail("Exception Occured in test case: " + getTestMethodName(result) + " <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
+            ExtentTestManager.getTest().fail("Exception occurred in test case: " + getTestMethodName(result) + " <details>" + "<summary>" +  "<font color=" + "red>" + "Click here to see Stack Trace"
                     + "</font>" + "</summary>" + exceptionMessage.replaceAll(",", "<br>")+"</details>"+" \n");
             try {
                String fileName = captureScreenshot(result.getMethod().getMethodName());
@@ -114,8 +114,8 @@ public class ExtentListeners extends TestSetup implements ITestListener {
         String date = dateFormat.format(calendarDate);  
         TakesScreenshot takeScreenshot = (TakesScreenshot)getDriver();
         File screenshot = takeScreenshot.getScreenshotAs(OutputType.FILE);
-        File screenshotOutputFile = new File(System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString().replace(":", "_").replace(" ", "_") + ".png");
+        File screenshotOutputFile = new File(System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.replace(":", "_").replace(" ", "_") + ".png");
 		FileUtils.copyFile(screenshot, screenshotOutputFile);
-		return System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.toString().replace(":", "_").replace(" ", "_") + ".png";
+		return System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.replace(":", "_").replace(" ", "_") + ".png";
     }
 }

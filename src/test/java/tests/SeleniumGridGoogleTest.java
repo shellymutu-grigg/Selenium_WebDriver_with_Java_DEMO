@@ -1,20 +1,17 @@
 package tests;
 
-import data.ConfigData;
-import data.TextData;
-import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import data.ConfigData;
 import configuration.GridDriverConfig;
 
 import java.text.MessageFormat;
 
-public class SeleniumGridGoogleTest {
-    static WebDriver webDriver;
+public class SeleniumGridGoogleTest extends GridDriverConfig {
 
     @Test (groups = { "Grid" }, priority = 1, description = "Verify Selenium Grid can trigger chrome instance")
     public void GooglePageTest(){
-        webDriver = GridDriverConfig.gridDriverSetup(ConfigData.CHROME_DRIVER);
+        webDriver = gridDriverSetup(ConfigData.CHROME_DRIVER);
         webDriver.get(ConfigData.GOOGLE_WEBSITE_URL);
         System.out.println(MessageFormat.format("Page title: {0}", webDriver.getTitle()));
         webDriver.close();

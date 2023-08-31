@@ -4,8 +4,10 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.List;
 
+import data.LocalStore;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.TestException;
 import org.testng.annotations.Test;
@@ -47,22 +49,22 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 	public void addToCartTest(Method method) {
 		ExtentTestManager.startTest(TestCaseName.convert(method.getName()), "Verify a user is able to login, add an item to their cart, remove the item from their cart and log out successfully.");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
-				TestCaseName.convert(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
+				TestCaseName.convert(method.getName()), StringUtils.capitalize(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_BROWSER).toString())));
 		
 		loginPage.navigateToURL();
 		ExtentListeners extentListener = new ExtentListeners();
 		extentListener.onTestStartScreenshot(method.getName());
 		
-		loginProcess.completeLogin(password, loginPage, webDriver);
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.RETURNS_AND_ORDERS_TEXT +"')]"), webDriver), "enterUserPassword(password)");
+		loginProcess.completeLogin(password, loginPage);
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.RETURNS_AND_ORDERS_TEXT +"')]")), "enterUserPassword(password)");
 		TestAssert.pageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		
 		SearchPage searchPage = loginPage.generateSearchPage();
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.DELIVER_TO_TEXT +"')]"), webDriver), "pauseForSearchPage()");
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.DELIVER_TO_TEXT +"')]")), "pauseForSearchPage()");
 		TestAssert.pageTitle("pauseForSearchPage()", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 
 		ResultsPage resultsPage = searchPage.searchForProducts(TextData.SEARCH_TEXT);
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.RESULTS_TEXT +"')]"), webDriver), "searchForProducts(TextData.SEARCH_TEXT)");
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.RESULTS_TEXT +"')]")), "searchForProducts(TextData.SEARCH_TEXT)");
 		TestAssert.pageTitle("searchForProducts(TextData.SEARCH_TEXT)", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 
 		List<WebElement> productList = resultsPage.getProductList();
@@ -77,30 +79,30 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 		int index = determineIndex(productName);
 		productName = productList.get(resultIndex).getText().split("\n")[index];
 
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.RESULTS_TEXT +"')]"), webDriver), "getProductList()");
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.RESULTS_TEXT +"')]")), "getProductList()");
 
 		String bookTitle = resultsPage.setProduct(productName, index);
 		TestAssert.pageTitle("setProduct(productName, index)", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 
-		resultsPage.clickProductLink(bookTitle, Element.getElement(By.cssSelector("img[alt='"+ bookTitle +"']"), webDriver));
+		resultsPage.clickProductLink(bookTitle, Element.getElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
 
-		if(Element.isPresent(By.xpath("//*[contains(text(), '"+ TextData.ADD_TO_CART_TEXT +"')]"), webDriver)){
+		if(Element.isPresent(By.xpath("//*[contains(text(), '"+ TextData.ADD_TO_CART_TEXT +"')]"))){
 			CartPage cartPage = resultsPage.addProductToCart();
-			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.ADDED_TO_CART_TEXT +"')]"), webDriver), "addProductToCart(productName, index)");
+			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.ADDED_TO_CART_TEXT +"')]")), "addProductToCart(productName, index)");
 			TestAssert.pageTitle("addProductToCart(productName, index)", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 
 			cartPage.openCart();
-			TestAssert.elementNotNull(Element.getElement(By.xpath("//h1[normalize-space()='"+ TextData.SHOPPING_CART_TEXT +"']"), webDriver), "openCart()");
+			TestAssert.elementNotNull(Element.getElement(By.xpath("//h1[normalize-space()='"+ TextData.SHOPPING_CART_TEXT +"']")), "openCart()");
 			TestAssert.pageTitle("openCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
 
 			LogoutPage logoutPage =  cartPage.deleteCart();
-			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.REMOVED_FROM_CART_TEXT +"')]"), webDriver), "deleteCart()");
+			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.REMOVED_FROM_CART_TEXT +"')]")), "deleteCart()");
 			TestAssert.pageTitle("deleteCart()", PageTitleData.CART_PAGE_TITLE, webDriver.getTitle());
-			logoutProcess.cartLogout(logoutPage, webDriver);
+			logoutProcess.cartLogout(logoutPage);
 		} else{
 			LogoutPage logoutPage = loginPage.initialiseLogoutPage();
 			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
-			logoutProcess.logout(logoutPage, webDriver, "TestException: "+productName);
+			logoutProcess.logout(logoutPage, "TestException: "+ productName);
 			throw new TestException(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
 		}
 	}
