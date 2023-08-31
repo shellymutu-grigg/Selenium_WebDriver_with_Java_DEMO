@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ConvertTestCaseName {
-    public static String convertTestCaseName(String testCaseName) {
+public class TestCaseName {
+    public static String convert(String testCaseName) {
         // Read the test case method name and split it based on capital letters
         Stream<String> convertTestMethodName = Arrays.stream(testCaseName.split("(?=\\p{Lu})"));
 

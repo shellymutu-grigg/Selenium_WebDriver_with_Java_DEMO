@@ -3,13 +3,12 @@ package pageObjects;
 import java.text.MessageFormat;
 import java.util.List;
 
-import functions.Element;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import org.testng.TestException;
-import webElement.FindElement;
+import webElement.Element;
 
 public class ResultsPage {
 
@@ -27,11 +26,11 @@ public class ResultsPage {
 	}
 	
 	public List<WebElement> getProductList(){
-		return FindElement.getWebElements(productsBy, webDriver);
+		return Element.getElements(productsBy, webDriver);
 	}
 	
 	public WebElement getProductByName(String productName, int index) {
-		WebElement product = FindElement.getWebElements(productsBy, webDriver).stream()
+		WebElement product = Element.getElements(productsBy, webDriver).stream()
 				.filter(product_ -> 
 					product_.getText().split("\n")[index].trim().contains(productName) 
 				).findFirst()
@@ -55,7 +54,7 @@ public class ResultsPage {
 	}
 	
 	public CartPage addProductToCart(){
-		FindElement.getWebElement(addToCartButtonBy, webDriver).click();
+		Element.getElement(addToCartButtonBy, webDriver).click();
 		CartPage cartPage = new CartPage(webDriver);
 		return cartPage;
 	}
@@ -67,9 +66,9 @@ public class ResultsPage {
 	}
 
 	public void setTitle(WebElement product){
-		int productIndex = FindElement.getWebElements(productsBy, webDriver).indexOf(product);
+		int productIndex = Element.getElements(productsBy, webDriver).indexOf(product);
 		if(productIndex >=0) {
-			WebElement productImage = FindElement.getWebElements(productsImagesBy, webDriver).get(productIndex);
+			WebElement productImage = Element.getElements(productsImagesBy, webDriver).get(productIndex);
 			bookTitle = productImage.getAttribute("alt");
 		} else {
 			System.out.println(MessageFormat.format("Index {0} of product is incorrect", productIndex));

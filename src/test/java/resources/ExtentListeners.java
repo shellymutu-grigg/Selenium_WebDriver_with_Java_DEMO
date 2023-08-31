@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import data.ConfigData;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -21,18 +22,18 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
-import functions.ConvertTestCaseName;
+import functions.TestCaseName;
 import testComponents.TestSetup;
  
 public class ExtentListeners extends TestSetup implements ITestListener {
 	
     private static String getTestMethodName(ITestResult result) {
-        return ConvertTestCaseName.convertTestCaseName(result.getMethod().getConstructorOrMethod().getName());
+        return TestCaseName.convert(result.getMethod().getConstructorOrMethod().getName());
     }
     
 	@Override
     public void onStart(ITestContext context) {
-        context.setAttribute("WebDriver", this.webDriver);
+        context.setAttribute(ConfigData.SYSTEM_PROPERTY_WEBDRIVER, this.webDriver);
     }	
 
 	@Override
@@ -57,8 +58,8 @@ public class ExtentListeners extends TestSetup implements ITestListener {
             } catch (Exception e) {
                 System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage()));
             }
-            ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName() + " has finished."));
-            ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName()) + " - PASS", ExtentColor.GREEN));
+            ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), TestCaseName.convert(result.getMethod().getMethodName() + " has finished."));
+            ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(TestCaseName.convert(result.getMethod().getMethodName()) + " - PASS", ExtentColor.GREEN));
         }
     }
  
@@ -78,7 +79,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
             } catch (Exception e) {
                 System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage()));
             }
-            ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(ConvertTestCaseName.convertTestCaseName(result.getMethod().getMethodName()) + " - FAIL", ExtentColor.RED));
+            ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(TestCaseName.convert(result.getMethod().getMethodName()) + " - FAIL", ExtentColor.RED));
         }
     }
  
@@ -99,7 +100,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
         if(ExtentTestManager.getTest() !=null) {
             try {
                 String fileName = captureScreenshot(testCaseName);
-                ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + ConvertTestCaseName.convertTestCaseName(testCaseName) + " successfully started at:" + "</font>",
+                ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + TestCaseName.convert(testCaseName) + " successfully started at:" + "</font>",
                         MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
             } catch (Exception e) {
                 System.out.println(MessageFormat.format("Screenshot capture failed with error: {0}", e.getMessage()));

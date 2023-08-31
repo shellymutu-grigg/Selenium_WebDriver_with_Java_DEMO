@@ -3,7 +3,7 @@ package pageObjects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import webElement.FindElement;
+import webElement.Element;
 
 public class SearchPage {
 
@@ -17,8 +17,8 @@ public class SearchPage {
 	}
 	
 	public ResultsPage searchForProducts(String product) {
-		FindElement.getWebElement(searchFieldBy, webDriver).sendKeys(product);
-		FindElement.getWebElement(searchButtonBy, webDriver).click();
+		Element.getElement(searchFieldBy, webDriver).sendKeys(product);
+		Element.getElement(searchButtonBy, webDriver).click();
 		ResultsPage resultsPage = new ResultsPage(webDriver);
 		return resultsPage;
 	}

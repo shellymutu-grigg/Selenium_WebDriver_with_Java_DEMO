@@ -1,5 +1,7 @@
-package resources;
+package configuration;
 
+import data.ConfigData;
+import data.TextData;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -12,20 +14,20 @@ import java.net.URL;
 import java.text.MessageFormat;
 import java.time.Duration;
 
-public class GridDriver {
+public class GridDriverConfig {
     static WebDriver webDriver;
     public static WebDriver gridDriverSetup(String browserName) {
         if (browserName != null) {
             DesiredCapabilities capabilities = new DesiredCapabilities();
-            if (browserName.equalsIgnoreCase("chrome")) {
+            if (browserName.equalsIgnoreCase(ConfigData.CHROME_DRIVER)) {
                 // Setup for Selenium Grid implementation
-                setCapabilities(capabilities, "chrome");
-            } else if (browserName.equalsIgnoreCase("firefox")) {
+                setCapabilities(capabilities, ConfigData.CHROME_DRIVER);
+            } else if (browserName.equalsIgnoreCase(ConfigData.FIREFOX_DRIVER)) {
                 // Setup for Selenium Grid implementation
-                setCapabilities(capabilities, "firefox");
-            } else if (browserName.equalsIgnoreCase("edge")) {
+                setCapabilities(capabilities, ConfigData.FIREFOX_DRIVER);
+            } else if (browserName.equalsIgnoreCase(ConfigData.EDGE_DRIVER)) {
                 // Setup for Selenium Grid implementation
-                setCapabilities(capabilities, "MicrosoftEdge");
+                setCapabilities(capabilities, ConfigData.EDGE_MICROSOFT_DRIVER);
             }
 
             webDriver.manage().window().setSize(new Dimension(1050, 650));
@@ -47,7 +49,7 @@ public class GridDriver {
             capabilities.setBrowserName(browserName);
             capabilities.setPlatform(Platform.WIN11);
             capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
-            webDriver = new RemoteWebDriver(new URL("http://192.168.50.207:4444"), capabilities);
+            webDriver = new RemoteWebDriver(new URL(ConfigData.REMOTE_DRIVER_URL), capabilities);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

@@ -3,7 +3,7 @@ package pageObjects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import webElement.FindElement;
+import webElement.Element;
 
 public class CartPage {
 	
@@ -18,12 +18,12 @@ public class CartPage {
 	}
 	
 	public void openCart() {
-		FindElement.getWebElement(cartLinkBy, webDriver).click();
+		Element.getElement(cartLinkBy, webDriver).click();
 	}
 	
 	public LogoutPage deleteCart() {
-		FindElement.getWebElement(cartBy, webDriver);
-		FindElement.getWebElements(deleteItemBy, webDriver).get(0).click();
+		Element.getElement(cartBy, webDriver);
+		Element.getElements(deleteItemBy, webDriver).get(0).click();
 		LogoutPage logoutPage = new LogoutPage(webDriver);
 		return logoutPage;
 	}

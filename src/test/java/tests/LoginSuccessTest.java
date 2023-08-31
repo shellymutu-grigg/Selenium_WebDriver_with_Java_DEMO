@@ -3,6 +3,7 @@ package tests;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
+import data.ConfigData;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.testng.annotations.Listeners;
@@ -10,22 +11,21 @@ import org.testng.annotations.Test;
 
 import data.PageTitleData;
 import data.TextData;
-import functions.AssertElementNotNull;
-import functions.AssertPageTitle;
-import functions.ConvertTestCaseName;
+import functions.TestAssert;
+import functions.TestCaseName;
 import pageObjects.LogoutPage;
 import resources.ExtentListeners;
 import resources.ExtentTestManager;
 import testComponents.LoginProcess;
 import testComponents.LogoutProcess;
 import testComponents.TestSetup;
-import webElement.FindElement;
+import webElement.Element;
 
 @Listeners(ExtentListeners.class)
 public class LoginSuccessTest extends TestSetup{
 	LoginProcess loginProcess = new LoginProcess();
 	LogoutProcess logoutProcess = new LogoutProcess();
-	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
+	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
 	
 	@Test(groups = { "Smoke", "Login" }, priority = 1, description = "Successful login scenario")
 	/*
@@ -35,9 +35,9 @@ public class LoginSuccessTest extends TestSetup{
 			AND the user will be able to review their account
 	 */
 	public void loginSuccessTest(Method method) {
-		ExtentTestManager.startTest(ConvertTestCaseName.convertTestCaseName(method.getName()), "A user is able to successfully login with a valid email and password combo");
+		ExtentTestManager.startTest(TestCaseName.convert(method.getName()), "A user is able to successfully login with a valid email and password combo");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
-				ConvertTestCaseName.convertTestCaseName(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
+				TestCaseName.convert(method.getName()), StringUtils.capitalize(System.getProperty("Browser"))));
 
 		loginPage.navigateToURL();
 		ExtentListeners extentListener = new ExtentListeners();
@@ -45,17 +45,17 @@ public class LoginSuccessTest extends TestSetup{
 		loginProcess.completeLogin(password, loginPage, webDriver);
 		
 		if(loginPage.checkIfSignedIn()) {
-			AssertPageTitle.assertPageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
+			TestAssert.pageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		} else {
 			if(loginPage.findLoginFailureText() == TextData.LOGIN_FAILURE_ALERT_TEXT) {
-				AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with incorrect password");
-				AssertPageTitle.assertPageTitle("enterUserDetails(email, password) with incorrect password", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with incorrect password");
+				TestAssert.pageTitle("enterUserDetails(email, password) with incorrect password", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 			} else if(loginPage.findLoginFailureText() == TextData.LOGIN_PUZZLE_TEXT) {
-				AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_PUZZLE_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with puzzle page presented");
-				AssertPageTitle.assertPageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_PUZZLE_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with puzzle page presented");
+				TestAssert.pageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 			} else if(loginPage.findLoginFailureText() == TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT) {
-				AssertElementNotNull.assertElementNotNull(FindElement.getWebElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with an important message page presented");
-				AssertPageTitle.assertPageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]"), webDriver), "enterUserDetails(email, password) with an important message page presented");
+				TestAssert.pageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 			}
 		}
 		

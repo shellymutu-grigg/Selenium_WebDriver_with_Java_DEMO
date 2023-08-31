@@ -1,12 +1,10 @@
 package testComponents;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.Properties;
 
-import functions.Url;
+import data.ConfigData;
+import functions.Get;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
@@ -32,7 +30,7 @@ public class TestSetup {
 	protected void launchApplication (Method method){
 		loginPage = new LoginPage(getDriver());
 		String methodName = method.getName();
-		System.setProperty("MethodName", methodName);
+		System.setProperty(ConfigData.SYSTEM_PROPERTY_METHOD_NAME, methodName);
 	}
 
 	@BeforeTest
@@ -48,8 +46,8 @@ public class TestSetup {
 	@BeforeClass(alwaysRun = true)
 	public void setup(ITestContext context) {
 		webDriver = BrowserManager.browserSetup();
-		context.setAttribute("WebDriver", getDriver());
-		getDriver().get(Url.getUrl());
+		context.setAttribute(ConfigData.SYSTEM_PROPERTY_WEBDRIVER, getDriver());
+		getDriver().get(Get.url());
 	}
 
 	@AfterClass(alwaysRun = true)

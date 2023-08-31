@@ -1,5 +1,8 @@
 package resources;
 
+import data.ConfigData;
+import data.TextData;
+import functions.Get;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
@@ -10,7 +13,6 @@ import java.time.Duration;
 import configuration.ChromeDriverConfig;
 import configuration.EdgeDriverConfig;
 import configuration.FirefoxDriverConfig;
-import functions.GlobalProperty;
 import testComponents.TestSetup;
 
 public class BrowserManager extends TestSetup {
@@ -18,19 +20,19 @@ public class BrowserManager extends TestSetup {
         String browserName = "";
         WebDriver webDriver = null;
         try {
-            browserName = GlobalProperty.getGlobalProperty("browser");
-            System.setProperty("Browser", browserName);
+            browserName = Get.globalProperty(ConfigData.BROWSER);
+            System.setProperty(ConfigData.SYSTEM_PROPERTY_BROWSER, browserName);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         if (browserName != null) {
-            if (browserName.equalsIgnoreCase("chrome")) {
+            if (browserName.equalsIgnoreCase(ConfigData.CHROME_DRIVER)) {
                 webDriver = ChromeDriverConfig.setUpChromeDriver(browserName);
-            } else if (browserName.equalsIgnoreCase("firefox")) {
+            } else if (browserName.equalsIgnoreCase(ConfigData.FIREFOX_DRIVER)) {
                 webDriver = FirefoxDriverConfig.setUpFirefoxDriver(browserName);
-            } else if (browserName.equalsIgnoreCase("edge")) {
+            } else if (browserName.equalsIgnoreCase(ConfigData.EDGE_DRIVER)) {
                 webDriver = EdgeDriverConfig.setUpEdgeDriver(browserName);
             }
             //Set the webDriver in the threadLocalDriver

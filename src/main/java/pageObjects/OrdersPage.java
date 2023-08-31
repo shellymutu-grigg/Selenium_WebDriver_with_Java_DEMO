@@ -7,7 +7,7 @@ import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 import org.testng.Assert;
 
 import data.TextData;
-import webElement.FindElement;
+import webElement.Element;
 
 public class OrdersPage {
 
@@ -27,7 +27,7 @@ public class OrdersPage {
 
 	public void openAccountMenu() {
 		try{
-			actions.moveToElement(FindElement.getWebElement(accountMenuBy, webDriver)).perform();
+			actions.moveToElement(Element.getElement(accountMenuBy, webDriver)).perform();
 		}catch(MoveTargetOutOfBoundsException e){
 			e.getMessage();
 		}
@@ -35,17 +35,17 @@ public class OrdersPage {
 	
 	public void openOrdersPage(){
 		try{
-			actions.moveToElement(FindElement.getWebElement(orderPageLinkBy, webDriver)).perform();
-			FindElement.getWebElement(orderPageLinkBy, webDriver).click();
+			actions.moveToElement(Element.getElement(orderPageLinkBy, webDriver)).perform();
+			Element.getElement(orderPageLinkBy, webDriver).click();
 		}catch(MoveTargetOutOfBoundsException e){
 			e.getMessage();
 		}
 	}
 	
 	public LogoutPage searchForOrders(){ 
-		FindElement.getWebElement(searchOrdersFieldBy, webDriver).sendKeys(TextData.ORDER_SEARCH_TEXT);
-		FindElement.getWebElement(searchOrdersButtonBy, webDriver).click();
-		String orderFilterText = FindElement.getWebElement(orderFilter, webDriver).getText();
+		Element.getElement(searchOrdersFieldBy, webDriver).sendKeys(TextData.ORDER_SEARCH_TEXT);
+		Element.getElement(searchOrdersButtonBy, webDriver).click();
+		String orderFilterText = Element.getElement(orderFilter, webDriver).getText();
 		
 		Assert.assertEquals(orderFilterText, TextData.ORDER_FILTER_TEXT);
 		LogoutPage logoutPage = new LogoutPage(webDriver);

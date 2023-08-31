@@ -1,11 +1,12 @@
 package pageObjects;
 
+import data.TextData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
-import webElement.FindElement;
+import webElement.Element;
 
 public class LogoutPage {
 	
@@ -13,7 +14,7 @@ public class LogoutPage {
 
 	Actions actions;
 	
-	By accountLinkBy = By.xpath("//*[contains(text(), 'Account & Lists')]");
+	By accountLinkBy = By.xpath("//*[contains(text(), '" + TextData.ACCOUNT_MENU_LINK_TEXT + "')]");
 	By logoutLinkBy = By.id("nav-item-signout");
 
 	public LogoutPage(WebDriver webDriver) {
@@ -23,7 +24,7 @@ public class LogoutPage {
 	
 	public void openAccountMenu() {
 		try{
-	        actions.moveToElement(FindElement.getWebElement(accountLinkBy, webDriver)).perform();
+	        actions.moveToElement(Element.getElement(accountLinkBy, webDriver)).perform();
 	    }catch(MoveTargetOutOfBoundsException e){
 	        e.getMessage();
 	    }
@@ -36,8 +37,8 @@ public class LogoutPage {
 	
 	public void logout() {
 		try{
-			actions.moveToElement(FindElement.getWebElement(logoutLinkBy, webDriver)).perform();
-			FindElement.getWebElement(logoutLinkBy, webDriver).click();
+			actions.moveToElement(Element.getElement(logoutLinkBy, webDriver)).perform();
+			Element.getElement(logoutLinkBy, webDriver).click();
 	    }catch(MoveTargetOutOfBoundsException e){
 	        e.getMessage();
 	    }

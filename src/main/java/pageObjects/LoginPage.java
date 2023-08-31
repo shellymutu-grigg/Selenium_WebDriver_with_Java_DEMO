@@ -1,7 +1,6 @@
 package pageObjects;
 
-import functions.Element;
-import functions.Url;
+import functions.Get;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -9,7 +8,7 @@ import org.testng.ITestListener;
 
 import data.PageTitleData;
 import data.TextData;
-import webElement.FindElement;
+import webElement.Element;
 
 public class LoginPage implements ITestListener{
 
@@ -30,7 +29,7 @@ public class LoginPage implements ITestListener{
 	By signInLinkBy = By.xpath("//span[normalize-space()='Account & Lists']");
 	By userEmailBy = By.id("ap_email");
 	By userPasswordBy = By.id("ap_password");
-	By yourAccountLinkBy = By.linkText("Your Account");
+	By yourAccountLinkBy = By.linkText(TextData.YOUR_ACCOUNT_TEXT);
 	
 	public LoginPage(WebDriver webDriver) {
 		this.webDriver = webDriver;
@@ -42,38 +41,38 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void navigateToURL() {
-		if(FindElement.getWebElement(landingPageBy, webDriver) != null) {
-			FindElement.getWebElement(landingPageBy, webDriver);
+		if(Element.getElement(landingPageBy, webDriver) != null) {
+			Element.getElement(landingPageBy, webDriver);
 		}
-		else if(FindElement.getWebElement(landingPageAltBy, webDriver) != null) {
-			FindElement.getWebElement(landingPageAltBy, webDriver);
-			if(FindElement.getWebElement(yourAccountLinkBy, webDriver) != null) {
+		else if(Element.getElement(landingPageAltBy, webDriver) != null) {
+			Element.getElement(landingPageAltBy, webDriver);
+			if(Element.getElement(yourAccountLinkBy, webDriver) != null) {
 				System.setProperty("YourAccount", "Your Account");
-				FindElement.getWebElement(yourAccountLinkBy, webDriver).click();
+				Element.getElement(yourAccountLinkBy, webDriver).click();
 			}
 		}
 	}
 	
 	public SearchPage generateSearchPage() {
-		FindElement.getWebElement(accountLinkBy, webDriver);
+		Element.getElement(accountLinkBy, webDriver);
 		SearchPage searchPage = new SearchPage(webDriver);
 		return searchPage;
 	}
 	
 	public OrdersPage generateOrdersPage() {
-		FindElement.getWebElement(accountLinkBy, webDriver);
+		Element.getElement(accountLinkBy, webDriver);
 		OrdersPage ordersPage = new OrdersPage(webDriver);
 		return ordersPage;
 	}	
 	
 	public void enterUserEmail(String email) {
-		FindElement.getWebElement(userEmailBy, webDriver).sendKeys(email);
-		FindElement.getWebElement(continueButtonBy, webDriver).click();
+		Element.getElement(userEmailBy, webDriver).sendKeys(email);
+		Element.getElement(continueButtonBy, webDriver).click();
 	}
 	
 	public void enterUserPassword(String password) {
-		FindElement.getWebElement(userPasswordBy, webDriver).sendKeys(password);
-		FindElement.getWebElement(loginButtonBy, webDriver).click();
+		Element.getElement(userPasswordBy, webDriver).sendKeys(password);
+		Element.getElement(loginButtonBy, webDriver).click();
 	}
 	
 	public boolean checkIfSignedIn() {
@@ -84,27 +83,27 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void navigateToLanding() {
-		FindElement.getWebElement(signInLinkBy, webDriver).click();
+		Element.getElement(signInLinkBy, webDriver).click();
 	}
 	
 	public void checkForPreviousLoginFailure() {
-		String accountListText = FindElement.getWebElement(accountMenuBy, webDriver).getText();
+		String accountListText = Element.getElement(accountMenuBy, webDriver).getText();
 		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
 			initialiseLogoutPage().openAccountMenu();
 			initialiseLogoutPage().logout();
-			webDriver.get(Url.getUrl());
+			webDriver.get(Get.url());
 		}
 	}
 	
 	public String findLoginFailureText() {
 		String failureText = "";
-		if(Element.isElementPresent(loginFailAlert, webDriver)) {
+		if(Element.isPresent(loginFailAlert, webDriver)) {
 			failureText = TextData.LOGIN_FAILURE_ALERT_TEXT;
 		}
-		else if(Element.isElementPresent(loginFailPuzzle, webDriver)) {
+		else if(Element.isPresent(loginFailPuzzle, webDriver)) {
 			failureText =  TextData.LOGIN_PUZZLE_TEXT;
 		}
-		else if(Element.isElementPresent(loginFailImportantMessage, webDriver)) {
+		else if(Element.isPresent(loginFailImportantMessage, webDriver)) {
 			failureText =  TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
 		}
 		return failureText;
@@ -112,15 +111,15 @@ public class LoginPage implements ITestListener{
 	
 	public String loginFail() {
 		String loginFailStatus = "";
-		if(Element.isElementPresent(loginFailAlert, webDriver)) {
+		if(Element.isPresent(loginFailAlert, webDriver)) {
 			loginFailStatus = TextData.LOGIN_FAILURE_ALERT_TEXT;
 			validateLoginFailure(loginFailAlertMessageText, TextData.LOGIN_FAILURE_ALERT_TEXT);
 		}
-		else if(Element.isElementPresent(loginFailPuzzle, webDriver)) {
+		else if(Element.isPresent(loginFailPuzzle, webDriver)) {
 			loginFailStatus =  TextData.LOGIN_PUZZLE_TEXT;
 			validateLoginFailure(loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT);
 		}
-		else if(Element.isElementPresent(loginFailImportantMessage, webDriver)) {
+		else if(Element.isPresent(loginFailImportantMessage, webDriver)) {
 			loginFailStatus = TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
 			validateLoginFailure(loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
 		}
@@ -128,7 +127,7 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void validateLoginFailure(By elementMessageText, String expectedText) {
-		String messageText = FindElement.getWebElement(elementMessageText, webDriver).getText();
+		String messageText = Element.getElement(elementMessageText, webDriver).getText();
 		Assert.assertEquals(messageText, expectedText);
 	}
 }
