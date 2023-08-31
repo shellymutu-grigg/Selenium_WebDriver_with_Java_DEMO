@@ -36,10 +36,13 @@ Automation Tests built:
 	- Logout
 2. Smoke Test Suite
 	- Login Failure Test
-	- Login Success Test
 	- Review Orders Test
+	- E2E Add to Cart Test 
 3. Error Handling Test
 	- Login Failure Test
+4. Selenium Grid Tests
+	- Selenium Grid Google Test
+	- Selenium Grid SMG Test
 	
 ## Evidence supplied
 1. Inheritance vs. Abstraction
@@ -52,4 +55,18 @@ Automation Tests built:
 	- Wait times
 	- SQL queries
 4. ExtentReports
-5. Selenium Grid  ***TO BE COMPLETED***
+5. Selenium Grid 
+
+## Selenium Grid
+- In a terminal window navigate to the folder with `selenium-server.jar` file:  `C:\Users\<USER_NAME>\development\downloads`
+- Execute following command: `java -jar selenium-server-<VERSION>.jar hub`
+- Verify Hub is running on local machine: open browser and navigate to: `http://localhost:4444/` or `http://192.168.50.207:4444`
+- Open a new terminal window 
+- window navigate to the folder with `selenium-server-<VERSION>.jar` file:  `C:\Users\<USER_NAME>\development\downloads`
+- Execute following command: `java -jar selenium-server-<VERSION>.jar  node --detect-drivers true`
+- Refresh browser and the node should be registered `URI:http://192.168.50.207:5555`
+- Add `selenium-server-<VERSION>.jar` file to project build path
+- Create Tests
+- Create .xml to run Tests
+- Create profile in pom.xml
+- Execute profile via command line e.g. `mvn test -PGrid`

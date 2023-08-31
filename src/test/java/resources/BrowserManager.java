@@ -4,6 +4,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.time.Duration;
 
 import configuration.ChromeDriverConfig;
@@ -23,6 +24,7 @@ public class BrowserManager extends TestSetup {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         if (browserName != null) {
             if (browserName.equalsIgnoreCase("chrome")) {
                 webDriver = ChromeDriverConfig.setUpChromeDriver(browserName);
@@ -36,10 +38,14 @@ public class BrowserManager extends TestSetup {
 
             getDriver().manage().window().setSize(new Dimension(1050, 650));
 
-            //Add implicit timeout
-            webDriver.manage()
-                    .timeouts()
-                    .implicitlyWait(Duration.ofSeconds(10));
+            try{
+                //Add implicit timeout
+                webDriver.manage()
+                        .timeouts()
+                        .implicitlyWait(Duration.ofSeconds(15));
+            } catch(NullPointerException e){
+                System.out.println(MessageFormat.format("NullPointerException: {0}", e.getMessage()));
+            }
         }
         return webDriver;
     }

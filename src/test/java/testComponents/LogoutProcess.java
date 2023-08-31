@@ -10,6 +10,8 @@ import functions.AssertPageTitle;
 import pageObjects.LogoutPage;
 import webElement.FindElement;
 
+import java.time.Duration;
+
 public class LogoutProcess {
 	
 	public void cartLogout(LogoutPage logoutPage, WebDriver webDriver) {

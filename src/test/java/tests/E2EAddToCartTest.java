@@ -36,7 +36,7 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv("AMAZON_PASSWORD_SUCCESS");
 	
-	@Test(groups = { "E2E" }, priority = 1, description = "Add to Cart End to End scenario")
+	@Test(groups = { "E2E", "Smoke" }, priority = 1, description = "Add to Cart End to End scenario")
 	/*
 		GIVEN a user enters a correct email and password combination
 		WHEN they access the Enter Email and Enter Password screens

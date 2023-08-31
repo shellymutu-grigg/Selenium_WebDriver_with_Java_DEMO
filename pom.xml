@@ -72,79 +72,98 @@
   <profiles>
 	  <profile>
 		  <id>Smoke</id>
-			<build>
-			  	<pluginManagement>
-					<plugins>  
-					 <plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-			          	<artifactId>maven-surefire-plugin</artifactId>
-			          	<version>2.22.1</version>
-				        <configuration>
-				          <suiteXmlFiles>
-				            <suiteXmlFile>src/test/resources/smoke.xml</suiteXmlFile>
-				          </suiteXmlFiles>
-				        </configuration>
-			     	</plugin>
-			      </plugins>
-		    	</pluginManagement>
-			</build>
-	  	</profile>
+		  <build>
+			  <pluginManagement>
+				  <plugins>
+					  <plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-plugin</artifactId>
+						  <version>2.22.1</version>
+						  <configuration>
+							  <suiteXmlFiles>
+								  <suiteXmlFile>src/test/resources/smoke.xml</suiteXmlFile>
+								</suiteXmlFiles>
+						  </configuration>
+					  </plugin>
+				  </plugins>
+			  </pluginManagement>
+		  </build>
+	  </profile>
 	  <profile>
 		  <id>E2E</id>
 		  <build>
-			  	<pluginManagement>
-					<plugins>  
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-				          	<artifactId>maven-surefire-plugin</artifactId>
-				          	<version>2.22.1</version>
-				        	<configuration>
-					          <suiteXmlFiles>
-					            <suiteXmlFile>src/test/resources/e2e.xml</suiteXmlFile>
-					          </suiteXmlFiles>
-					        </configuration>
-			     		</plugin>
-			      	</plugins>
-		    	</pluginManagement>
-			</build>
+			  <pluginManagement>
+				  <plugins>
+					  <plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-plugin</artifactId>
+						  <version>2.22.1</version>
+						  <configuration>
+							  <suiteXmlFiles>
+								  <suiteXmlFile>src/test/resources/e2e.xml</suiteXmlFile>
+							  </suiteXmlFiles>
+						  </configuration>
+					  </plugin>
+				  </plugins>
+			  </pluginManagement>
+		  </build>
 	  </profile>
 	  <profile>
 		  <id>ErrorHandling</id>
 		  <build>
-			  	<pluginManagement>
-					<plugins>  
-						 <plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-				          	<artifactId>maven-surefire-plugin</artifactId>
-				          	<version>2.22.1</version>
-					        <configuration>
-					          <suiteXmlFiles>
-					            <suiteXmlFile>src/test/resources/errors.xml</suiteXmlFile>
-					          </suiteXmlFiles>
-					        </configuration>
-				     	</plugin>
+			  <pluginManagement>
+				  <plugins>
+					  <plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-plugin</artifactId>
+						  <version>2.22.1</version>
+						  <configuration>
+							  <suiteXmlFiles>
+								  <suiteXmlFile>src/test/resources/errors.xml</suiteXmlFile>
+							  </suiteXmlFiles>
+						  </configuration>
+					  </plugin>
 			      </plugins>
-		    	</pluginManagement>
-			</build>
+			  </pluginManagement>
+		  </build>
 	  </profile>
 	  <profile>
 		  <id>Login</id>
 		  <build>
-			  	<pluginManagement>
-					<plugins>  
-						 <plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-				          	<artifactId>maven-surefire-plugin</artifactId>
-				          	<version>2.22.1</version>
-					        <configuration>
-					          <suiteXmlFiles>
-					            <suiteXmlFile>src/test/resources/loginSucess.xml</suiteXmlFile>
+			  <pluginManagement>
+				  <plugins>
+					  <plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-plugin</artifactId>
+						  <version>2.22.1</version>
+						  <configuration>
+							  <suiteXmlFiles>
+								  <suiteXmlFile>src/test/resources/loginSuccess.xml</suiteXmlFile>
 					          </suiteXmlFiles>
-					        </configuration>
-				     	</plugin>
+						  </configuration>
+					  </plugin>
 			      </plugins>
-		    	</pluginManagement>
-			</build>
+			  </pluginManagement>
+		  </build>
+	  </profile>
+	  <profile>
+		  <id>Grid</id>
+		  <build>
+			  <pluginManagement>
+				  <plugins>
+					  <plugin>
+						  <groupId>org.apache.maven.plugins</groupId>
+						  <artifactId>maven-surefire-plugin</artifactId>
+						  <version>2.22.1</version>
+						  <configuration>
+							  <suiteXmlFiles>
+								  <suiteXmlFile>src/test/resources/grid.xml</suiteXmlFile>
+							  </suiteXmlFiles>
+						  </configuration>
+					  </plugin>
+				  </plugins>
+			  </pluginManagement>
+		  </build>
 	  </profile>
   </profiles>
 
@@ -199,11 +218,6 @@
 			<groupId>org.apache.maven.plugins</groupId>
           	<artifactId>maven-surefire-plugin</artifactId>
           	<version>2.22.1</version>
-          	<configuration>
-			    <suiteXmlFiles>
-			        <suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
-			    </suiteXmlFiles>
-			</configuration> 
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
