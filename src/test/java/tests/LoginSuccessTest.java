@@ -2,6 +2,7 @@ package tests;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import data.ConfigData;
 import data.LocalStore;
@@ -48,14 +49,14 @@ public class LoginSuccessTest extends TestSetup{
 		if(loginPage.checkIfSignedIn()) {
 			TestAssert.pageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
 		} else {
-			if(loginPage.findLoginFailureText() == TextData.LOGIN_FAILURE_ALERT_TEXT) {
+			if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_FAILURE_ALERT_TEXT)) {
 				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]")), "enterUserDetails(email, password) with incorrect password");
 				TestAssert.pageTitle("enterUserDetails(email, password) with incorrect password", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-			} else if(loginPage.findLoginFailureText() == TextData.LOGIN_PUZZLE_TEXT) {
+			} else if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_PUZZLE_TEXT)) {
 				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_PUZZLE_TEXT +"')]")), "enterUserDetails(email, password) with puzzle page presented");
 				TestAssert.pageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-			} else if(loginPage.findLoginFailureText() == TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT) {
-				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
+			} else if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT)) {
+				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
 				TestAssert.pageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 			}
 		}

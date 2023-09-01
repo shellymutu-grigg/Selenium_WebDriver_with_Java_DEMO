@@ -12,6 +12,8 @@ import data.PageTitleData;
 import data.TextData;
 import webElement.Element;
 
+import java.util.Objects;
+
 public class LoginPage implements ITestListener{
 	By accountLinkBy = By.id("nav-global-location-popover-link");
 	By continueButtonBy = By.id("continue");
@@ -21,8 +23,8 @@ public class LoginPage implements ITestListener{
 	By loginButtonBy = By.id("signInSubmit");
 	By loginFailPuzzle = By.id("cvf-page-content");
 	By loginFailPuzzleMessageText = By.cssSelector(".a-spacing-mini");
-	By loginFailImportantMessage = By.xpath("//*[contains(text(), '" + TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]");
-	By loginFailImportantMessageText = By.xpath("//*[contains(text(), '" + TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]");
+	By loginFailImportantMessage = By.xpath("//*[contains(text(), '" + TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]");
+	By loginFailImportantMessageText = By.xpath("//*[contains(text(), '" + TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]");
 	By loginFailAlert = By.id("auth-error-message-box");
 	By loginFailAlertMessageText = By.cssSelector(".a-alert-content");
 	By signInLinkBy = By.xpath("//span[normalize-space()='Account & Lists']");
@@ -31,60 +33,54 @@ public class LoginPage implements ITestListener{
 	By yourAccountLinkBy = By.linkText(TextData.YOUR_ACCOUNT_TEXT);
 	
 	public LogoutPage initialiseLogoutPage() {
-		LogoutPage logoutPage = new LogoutPage();
-		return logoutPage;
+		return new LogoutPage();
 	}
 	
 	public void navigateToURL() {
-		if(Element.getElement(landingPageBy) != null) {
+		if(Element.getElement(landingPageBy).isDisplayed()) {
 			Element.getElement(landingPageBy);
 		}
-		else if(Element.getElement(landingPageAltBy) != null) {
+		else if(Element.getElement(landingPageAltBy).isDisplayed()) {
 			Element.getElement(landingPageAltBy);
-			if(Element.getElement(yourAccountLinkBy) != null) {
+			if(Element.getElement(yourAccountLinkBy).isDisplayed()) {
 				LocalStore.setObject(ConfigData.SYSTEM_PROPERTY_YOUR_ACCOUNT, TextData.YOUR_ACCOUNT_TEXT);
-				Element.getElement(yourAccountLinkBy).click();
+				Element.click(yourAccountLinkBy);
 			}
 		}
 	}
 	
 	public SearchPage generateSearchPage() {
 		Element.getElement(accountLinkBy);
-		SearchPage searchPage = new SearchPage();
-		return searchPage;
+		return new SearchPage();
 	}
 	
 	public OrdersPage generateOrdersPage() {
 		Element.getElement(accountLinkBy);
-		OrdersPage ordersPage = new OrdersPage();
-		return ordersPage;
+		return new OrdersPage();
 	}	
 	
 	public void enterUserEmail(String email) {
-		Element.getElement(userEmailBy).sendKeys(email);
-		Element.getElement(continueButtonBy).click();
+		Element.sendKeys(userEmailBy, email);
+		Element.click(continueButtonBy);
 	}
 	
 	public void enterUserPassword(String password) {
-		Element.getElement(userPasswordBy).sendKeys(password);
-		Element.getElement(loginButtonBy).click();
+		Element.sendKeys(userPasswordBy, password);
+		Element.click(loginButtonBy);
 	}
 	
 	public boolean checkIfSignedIn() {
 		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
-		if(webDriver.getTitle().contains(PageTitleData.LANDING_PAGE_TITLE)) {
-			return true;
-		}
-		else return false;
+		return webDriver.getTitle().contains(PageTitleData.LANDING_PAGE_TITLE);
 	}
 	
 	public void navigateToLanding() {
-		Element.getElement(signInLinkBy).click();
+		Element.click(signInLinkBy);
 	}
 	
 	public void checkForPreviousLoginFailure() {
 		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
-		String accountListText = Element.getElement(accountMenuBy).getText();
+		String accountListText = Objects.requireNonNull(Element.getElement(accountMenuBy)).getText();
 		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
 			initialiseLogoutPage().openAccountMenu();
 			initialiseLogoutPage().logout();
@@ -101,7 +97,7 @@ public class LoginPage implements ITestListener{
 			failureText =  TextData.LOGIN_PUZZLE_TEXT;
 		}
 		else if(Element.isPresent(loginFailImportantMessage)) {
-			failureText =  TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
+			failureText =  TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT;
 		}
 		return failureText;
 	}
@@ -117,14 +113,14 @@ public class LoginPage implements ITestListener{
 			validateLoginFailure(loginFailPuzzleMessageText, TextData.LOGIN_PUZZLE_TEXT);
 		}
 		else if(Element.isPresent(loginFailImportantMessage)) {
-			loginFailStatus = TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT;
-			validateLoginFailure(loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT);
+			loginFailStatus = TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT;
+			validateLoginFailure(loginFailImportantMessageText, TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT);
 		}
 		return loginFailStatus;
 	}
 	
 	public void validateLoginFailure(By elementMessageText, String expectedText) {
-		String messageText = Element.getElement(elementMessageText).getText();
+		String messageText = Objects.requireNonNull(Element.getElement(elementMessageText)).getText();
 		Assert.assertEquals(messageText, expectedText);
 	}
 }

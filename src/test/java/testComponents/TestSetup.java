@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 import data.ConfigData;
-import data.LocalStore;
-import data.TextData;
 import functions.Get;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
@@ -66,7 +64,8 @@ public class TestSetup {
 				// Firefox generates a "NoSuchSessionException: Tried to run command without establishing a connection exception"
 				// if .quit() called directly
 			} catch (NoSuchSessionException e) {
-
+				System.out.println(MessageFormat.format("@AfterSuite NoSuchSessionException has message: {0}", e.getMessage()));
+				throw new NoSuchSessionException(MessageFormat.format("NoSuchSessionException: {0}", e.getMessage()));
 			}
 			// Edge generates a SocketException: Connection reset
 		}

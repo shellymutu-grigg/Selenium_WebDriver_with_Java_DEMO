@@ -25,14 +25,14 @@ public class LoginProcess {
 			pageText = TextData.DELIVER_TO_TEXT;
 		} else {
 			pageTitle = PageTitleData.LANDING_PAGE_TITLE;
-			pageText = TextData.LANDING_PAGE_SIGNIN_TEXT;
+			pageText = TextData.LANDING_PAGE_SIGN_IN_TEXT;
 		}
 		TestAssert.pageTitle("navigateToURL()", pageTitle, webDriver.getTitle());
 		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ pageText +"')]")), "navigateToURL()");
 		
 		loginPage.navigateToLanding();
 		TestAssert.pageTitle("navigateToLanding()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.SIGNIN_TEXT +"')]")), "navigateToLanding()");
+		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.SIGN_IN_TEXT +"')]")), "navigateToLanding()");
 		
 		loginPage.enterUserEmail(email);
 		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.KEEP_SIGNED_IN_TEXT +"')]")), "enterUserEmail(email)");

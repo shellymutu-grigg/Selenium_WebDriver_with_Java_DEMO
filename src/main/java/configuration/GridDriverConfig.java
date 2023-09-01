@@ -1,7 +1,6 @@
 package configuration;
 
 import data.ConfigData;
-import data.TextData;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -39,6 +38,7 @@ public class GridDriverConfig {
                         .implicitlyWait(Duration.ofSeconds(10));
             } catch (NullPointerException e) {
                 System.out.println(MessageFormat.format("NullPointerException: {0}", e.getMessage()));
+                throw new NullPointerException(MessageFormat.format("NullPointerException: {0}", e.getMessage()));
             }
         }
         return webDriver;
@@ -51,7 +51,8 @@ public class GridDriverConfig {
             capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
             webDriver = new RemoteWebDriver(new URL(ConfigData.REMOTE_DRIVER_URL), capabilities);
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            System.out.println(MessageFormat.format("MalformedURLException: {0}", e.getMessage()));
+            throw new RuntimeException(MessageFormat.format("MalformedURLException: {0}", e.getMessage()));
         }
     }
 }

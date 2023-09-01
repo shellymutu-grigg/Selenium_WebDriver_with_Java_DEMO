@@ -7,7 +7,6 @@ import java.util.List;
 import data.LocalStore;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.TestException;
 import org.testng.annotations.Test;
@@ -101,9 +100,9 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 			logoutProcess.cartLogout(logoutPage);
 		} else{
 			LogoutPage logoutPage = loginPage.initialiseLogoutPage();
-			System.out.println(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
+			System.out.println(MessageFormat.format("{0} is not available for purchase", productName));
 			logoutProcess.logout(logoutPage, "TestException: "+ productName);
-			throw new TestException(MessageFormat.format("Book {0} is not available for purchase in your area", productName));
+			throw new TestException(MessageFormat.format("{0} is not available for purchase", productName));
 		}
 	}
 

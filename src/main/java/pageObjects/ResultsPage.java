@@ -2,6 +2,7 @@ package pageObjects;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -21,23 +22,19 @@ public class ResultsPage {
 	}
 	
 	public WebElement getProductByName(String productName, int index) {
-		WebElement product = Element.getElements(productsBy).stream()
+		WebElement product = Objects.requireNonNull(Element.getElements(productsBy)).stream()
 				.filter(product_ -> 
 					product_.getText().split("\n")[index].trim().contains(productName) 
 				).findFirst()
 				.orElse(null);
-		try {
-			setTitle(product);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		setTitle(product);
 		return product;
 	}
 	
 	public void clickProductLink(String productTitle, WebElement productCheck){
 		if(productCheck != null) {
-			productCheck.click();
+			Element.click(productCheck);
 		} else {
 			System.out.println(MessageFormat.format("{0} product not found", productTitle));
 			throw new TestException(MessageFormat.format("{0} product not found", productTitle));
@@ -45,9 +42,8 @@ public class ResultsPage {
 	}
 	
 	public CartPage addProductToCart(){
-		Element.getElement(addToCartButtonBy).click();
-		CartPage cartPage = new CartPage();
-		return cartPage;
+		Element.click(addToCartButtonBy);
+		return new CartPage();
 	}
 
 	public String setProduct(String productName, int index){
@@ -57,9 +53,9 @@ public class ResultsPage {
 	}
 
 	public void setTitle(WebElement product){
-		int productIndex = Element.getElements(productsBy).indexOf(product);
+		int productIndex = Objects.requireNonNull(Element.getElements(productsBy)).indexOf(product);
 		if(productIndex >=0) {
-			WebElement productImage = Element.getElements(productsImagesBy).get(productIndex);
+			WebElement productImage = Objects.requireNonNull(Element.getElements(productsImagesBy)).get(productIndex);
 			bookTitle = productImage.getAttribute("alt");
 		} else {
 			System.out.println(MessageFormat.format("Index {0} of product is incorrect", productIndex));

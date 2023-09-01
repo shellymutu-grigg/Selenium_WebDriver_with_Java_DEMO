@@ -11,6 +11,9 @@ import org.testng.Assert;
 import data.TextData;
 import webElement.Element;
 
+import java.text.MessageFormat;
+import java.util.Objects;
+
 public class OrdersPage {
 	Actions actions;
 
@@ -29,26 +32,27 @@ public class OrdersPage {
 		try{
 			actions.moveToElement(Element.getElement(accountMenuBy)).perform();
 		}catch(MoveTargetOutOfBoundsException e){
-			e.getMessage();
+			System.out.println(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
+			throw new MoveTargetOutOfBoundsException(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
 		}
 	}
 	
 	public void openOrdersPage(){
 		try{
 			actions.moveToElement(Element.getElement(orderPageLinkBy)).perform();
-			Element.getElement(orderPageLinkBy).click();
+			Element.click(orderPageLinkBy);
 		}catch(MoveTargetOutOfBoundsException e){
-			e.getMessage();
+			System.out.println(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
+			throw new MoveTargetOutOfBoundsException(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
 		}
 	}
 	
 	public LogoutPage searchForOrders(){ 
-		Element.getElement(searchOrdersFieldBy).sendKeys(TextData.ORDER_SEARCH_TEXT);
-		Element.getElement(searchOrdersButtonBy).click();
-		String orderFilterText = Element.getElement(orderFilter).getText();
+		Element.sendKeys(searchOrdersFieldBy, TextData.ORDER_SEARCH_TEXT);
+		Element.click(searchOrdersButtonBy);
+		String orderFilterText = Objects.requireNonNull(Element.getElement(orderFilter)).getText();
 		
 		Assert.assertEquals(orderFilterText, TextData.ORDER_FILTER_TEXT);
-		LogoutPage logoutPage = new LogoutPage();
-		return logoutPage;
+		return new LogoutPage();
 	}	
 }

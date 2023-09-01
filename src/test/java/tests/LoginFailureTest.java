@@ -2,6 +2,7 @@ package tests;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.util.Objects;
 
 import data.ConfigData;
 import data.LocalStore;
@@ -51,14 +52,14 @@ public class LoginFailureTest extends TestSetup {
 		} else {
 			pageTitle = PageTitleData.LANDING_PAGE_TITLE;
 		}
-		if(loginFailStatus == TextData.LOGIN_FAILURE_ALERT_TEXT) {
+		if(Objects.equals(loginFailStatus, TextData.LOGIN_FAILURE_ALERT_TEXT)) {
 			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]")), "enterUserDetails(email, password) with incorrect password");
 			TestAssert.pageTitle("enterUserDetails(email, password) with incorrect password", pageTitle, webDriver.getTitle());
-		} else if(loginFailStatus == TextData.LOGIN_PUZZLE_TEXT) {
+		} else if(Objects.equals(loginFailStatus, TextData.LOGIN_PUZZLE_TEXT)) {
 			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_PUZZLE_TEXT +"')]")), "enterUserDetails(email, password) with puzzle page presented");
 			TestAssert.pageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.AUTHENTICATION_REQUIRED_PAGE_TITLE, webDriver.getTitle());
-		} else if(loginFailStatus == TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT) {
-			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
+		} else if(Objects.equals(loginFailStatus, TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT)) {
+			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
 			TestAssert.pageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 		}
 	}

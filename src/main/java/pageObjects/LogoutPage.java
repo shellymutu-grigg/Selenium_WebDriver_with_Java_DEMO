@@ -10,6 +10,8 @@ import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
 
 import webElement.Element;
 
+import java.text.MessageFormat;
+
 public class LogoutPage {
 	Actions actions;
 	
@@ -21,12 +23,14 @@ public class LogoutPage {
 		try{
 	        actions.moveToElement(Element.getElement(accountLinkBy)).perform();
 	    }catch(MoveTargetOutOfBoundsException e){
-	        e.getMessage();
+			System.out.println(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
+			throw new MoveTargetOutOfBoundsException(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
 	    }
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
+			System.out.println(MessageFormat.format("InterruptedException: {0}", e.getMessage()));
+			throw new RuntimeException(MessageFormat.format("InterruptedException: {0}", e.getMessage()));
 		}
 	}
 	
@@ -34,10 +38,10 @@ public class LogoutPage {
 		setActions();
 		try{
 			actions.moveToElement(Element.getElement(logoutLinkBy)).perform();
-			Element.getElement(logoutLinkBy).click();
+			Element.click(logoutLinkBy);
 	    }catch(MoveTargetOutOfBoundsException e){
-	        e.getMessage();
-	    }
+			System.out.println(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
+			throw new MoveTargetOutOfBoundsException(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));	    }
 	}
 
 	public void setActions(){

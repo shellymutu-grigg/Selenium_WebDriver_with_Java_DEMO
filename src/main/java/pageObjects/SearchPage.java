@@ -10,9 +10,8 @@ public class SearchPage {
 	By searchButtonBy = By.id("nav-search-submit-button");
 	
 	public ResultsPage searchForProducts(String product) {
-		Element.getElement(searchFieldBy).sendKeys(product);
-		Element.getElement(searchButtonBy).click();
-		ResultsPage resultsPage = new ResultsPage();
-		return resultsPage;
+		Element.sendKeys(searchFieldBy, product);
+		Element.click(searchButtonBy);
+		return new ResultsPage();
 	}
 }

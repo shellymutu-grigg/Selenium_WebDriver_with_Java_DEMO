@@ -18,15 +18,13 @@ public class ExtentManager {
     	Date calendarDate = Calendar.getInstance().getTime();  
 	    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
 	    String date = dateFormat.format(calendarDate);
-	    String filePathName = System.getProperty("user.dir") + "//reports//Test Report_"+ date.toString().replace(":", "_").replace(" ", "_") +".html";
+	    String filePathName = System.getProperty("user.dir") + "//reports//Test Report_"+ date.replace(":", "_").replace(" ", "_") +".html";
 		ExtentSparkReporter reporter = new ExtentSparkReporter(filePathName);
     	reporter.config().setTheme(Theme.STANDARD);
 		reporter.config().setReportName("Amazon Automation Test Results");
 		reporter.config().setTimeStampFormat("EEEE dd MMMM yyyy HH:mm:ss '('zzz')'");
 		reporter.config().setDocumentTitle("Test Results");
         extentReports.attachReporter(reporter);
-        extentReports.setSystemInfo("Blog Name", "SW Test Academy");
-        extentReports.setSystemInfo("Author", "Onur Baskirt");
         return extentReports;
     }
 }
