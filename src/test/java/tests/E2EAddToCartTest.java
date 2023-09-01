@@ -47,6 +47,9 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 	 */
 	public void addToCartTest(Method method) {
 		ExtentTestManager.startTest(TestCaseName.convert(method.getName()), "Verify a user is able to login, add an item to their cart, remove the item from their cart and log out successfully.");
+		ExtentTestManager.getTest().assignAuthor("Shelly Mutu-Grigg");
+		ExtentTestManager.getTest().assignDevice("Desktop");
+		ExtentTestManager.getTest().assignCategory("E2E");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
 				TestCaseName.convert(method.getName()), StringUtils.capitalize(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_BROWSER).toString())));
 		

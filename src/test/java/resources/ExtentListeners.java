@@ -113,7 +113,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     
     public String captureScreenshot(String testCaseName) throws IOException {
 		Date calendarDate = Calendar.getInstance().getTime();  
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = dateFormat.format(calendarDate);  
         TakesScreenshot takeScreenshot = (TakesScreenshot)getDriver();
         File screenshot = takeScreenshot.getScreenshotAs(OutputType.FILE);

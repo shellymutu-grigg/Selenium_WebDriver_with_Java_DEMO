@@ -22,6 +22,7 @@ public class TextData {
 	public final static String SEARCH_TEXT = "ISTQB Foundation Exam";
 	public final static String SHOPPING_CART_TEXT = "Shopping Cart";
 	public static final String SIGN_IN_TEXT = "phone number";
+	public static final String TRY_DIFFERENT_IMAGE_TEXT="Try different image";
 	public static final String YOUR_ACCOUNT_TEXT = "Your Account";
 	public static final String YOUR_ORDERS_TEXT = "Your Orders";
 }

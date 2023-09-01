@@ -38,6 +38,9 @@ public class LoginSuccessTest extends TestSetup{
 	 */
 	public void loginSuccessTest(Method method) {
 		ExtentTestManager.startTest(TestCaseName.convert(method.getName()), "A user is able to successfully login with a valid email and password combo");
+		ExtentTestManager.getTest().assignAuthor("Shelly Mutu-Grigg");
+		ExtentTestManager.getTest().assignDevice("Desktop");
+		ExtentTestManager.getTest().assignCategory("Login Success");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
 				TestCaseName.convert(method.getName()), StringUtils.capitalize(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_BROWSER).toString())));
 

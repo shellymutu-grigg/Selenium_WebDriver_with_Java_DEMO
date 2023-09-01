@@ -16,7 +16,7 @@ public class ExtentManager {
     
     public synchronized static ExtentReports createExtentReports() {
     	Date calendarDate = Calendar.getInstance().getTime();  
-	    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    String date = dateFormat.format(calendarDate);
 	    String filePathName = System.getProperty("user.dir") + "//reports//Test Report_"+ date.replace(":", "_").replace(" ", "_") +".html";
 		ExtentSparkReporter reporter = new ExtentSparkReporter(filePathName);
@@ -25,6 +25,7 @@ public class ExtentManager {
 		reporter.config().setTimeStampFormat("EEEE dd MMMM yyyy HH:mm:ss '('zzz')'");
 		reporter.config().setDocumentTitle("Test Results");
         extentReports.attachReporter(reporter);
+		extentReports.setSystemInfo("Author", "Shelly Mutu-Grigg");
         return extentReports;
     }
 }

@@ -27,7 +27,9 @@ public class LoginPage implements ITestListener{
 	By loginFailImportantMessageText = By.xpath("//*[contains(text(), '" + TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]");
 	By loginFailAlert = By.id("auth-error-message-box");
 	By loginFailAlertMessageText = By.cssSelector(".a-alert-content");
-	By signInLinkBy = By.xpath("//span[normalize-space()='Account & Lists']");
+
+	By tryDifferentImageBy = By.xpath("//*[contains(text(), '"+ TextData.TRY_DIFFERENT_IMAGE_TEXT +"')]");
+	By signInLinkBy = By.xpath("//span[normalize-space()='"+ TextData.ACCOUNT_MENU_LINK_TEXT+"']");
 	By userEmailBy = By.id("ap_email");
 	By userPasswordBy = By.id("ap_password");
 	By yourAccountLinkBy = By.linkText(TextData.YOUR_ACCOUNT_TEXT);
@@ -37,7 +39,10 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void navigateToURL() {
-		if(Element.getElement(landingPageBy).isDisplayed()) {
+		if (Element.isPresent(tryDifferentImageBy)) {
+			Element.click(tryDifferentImageBy);
+		}
+		else if(Element.getElement(landingPageBy).isDisplayed()) {
 			Element.getElement(landingPageBy);
 		}
 		else if(Element.getElement(landingPageAltBy).isDisplayed()) {

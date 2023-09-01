@@ -40,6 +40,9 @@ public class SearchOrdersTest extends TestSetup{
 	 */
 	public void searchOrdersTest(Method method) {
 		ExtentTestManager.startTest(TestCaseName.convert(method.getName()), "Verify user is able to login, search their order history and log out");
+		ExtentTestManager.getTest().assignAuthor("Shelly Mutu-Grigg");
+		ExtentTestManager.getTest().assignDevice("Desktop");
+		ExtentTestManager.getTest().assignCategory("Search Orders");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
 				TestCaseName.convert(method.getName()), StringUtils.capitalize(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_BROWSER).toString())));
 		

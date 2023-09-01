@@ -35,6 +35,9 @@ public class LoginFailureTest extends TestSetup {
 	 */
 	public void loginFailureTest(Method method) {
 		ExtentTestManager.startTest(TestCaseName.convert(method.getName()), "Entering an incorrect password will result in an error page being displayed to the user");
+		ExtentTestManager.getTest().assignAuthor("Shelly Mutu-Grigg");
+		ExtentTestManager.getTest().assignDevice("Desktop");
+		ExtentTestManager.getTest().assignCategory("Login Failure");
 		ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), MessageFormat.format("{0} has started executing in {1}.",
 				TestCaseName.convert(method.getName()), StringUtils.capitalize(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_BROWSER).toString())));
 		
