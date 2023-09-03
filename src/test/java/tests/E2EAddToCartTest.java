@@ -5,8 +5,10 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import data.LocalStore;
+import functions.Get;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.TestException;
 import org.testng.annotations.Test;
@@ -35,7 +37,10 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
 	
-	@Test(groups = { "E2E", "Smoke" }, priority = 1, description = "Add to Cart End to End scenario")
+	@Test(groups = { "E2E", "Smoke" },
+			priority = 1,
+			description = "Add to Cart End to End scenario",
+			retryAnalyzer = resources.RetryAnalyzer.class)
 	/*
 		GIVEN a user enters a correct email and password combination
 		WHEN they access the Enter Email and Enter Password screens
@@ -105,7 +110,9 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 			LogoutPage logoutPage = loginPage.initialiseLogoutPage();
 			System.out.println(MessageFormat.format("{0} is not available for purchase", productName));
 			logoutProcess.logout(logoutPage, "TestException: "+ productName);
-			throw new TestException(MessageFormat.format("{0} is not available for purchase", productName));
+			WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
+			webDriver.get(Get.url());
+			ExtentTestManager.getTest().fail(MessageFormat.format("{0} is not available for purchase", productName));
 		}
 	}
 

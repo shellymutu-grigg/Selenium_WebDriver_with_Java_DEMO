@@ -20,6 +20,7 @@ public class LoginProcess {
 		
 		String pageTitle;
 		String pageText;
+		// If the landing page has the "Your Account" link in it, process it
 		if(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_YOUR_ACCOUNT) == TextData.YOUR_ACCOUNT_TEXT) {
 			pageTitle = PageTitleData.LOGGED_IN_LANDING_PAGE_TITLE;
 			pageText = TextData.DELIVER_TO_TEXT;

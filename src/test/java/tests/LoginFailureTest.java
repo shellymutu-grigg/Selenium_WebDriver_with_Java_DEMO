@@ -26,7 +26,10 @@ public class LoginFailureTest extends TestSetup {
 	LoginProcess loginSuccessProcess = new LoginProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_FAIL);
 	
-	@Test(groups = { "LoginFailure" }, priority = 1, description = "Entering an incorrect password will result in an error page being displayed to the user")
+	@Test(groups = { "LoginFailure" },
+			priority = 1,
+			description = "Entering an incorrect password will result in an error page being displayed to the user",
+			retryAnalyzer = resources.RetryAnalyzer.class)
 	/*
 		GIVEN a user enters an incorrect password
 		WHEN they are on the Enter Password screen

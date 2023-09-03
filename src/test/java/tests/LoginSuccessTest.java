@@ -29,7 +29,10 @@ public class LoginSuccessTest extends TestSetup{
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
 	
-	@Test(groups = { "Smoke", "LoginSuccess" }, priority = 1, description = "Successful login scenario")
+	@Test(groups = { "Smoke", "LoginSuccess" },
+			priority = 1,
+			description = "Successful login scenario",
+			retryAnalyzer = resources.RetryAnalyzer.class)
 	/*
 		GIVEN a user enters a correct email and password combination
 		WHEN they access the Enter Email and Enter Password screens

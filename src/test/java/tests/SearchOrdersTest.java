@@ -29,7 +29,10 @@ public class SearchOrdersTest extends TestSetup{
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
 	
-	@Test(groups = { "Smoke", "SearchOrders" }, priority = 1, description = "Verify user is able to login, search their order history and log out")
+	@Test(groups = { "Smoke", "SearchOrders" },
+			priority = 1,
+			description = "Verify user is able to login, search their order history and log out",
+			retryAnalyzer = resources.RetryAnalyzer.class)
 	/*
 		GIVEN a user enters a correct email and password combination
 		WHEN they access the Enter Email and Enter Password screens
