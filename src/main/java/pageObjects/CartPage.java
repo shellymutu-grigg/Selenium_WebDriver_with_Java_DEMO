@@ -11,12 +11,12 @@ public class CartPage {
 	By deleteItemBy = By.cssSelector("input[value='Delete']");
 	
 	public void openCart() {
-		Element.click(cartLinkBy);
+		Element.click(cartLinkBy, false);
 	}
 	
 	public LogoutPage deleteCart() {
 		// Always delete first item listed in cart
-		Element.click(Objects.requireNonNull(Element.getElements(deleteItemBy)).get(0));
+		Element.click(deleteItemBy, true);
 		return new LogoutPage();
 	}
 }

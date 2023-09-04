@@ -40,7 +40,7 @@ public class LoginPage implements ITestListener{
 	
 	public void navigateToURL() {
 		if (Element.isPresent(tryDifferentImageBy)) {
-			Element.click(tryDifferentImageBy);
+			Element.click(tryDifferentImageBy, false);
 		}
 		else if(Element.getElement(landingPageBy).isDisplayed()) {
 			Element.getElement(landingPageBy);
@@ -49,7 +49,7 @@ public class LoginPage implements ITestListener{
 			Element.getElement(landingPageAltBy);
 			if(Element.getElement(yourAccountLinkBy).isDisplayed()) {
 				LocalStore.setObject(ConfigData.SYSTEM_PROPERTY_YOUR_ACCOUNT, TextData.YOUR_ACCOUNT_TEXT);
-				Element.click(yourAccountLinkBy);
+				Element.click(yourAccountLinkBy, false);
 			}
 		}
 	}
@@ -66,12 +66,12 @@ public class LoginPage implements ITestListener{
 	
 	public void enterUserEmail(String email) {
 		Element.sendKeys(userEmailBy, email);
-		Element.click(continueButtonBy);
+		Element.click(continueButtonBy, false);
 	}
 	
 	public void enterUserPassword(String password) {
 		Element.sendKeys(userPasswordBy, password);
-		Element.click(loginButtonBy);
+		Element.click(loginButtonBy, false);
 	}
 	
 	public boolean checkIfSignedIn() {
@@ -80,7 +80,7 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void navigateToLanding() {
-		Element.click(signInLinkBy);
+		Element.click(signInLinkBy, false);
 	}
 	
 	public void checkForPreviousLoginFailure() {

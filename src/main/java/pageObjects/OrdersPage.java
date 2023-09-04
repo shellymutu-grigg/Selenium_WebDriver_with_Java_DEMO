@@ -40,7 +40,7 @@ public class OrdersPage {
 	public void openOrdersPage(){
 		try{
 			actions.moveToElement(Element.getElement(orderPageLinkBy)).perform();
-			Element.click(orderPageLinkBy);
+			Element.click(orderPageLinkBy, false);
 		}catch(MoveTargetOutOfBoundsException e){
 			System.out.println(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
 			throw new MoveTargetOutOfBoundsException(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
@@ -49,7 +49,7 @@ public class OrdersPage {
 	
 	public LogoutPage searchForOrders(){ 
 		Element.sendKeys(searchOrdersFieldBy, TextData.ORDER_SEARCH_TEXT);
-		Element.click(searchOrdersButtonBy);
+		Element.click(searchOrdersButtonBy, false);
 		String orderFilterText = Objects.requireNonNull(Element.getElement(orderFilter)).getText();
 		
 		Assert.assertEquals(orderFilterText, TextData.ORDER_FILTER_TEXT);

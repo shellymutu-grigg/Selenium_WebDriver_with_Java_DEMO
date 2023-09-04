@@ -72,7 +72,6 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 
 		ResultsPage resultsPage = searchPage.searchForProducts(TextData.SEARCH_TEXT);
 		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.RESULTS_TEXT +"')]")), "searchForProducts(TextData.SEARCH_TEXT)");
-		TestAssert.pageTitle("searchForProducts(TextData.SEARCH_TEXT)", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 
 		List<WebElement> productList = resultsPage.getProductList();
 		TestAssert.pageTitle("getProductList()", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
@@ -91,7 +90,7 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 		String bookTitle = resultsPage.setProduct(productName, index);
 		TestAssert.pageTitle("setProduct(productName, index)", PageTitleData.RESULTS_PAGE_TITLE, webDriver.getTitle());
 
-		resultsPage.clickProductLink(bookTitle, Element.getElement(By.cssSelector("img[alt='"+ bookTitle +"']")));
+		resultsPage.clickProductLink(bookTitle, By.cssSelector("img[alt='"+ bookTitle +"']"));
 
 		if(Element.isPresent(By.xpath("//*[contains(text(), '"+ TextData.ADD_TO_CART_TEXT +"')]"))){
 			CartPage cartPage = resultsPage.addProductToCart();
@@ -110,8 +109,6 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 			LogoutPage logoutPage = loginPage.initialiseLogoutPage();
 			System.out.println(MessageFormat.format("{0} is not available for purchase", productName));
 			logoutProcess.logout(logoutPage, "TestException: "+ productName);
-			WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
-			webDriver.get(Get.url());
 			ExtentTestManager.getTest().fail(MessageFormat.format("{0} is not available for purchase", productName));
 		}
 	}

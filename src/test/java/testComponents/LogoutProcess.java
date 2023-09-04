@@ -2,6 +2,7 @@ package testComponents;
 
 import data.ConfigData;
 import data.LocalStore;
+import functions.Get;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -44,5 +45,7 @@ public class LogoutProcess {
 		logoutPage.logout();
 		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.SIGN_IN_TEXT +"')]")), "logout()");
 		TestAssert.pageTitle("logged out()", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+
+		webDriver.get(Get.url());
 	}
 }

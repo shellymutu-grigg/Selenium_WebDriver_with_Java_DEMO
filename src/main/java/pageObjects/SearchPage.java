@@ -11,7 +11,7 @@ public class SearchPage {
 	
 	public ResultsPage searchForProducts(String product) {
 		Element.sendKeys(searchFieldBy, product);
-		Element.click(searchButtonBy);
+		Element.click(searchButtonBy, false);
 		return new ResultsPage();
 	}
 }

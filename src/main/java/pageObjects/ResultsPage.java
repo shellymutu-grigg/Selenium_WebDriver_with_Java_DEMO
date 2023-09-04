@@ -32,9 +32,9 @@ public class ResultsPage {
 		return product;
 	}
 	
-	public void clickProductLink(String productTitle, WebElement productCheck){
-		if(productCheck != null) {
-			Element.click(productCheck);
+	public void clickProductLink(String productTitle, By product){
+		if(product != null) {
+			Element.click(product, false);
 		} else {
 			System.out.println(MessageFormat.format("{0} product not found", productTitle));
 			throw new TestException(MessageFormat.format("{0} product not found", productTitle));
@@ -42,7 +42,7 @@ public class ResultsPage {
 	}
 	
 	public CartPage addProductToCart(){
-		Element.click(addToCartButtonBy);
+		Element.click(addToCartButtonBy, false);
 		return new CartPage();
 	}
 

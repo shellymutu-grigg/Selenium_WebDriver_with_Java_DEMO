@@ -16,7 +16,7 @@ public class RetryAnalyzer implements IRetryAnalyzer {
      * can put some code in here to decide when to rerun the test.
      *
      * Note: This method will return true if a tests needs to be retried
-     * and false it not.
+     * and false if not.
      *
      */
 

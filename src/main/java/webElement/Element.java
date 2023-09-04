@@ -1,11 +1,13 @@
 package webElement;
 
+import data.TextData;
 import org.openqa.selenium.*;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
+import retry.Retry;
 import wait.Wait;
 
 public class Element {
@@ -31,31 +33,26 @@ public class Element {
         return list != null && !list.isEmpty();
     }
 
-    public static void click(By by){
+    public static void click(By by, boolean list){
         try{
-            Wait.setDriverWait().until(webDriver -> webDriver.findElement(by)).click();
+            if(list){
+                Wait.setDriverWait().until(webDriver -> Objects.requireNonNull(Element.getElements(by)).get(0)).click();
+            } else {
+                Wait.setDriverWait().until(webDriver -> Objects.requireNonNull(Element.getElement(by))).click();
+            }
         } catch (StaleElementReferenceException e){
-             System.out.println(MessageFormat.format("StaleElementReferenceException has message:  {0}", e.getMessage()));
-             //TODO implement retry functionality
-        }
-
-    }
-
-    public static void click(WebElement webElement){
-        try{
-            Wait.setDriverWait().until(webDriver -> webElement).click();
-        } catch (StaleElementReferenceException e){
+            Retry.retry(by, list, TextData.CLICK, "", 2);
             System.out.println(MessageFormat.format("StaleElementReferenceException has message:  {0}", e.getMessage()));
-            //TODO implement retry functionality
         }
+
     }
+
     public static void sendKeys(By by, String text){
         try{
-            Wait.setDriverWait().until(webDriver -> webDriver.findElement(by)).sendKeys(text);
+            Wait.setDriverWait().until(driver -> driver.findElement(by)).sendKeys(text);
         } catch (StaleElementReferenceException e){
+            Retry.retry(by, false, TextData.SEND_KEYS, "", 2);
             System.out.println(MessageFormat.format("StaleElementReferenceException has message:  {0}", e.getMessage()));
-            //TODO implement retry functionality
         }
-
     }
 }

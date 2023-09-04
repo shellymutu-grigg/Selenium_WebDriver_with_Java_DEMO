@@ -38,7 +38,7 @@ public class LogoutPage {
 		setActions();
 		try{
 			actions.moveToElement(Element.getElement(logoutLinkBy)).perform();
-			Element.click(logoutLinkBy);
+			Element.click(logoutLinkBy, false);
 	    }catch(MoveTargetOutOfBoundsException e){
 			System.out.println(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
 			throw new MoveTargetOutOfBoundsException(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));	    }

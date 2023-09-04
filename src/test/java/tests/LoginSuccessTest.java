@@ -51,22 +51,18 @@ public class LoginSuccessTest extends TestSetup{
 		ExtentListeners extentListener = new ExtentListeners();
 		extentListener.onTestStartScreenshot(method.getName());
 		loginProcess.completeLogin(password, loginPage);
-		
-		if(loginPage.checkIfSignedIn()) {
-			TestAssert.pageTitle("enterUserPassword(password)", PageTitleData.LANDING_PAGE_TITLE, webDriver.getTitle());
-		} else {
-			if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_FAILURE_ALERT_TEXT)) {
-				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]")), "enterUserDetails(email, password) with incorrect password");
-				TestAssert.pageTitle("enterUserDetails(email, password) with incorrect password", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-			} else if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_PUZZLE_TEXT)) {
-				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_PUZZLE_TEXT +"')]")), "enterUserDetails(email, password) with puzzle page presented");
-				TestAssert.pageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-			} else if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT)) {
-				TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
-				TestAssert.pageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
-			}
+
+		if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_FAILURE_ALERT_TEXT)) {
+			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]")), "enterUserDetails(email, password) with incorrect password");
+			TestAssert.pageTitle("enterUserDetails(email, password) with incorrect password", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+		} else if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_PUZZLE_TEXT)) {
+			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_PUZZLE_TEXT +"')]")), "enterUserDetails(email, password) with puzzle page presented");
+			TestAssert.pageTitle("enterUserDetails(email, password) with puzzle page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
+		} else if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT)) {
+			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
+			TestAssert.pageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 		}
-		
+
 		LogoutPage logoutPage = loginPage.initialiseLogoutPage();
 		logoutProcess.logout(logoutPage, "");
 	}

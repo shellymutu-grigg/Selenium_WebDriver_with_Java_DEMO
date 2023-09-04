@@ -4,6 +4,7 @@ public class TextData {
 	public static final String ACCOUNT_MENU_LINK_TEXT = "Account & Lists";
 	public static final String ADD_TO_CART_TEXT = "Add to Cart";
 	public static final String ADDED_TO_CART_TEXT = "Added to Cart";
+	public static final String CLICK = "CLICK";
 	public static final String DELIVER_TO_TEXT = "Deliver to";
 	public static final String KEEP_SIGNED_IN_TEXT = "Keep me signed";
 	public static final String LANDING_PAGE_SIGN_IN_TEXT = "Hello, sign in";
@@ -20,6 +21,7 @@ public class TextData {
 	public static final String RETURNS_AND_ORDERS_TEXT = "Returns";
 	public final static String SEARCH_RESULTS_TEXT = "Search results";
 	public final static String SEARCH_TEXT = "ISTQB Foundation Exam";
+	public static final String SEND_KEYS = "SEND_KEYS";
 	public final static String SHOPPING_CART_TEXT = "Shopping Cart";
 	public static final String SIGN_IN_TEXT = "phone number";
 	public static final String TRY_DIFFERENT_IMAGE_TEXT="Try different image";
