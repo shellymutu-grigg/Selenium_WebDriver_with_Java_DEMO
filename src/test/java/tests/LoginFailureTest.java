@@ -6,6 +6,9 @@ import java.util.Objects;
 
 import data.ConfigData;
 import data.LocalStore;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.testng.annotations.Listeners;
@@ -22,9 +25,12 @@ import testComponents.TestSetup;
 import webElement.Element;
 
 @Listeners(ExtentListeners.class)
+@Slf4j
 public class LoginFailureTest extends TestSetup {
 	LoginProcess loginSuccessProcess = new LoginProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_FAIL);
+
+	Logger logger = LoggerFactory.getLogger(LoginFailureTest.class);
 	
 	@Test(groups = { "LoginFailure" },
 			priority = 1,
@@ -45,11 +51,13 @@ public class LoginFailureTest extends TestSetup {
 				TestCaseName.convert(method.getName()), StringUtils.capitalize(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_BROWSER).toString())));
 		
 		loginPage.navigateToURL();
+		logger.info("{} has navigated to landing page", TestCaseName.convert(method.getName()));
 		ExtentListeners extentListener = new ExtentListeners();
 		extentListener.onTestStartScreenshot(method.getName());
 		
 		loginSuccessProcess.completeLogin(password, loginPage);
-		
+		logger.info("{} has entered user email successfully", TestCaseName.convert(method.getName()));
+
 		String loginFailStatus = loginPage.loginFail();
 		String pageTitle;
 		if(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER).toString().contains(ConfigData.CHROME_DRIVER) ||
@@ -68,5 +76,7 @@ public class LoginFailureTest extends TestSetup {
 			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
 			TestAssert.pageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 		}
+		logger.info("{} has successfully failed to login", TestCaseName.convert(method.getName()));
+
 	}
 }

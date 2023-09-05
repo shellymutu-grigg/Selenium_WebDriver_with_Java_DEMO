@@ -4,18 +4,24 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.TestException;
 import webElement.Element;
 
+@Slf4j
 public class ResultsPage {
 	String bookTitle;
 
 	By addToCartButtonBy = By.id("add-to-cart-button");
 	By productsBy = By.cssSelector(".s-card-container");
 	By productsImagesBy = By.cssSelector(".s-image");
+
+	static Logger logger = LoggerFactory.getLogger(ResultsPage.class);
 	
 	public List<WebElement> getProductList(){
 		return Element.getElements(productsBy);
@@ -36,7 +42,7 @@ public class ResultsPage {
 		if(product != null) {
 			Element.click(product, false);
 		} else {
-			System.out.println(MessageFormat.format("{0} product not found", productTitle));
+			logger.error("{} product not found", productTitle);
 			throw new TestException(MessageFormat.format("{0} product not found", productTitle));
 		}
 	}
@@ -58,7 +64,7 @@ public class ResultsPage {
 			WebElement productImage = Objects.requireNonNull(Element.getElements(productsImagesBy)).get(productIndex);
 			bookTitle = productImage.getAttribute("alt");
 		} else {
-			System.out.println(MessageFormat.format("Index {0} of product is incorrect", productIndex));
+			logger.error("Index {} of product is incorrect", productIndex);
 		}
 	}
 }

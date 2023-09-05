@@ -12,7 +12,7 @@ public class ConfigData {
 	public static final String FIREFOX_DRIVER = "firefox";
 	public final static String GOOGLE_WEBSITE_URL = "https://www.google.com";
 	public final static String REMOTE_DRIVER_URL = "http://192.168.50.207:4444";
-	public final static int RESULTS_INDEX = 5;
+	public final static int RESULTS_INDEX = 1;
 	public final static String SMG_WEBSITE_URL = "https://www.shellymutugrigg.com";
 	public final static String SYSTEM_PROPERTY_BROWSER = "Browser";
 	public final static String SYSTEM_PROPERTY_WEBDRIVER = "Browser";

@@ -1,13 +1,20 @@
 package functions;
 
 import data.ConfigData;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 
+@Slf4j
 public class Get {
+
+    static Logger logger = LoggerFactory.getLogger(Get.class);
+
     public static String url(){
         return System.getProperty("url") != null ? System.getProperty("url")
                 : ConfigData.AMAZON_WEBSITE_URL;
@@ -22,7 +29,7 @@ public class Get {
                     + "//src//test//resources//globalData.properties");
             properties.load(fileInputStream);
         } catch (IOException e) {
-            System.out.println(MessageFormat.format("IOException: {0}", e.getMessage()));
+            logger.error("IOException: {}", e.getMessage());
             throw new RuntimeException(MessageFormat.format("IOException: {0}", e.getMessage()));
         }
 

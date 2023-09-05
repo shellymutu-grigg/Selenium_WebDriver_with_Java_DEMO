@@ -5,15 +5,15 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import data.ConfigData;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.interactions.MoveTargetOutOfBoundsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -23,10 +23,13 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
+import data.ConfigData;
 import functions.TestCaseName;
 import testComponents.TestSetup;
- 
+
+@Slf4j
 public class ExtentListeners extends TestSetup implements ITestListener {
+    Logger logger = LoggerFactory.getLogger(ExtentListeners.class);
 	
     private static String getTestMethodName(ITestResult result) {
         return TestCaseName.convert(result.getMethod().getConstructorOrMethod().getName());
@@ -39,25 +42,25 @@ public class ExtentListeners extends TestSetup implements ITestListener {
 
 	@Override
     public void onTestStart(ITestResult result) {
-		System.out.println(MessageFormat.format("{0} has started", getTestMethodName(result)));
+        logger.info("{} has started", getTestMethodName(result));
     }
 	
 	@Override
     public void onFinish(ITestContext context) {
-        
+
     }
  
 	@Override
     public void onTestSuccess(ITestResult result) {
         if(ExtentTestManager.getTest() !=null) {
-            System.out.println(MessageFormat.format("{0} has succeeded", getTestMethodName(result)));
+            logger.info("{} has succeeded", getTestMethodName(result));
 
             try {
                 String fileName = captureScreenshot(result.getMethod().getMethodName());
                 ExtentTestManager.getTest().pass("<font color=green>" + "Test case: " + getTestMethodName(result) + " successfully ended at:" + "</font>",
                         MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
             } catch (Exception e) {
-                System.out.println(MessageFormat.format("Exception: Screenshot capture failed with error: {0}", e.getMessage()));
+                logger.error("Exception: Screenshot capture failed with error: {}", e.getMessage());
                 throw new RuntimeException(MessageFormat.format("Exception: {0}", e.getMessage()));
             }
             ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), TestCaseName.convert(result.getMethod().getMethodName() + " has finished."));
@@ -68,8 +71,8 @@ public class ExtentListeners extends TestSetup implements ITestListener {
 	@Override
     public void onTestFailure(ITestResult result) {
         if(ExtentTestManager.getTest() !=null){
-            System.out.println(MessageFormat.format("{0} has failed", getTestMethodName(result)));
-            ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), "<font color=red><strong>" + MessageFormat.format("{0} has failed", getTestMethodName(result))+ "</strong>");
+            logger.error("{} has failed", getTestMethodName(result));
+            ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), "<font color=red><strong>" + MessageFormat.format("{} has failed", getTestMethodName(result))+ "</strong>");
 
             ExtentTestManager.getTest().fail("An exception occurred in test case: " + getTestMethodName(result) + " <details>" + "<summary>" +  "Click here to see exception message"
                     + "</font>" + "</summary>" + "<font color=red><strong>" + result.getThrowable().getMessage() + "</strong></details>"+" \n");
@@ -78,7 +81,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
                ExtentTestManager.getTest().fail("<font color=red>" + "Where failure occurred screenshot" + "</font>",
                        MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
             } catch (Exception e) {
-                System.out.println(MessageFormat.format("Exception: Screenshot capture failed with error: {0}", e.getMessage()));
+                logger.error("Exception: Screenshot capture failed with error: {}", e.getMessage());
                 throw new RuntimeException(MessageFormat.format("Exception: {0}", e.getMessage()));
             }
             ExtentTestManager.getTest().log(Status.FAIL, MarkupHelper.createLabel(TestCaseName.convert(result.getMethod().getMethodName()) + " - FAIL", ExtentColor.RED));
@@ -88,7 +91,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     @Override
     public void onTestSkipped(ITestResult result) {
         if(ExtentTestManager.getTest() !=null) {
-            System.out.println(MessageFormat.format("{0} has been skipped", getTestMethodName(result)));
+            logger.warn("{} has been skipped", getTestMethodName(result));
             ExtentTestManager.getTest().info(getTestMethodName(result) + " test has been skipped.");
             ExtentTestManager.getTest().log(Status.SKIP, "Test Skipped");
         }
@@ -105,7 +108,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
                 ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + TestCaseName.convert(testCaseName) + " successfully started at:" + "</font>",
                         MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
             } catch (Exception e) {
-                System.out.println(MessageFormat.format("Exception: Screenshot capture failed with error: {0}", e.getMessage()));
+                logger.error("Exception: Screenshot capture failed with error: {}", e.getMessage());
                 throw new RuntimeException(MessageFormat.format("Exception: {0}", e.getMessage()));
             }
         }

@@ -34,7 +34,7 @@ test-output/*
 reports/*
 /target/
 /bin/
-
+logs/*
 .env
 
 .idea/*

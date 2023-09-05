@@ -3,9 +3,12 @@ package tests;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import data.ConfigData;
 import data.LocalStore;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.testng.annotations.Listeners;
@@ -24,10 +27,13 @@ import testComponents.TestSetup;
 import webElement.Element;
 
 @Listeners(ExtentListeners.class)
+@Slf4j
 public class LoginSuccessTest extends TestSetup{
 	LoginProcess loginProcess = new LoginProcess();
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
+
+	Logger logger = LoggerFactory.getLogger(LoginSuccessTest.class);
 	
 	@Test(groups = { "Smoke", "LoginSuccess" },
 			priority = 1,
@@ -48,9 +54,12 @@ public class LoginSuccessTest extends TestSetup{
 				TestCaseName.convert(method.getName()), StringUtils.capitalize(LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_BROWSER).toString())));
 
 		loginPage.navigateToURL();
+		logger.info("{} has navigated to landing page", TestCaseName.convert(method.getName()));
+
 		ExtentListeners extentListener = new ExtentListeners();
 		extentListener.onTestStartScreenshot(method.getName());
 		loginProcess.completeLogin(password, loginPage);
+		logger.info("{} has successfully entered user email and password", TestCaseName.convert(method.getName()));
 
 		if(Objects.equals(loginPage.findLoginFailureText(), TextData.LOGIN_FAILURE_ALERT_TEXT)) {
 			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_ALERT_TEXT +"')]")), "enterUserDetails(email, password) with incorrect password");
@@ -62,9 +71,11 @@ public class LoginSuccessTest extends TestSetup{
 			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.LOGIN_FAILURE_IMPORTANT_MESSAGE_TEXT +"')]")), "enterUserDetails(email, password) with an important message page presented");
 			TestAssert.pageTitle("enterUserDetails(email, password) with an important message page presented", PageTitleData.SIGN_IN_PAGE_TITLE, webDriver.getTitle());
 		}
+		logger.info("{} has successfully completed login process", TestCaseName.convert(method.getName()));
 
 		LogoutPage logoutPage = loginPage.initialiseLogoutPage();
 		logoutProcess.logout(logoutPage, "");
+		logger.info("{} has successfully completed logout process", TestCaseName.convert(method.getName()));
 	}
 
 }

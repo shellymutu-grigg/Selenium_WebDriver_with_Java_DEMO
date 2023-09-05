@@ -1,16 +1,22 @@
 package webElement;
 
 import data.TextData;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import retry.Retry;
 import wait.Wait;
 
+@Slf4j
 public class Element {
+
+    static Logger logger = LoggerFactory.getLogger(Element.class);
 
     public static WebElement getElement(By locator){
         Objects.requireNonNull(locator, MessageFormat.format("Element with locator {0} must not be null", locator));
@@ -42,7 +48,7 @@ public class Element {
             }
         } catch (StaleElementReferenceException e){
             Retry.retry(by, list, TextData.CLICK, "", 2);
-            System.out.println(MessageFormat.format("StaleElementReferenceException has message:  {0}", e.getMessage()));
+            logger.error("StaleElementReferenceException has message: {}", e.getMessage());
         }
 
     }
@@ -52,7 +58,7 @@ public class Element {
             Wait.setDriverWait().until(driver -> driver.findElement(by)).sendKeys(text);
         } catch (StaleElementReferenceException e){
             Retry.retry(by, false, TextData.SEND_KEYS, "", 2);
-            System.out.println(MessageFormat.format("StaleElementReferenceException has message:  {0}", e.getMessage()));
+            logger.error("StaleElementReferenceException has message: {}", e.getMessage());
         }
     }
 }
