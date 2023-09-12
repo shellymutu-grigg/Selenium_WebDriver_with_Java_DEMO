@@ -9,7 +9,7 @@ import data.ConfigData;
 import configuration.GridDriverConfig;
 
 @Slf4j
-public class SeleniumGridSMGTest  extends GridDriverConfig {
+public class SeleniumGridSMGTest extends GridDriverConfig {
 
     static Logger logger = LoggerFactory.getLogger(SeleniumGridSMGTest.class);
 
@@ -18,5 +18,7 @@ public class SeleniumGridSMGTest  extends GridDriverConfig {
         webDriver = gridDriverSetup(ConfigData.EDGE_DRIVER);
         webDriver.get(ConfigData.SMG_WEBSITE_URL);
         logger.info("Page title: {}", webDriver.getTitle());
-        webDriver.quit();   }
+        webDriver.close();
+        webDriver.quit();
+    }
 }

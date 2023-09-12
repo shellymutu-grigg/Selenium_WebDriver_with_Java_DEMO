@@ -23,6 +23,7 @@ public class GridDriverConfig {
     static Logger logger = LoggerFactory.getLogger(GridDriverConfig.class);
 
     public static WebDriver gridDriverSetup(String browserName) {
+        logger.info("gridDriverSetup({})", browserName);
         if (browserName != null) {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             if (browserName.equalsIgnoreCase(ConfigData.CHROME_DRIVER)) {
@@ -42,12 +43,13 @@ public class GridDriverConfig {
                 //Add implicit timeout
                 webDriver.manage()
                         .timeouts()
-                        .implicitlyWait(Duration.ofSeconds(10));
+                        .implicitlyWait(Duration.ofSeconds(5));
             } catch (NullPointerException e) {
                 logger.error("NullPointerException: {}", e.getMessage());
                 throw new NullPointerException(MessageFormat.format("NullPointerException: {0}", e.getMessage()));
             }
         }
+        logger.info("{} has instantiated webDriver with hashCode of {}", browserName, webDriver.hashCode());
         return webDriver;
     }
 
