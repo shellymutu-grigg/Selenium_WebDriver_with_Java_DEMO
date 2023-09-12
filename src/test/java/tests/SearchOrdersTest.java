@@ -21,18 +21,14 @@ import functions.TestCaseName;
 import pageObjects.LoginPage;
 import pageObjects.LogoutPage;
 import pageObjects.OrdersPage;
-import resources.ExtentListeners;
-import resources.ExtentTestManager;
-import resources.WebDriverListener;
-import resources.WebDriverManager;
+import resources.*;
 import testComponents.LoginProcess;
 import testComponents.LogoutProcess;
-import testComponents.TestSetup;
 import webElement.Element;
 
 @Listeners({ExtentListeners.class, WebDriverListener.class})
 @Slf4j
-public class SearchOrdersTest extends TestSetup{
+public class SearchOrdersTest {
 	LoginProcess loginProcess = new LoginProcess();
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);

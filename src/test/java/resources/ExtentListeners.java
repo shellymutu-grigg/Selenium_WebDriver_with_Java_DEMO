@@ -25,10 +25,10 @@ import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 
 import functions.TestCaseName;
-import testComponents.TestSetup;
+import testComponents.Screenshot;
 
 @Slf4j
-public class ExtentListeners extends TestSetup implements ITestListener {
+public class ExtentListeners implements ITestListener {
     Logger logger = LoggerFactory.getLogger(ExtentListeners.class);
 	
     static String getTestMethodName(ITestResult result) {
@@ -41,6 +41,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
 
     @Override
     public void onFinish(ITestContext context) {
+        ExtentManager.extentReports.flush();
     }
 
 	@Override
@@ -51,7 +52,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     public void onTestSuccess(ITestResult result) {
         if(ExtentTestManager.getTest() !=null) {
             try {
-                String fileName = captureScreenshot(result.getMethod().getMethodName());
+                String fileName = Screenshot.captureScreenshot(result.getMethod().getMethodName());
                 ExtentTestManager.getTest().pass("<font color=green>" + "Test case: " + getTestMethodName(result) + " successfully ended at:" + "</font>",
                         MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
             } catch (Exception e) {
@@ -60,8 +61,8 @@ public class ExtentListeners extends TestSetup implements ITestListener {
             ExtentTestManager.getTest().log(ExtentTestManager.getTest().getStatus(), TestCaseName.convert(result.getMethod().getMethodName() + " has finished."));
             ExtentTestManager.getTest().log(Status.PASS, MarkupHelper.createLabel(TestCaseName.convert(result.getMethod().getMethodName()) + " - PASS", ExtentColor.GREEN));
             WebDriver webDriver = WebDriverManager.getDriver();
-            logger.info("Thread {} ({}) with webDriver hashCode {} was successful", Thread.currentThread().getId(), getTestMethodName(result), webDriver.hashCode());
-            logger.info("Thread {} ({}) is quitting webDriver with hashCode {}", Thread.currentThread().getId(), getTestMethodName(result), webDriver.hashCode());
+            logger.info("Thread {} ({}) with webDriver hashCode {} was successful", Thread.currentThread().getId(), result.getMethod().getMethodName(), webDriver.hashCode());
+            logger.info("Thread {} ({}) is quitting webDriver with hashCode {}", Thread.currentThread().getId(), result.getMethod().getMethodName(), webDriver.hashCode());
             webDriver.quit();
         }
     }
@@ -75,7 +76,7 @@ public class ExtentListeners extends TestSetup implements ITestListener {
             ExtentTestManager.getTest().fail("An exception occurred in test case: " + getTestMethodName(result) + " <details>" + "<summary>" +  "Click here to see exception message"
                     + "</font>" + "</summary>" + "<font color=red><strong>" + result.getThrowable().getMessage() + "</strong></details>"+" \n");
             try {
-               String fileName = captureScreenshot(result.getMethod().getMethodName());
+               String fileName = Screenshot.captureScreenshot(result.getMethod().getMethodName());
                ExtentTestManager.getTest().fail("<font color=red>" + "Where failure occurred screenshot" + "</font>",
                        MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
             } catch (Exception e) {
@@ -101,23 +102,12 @@ public class ExtentListeners extends TestSetup implements ITestListener {
     public void onTestStartScreenshot(String testCaseName) {
         if(ExtentTestManager.getTest() !=null) {
             try {
-                String fileName = captureScreenshot(testCaseName);
+                String fileName = Screenshot.captureScreenshot(testCaseName);
                 ExtentTestManager.getTest().pass("<font color=" + "green>" + "Test case: " + TestCaseName.convert(testCaseName) + " with thread " + Thread.currentThread().getId() + " has successfully started. Test started from:" + "</font>",
                         MediaEntityBuilder.createScreenCaptureFromPath(fileName).build());
             } catch (Exception e) {
                 logger.error("Exception: Screenshot capture failed with error: {}", e.getMessage());
             }
         }
-    }
-    
-    public String captureScreenshot(String testCaseName) throws IOException {
-		Date calendarDate = Calendar.getInstance().getTime();  
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = dateFormat.format(calendarDate);  
-        TakesScreenshot takeScreenshot = (TakesScreenshot)WebDriverManager.getDriver();
-        File screenshot = takeScreenshot.getScreenshotAs(OutputType.FILE);
-        File screenshotOutputFile = new File(System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.replace(":", "_").replace(" ", "_") + ".png");
-		FileUtils.copyFile(screenshot, screenshotOutputFile);
-		return System.getProperty("user.dir") + "//reports//screenshots//" + testCaseName + date.replace(":", "_").replace(" ", "_") + ".png";
     }
 }

@@ -1,7 +1,7 @@
 package resources;
 
-
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
@@ -15,12 +15,11 @@ import functions.Get;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
-import testComponents.TestSetup;
 
 import static resources.ExtentListeners.getTestMethodName;
 
 @Slf4j
-public class BrowserManager extends TestSetup {
+public class BrowserManager {
     static Logger logger = LoggerFactory.getLogger(BrowserManager.class);
     public static WebDriver browserSetup(ITestResult result) {
         WebDriver webDriver = null;
@@ -34,6 +33,8 @@ public class BrowserManager extends TestSetup {
         } else if (browserName.equalsIgnoreCase(ConfigData.EDGE_DRIVER)) {
             webDriver = EdgeDriverConfig.setUpEdgeDriver();
         }
+
+        webDriver.manage().window().setSize(new Dimension(1050, 650));
 
         //Add implicit timeout
         assert webDriver != null;

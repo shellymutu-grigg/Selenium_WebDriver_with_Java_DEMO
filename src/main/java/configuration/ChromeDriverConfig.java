@@ -12,7 +12,8 @@ public class ChromeDriverConfig {
 		ChromeOptions chromeOptions = new ChromeOptions();
 		chromeOptions.addArguments("--ignore-ssl-errors=yes");
 		chromeOptions.addArguments("--ignore-certificate-errors");
-		if (Get.globalProperty(ConfigData.HEADLESS)=="true") {
+		boolean headless = Boolean.parseBoolean(Get.globalProperty(ConfigData.HEADLESS));
+		if (headless) {
 			chromeOptions.addArguments("--headless=new");
 		}
 		return new ChromeDriver(chromeOptions);

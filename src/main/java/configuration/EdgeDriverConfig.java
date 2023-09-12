@@ -10,8 +10,9 @@ public class EdgeDriverConfig {
 
 	public static WebDriver setUpEdgeDriver() {
 		EdgeOptions edgeOptions = new EdgeOptions();
-		if (Get.globalProperty(ConfigData.HEADLESS)=="true") {
-			edgeOptions.addArguments("--headless=new");
+		boolean headless = Boolean.parseBoolean(Get.globalProperty(ConfigData.HEADLESS));
+		if (headless) {
+			edgeOptions.addArguments("--headless");
 		}
 		return new EdgeDriver(edgeOptions);
 	}

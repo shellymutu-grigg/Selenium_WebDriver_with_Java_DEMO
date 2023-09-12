@@ -19,17 +19,13 @@ import data.TextData;
 import functions.TestAssert;
 import functions.TestCaseName;
 import pageObjects.LoginPage;
-import resources.ExtentListeners;
-import resources.ExtentTestManager;
-import resources.WebDriverListener;
-import resources.WebDriverManager;
+import resources.*;
 import testComponents.LoginProcess;
-import testComponents.TestSetup;
 import webElement.Element;
 
 @Listeners({ExtentListeners.class, WebDriverListener.class})
 @Slf4j
-public class LoginFailureTest extends TestSetup {
+public class LoginFailureTest {
 	LoginProcess loginSuccessProcess = new LoginProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_FAIL);
 

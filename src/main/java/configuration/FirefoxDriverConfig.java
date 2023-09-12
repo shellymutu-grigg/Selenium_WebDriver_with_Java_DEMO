@@ -10,8 +10,9 @@ public class FirefoxDriverConfig {
 
 	public static WebDriver setUpFirefoxDriver() {
 		FirefoxOptions firefoxOptions = new FirefoxOptions();
-		if (Get.globalProperty(ConfigData.HEADLESS)=="true") {
-			firefoxOptions.addArguments("--headless=new");
+		boolean headless = Boolean.parseBoolean(Get.globalProperty(ConfigData.HEADLESS));
+		if (headless) {
+			firefoxOptions.addArguments("--headless");
 		}
 		return new FirefoxDriver(firefoxOptions);
 	}

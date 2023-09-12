@@ -7,6 +7,11 @@
 			<include name="Grid"/>
 		</run>
 	</groups>
+
+	<listeners>
+		<listener class-name="resources.ExtentListeners"/>
+		<listener class-name="resources.GridListener"/>
+	</listeners>
   	
 	<test thread-count="2" parallel="classes" name="Selenium Grid Tests">
     	<classes>

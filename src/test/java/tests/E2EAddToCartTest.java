@@ -22,18 +22,14 @@ import functions.TestAssert;
 import functions.TestCaseName;
 import interfaces.IHelper;
 import pageObjects.*;
-import resources.ExtentListeners;
-import resources.ExtentTestManager;
-import resources.WebDriverListener;
-import resources.WebDriverManager;
+import resources.*;
 import testComponents.LoginProcess;
 import testComponents.LogoutProcess;
-import testComponents.TestSetup;
 import webElement.Element;
 
 @Listeners({ExtentListeners.class, WebDriverListener.class})
 @Slf4j
-public class E2EAddToCartTest extends TestSetup implements IHelper{
+public class E2EAddToCartTest implements IHelper{
 	LoginProcess loginProcess = new LoginProcess();
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
@@ -123,8 +119,7 @@ public class E2EAddToCartTest extends TestSetup implements IHelper{
 
 			logoutProcess.cartLogout(logoutPage);
 			logger.info("Thread {} ({}) with webDriver with hashCode {} successfully completed logout process", Thread.currentThread().getId(), TestCaseName.convert(method.getName()), WebDriverManager.getDriver().hashCode());
-
-
+			ExtentManager.extentReports.flush();
 		} else{
 			LogoutPage logoutPage = loginPage.initialiseLogoutPage();
 			logger.info("Thread {} ({}) with webDriver with hashCode {} has determined that product {} is not available for purchase", Thread.currentThread().getId(), TestCaseName.convert(method.getName()), WebDriverManager.getDriver().hashCode(), productName);

@@ -21,18 +21,14 @@ import functions.TestAssert;
 import functions.TestCaseName;
 import pageObjects.LoginPage;
 import pageObjects.LogoutPage;
-import resources.ExtentListeners;
-import resources.ExtentTestManager;
-import resources.WebDriverListener;
-import resources.WebDriverManager;
+import resources.*;
 import testComponents.LoginProcess;
 import testComponents.LogoutProcess;
-import testComponents.TestSetup;
 import webElement.Element;
 
 @Listeners({ExtentListeners.class, WebDriverListener.class})
 @Slf4j
-public class LoginSuccessTest extends TestSetup{
+public class LoginSuccessTest {
 	LoginProcess loginProcess = new LoginProcess();
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
@@ -92,5 +88,4 @@ public class LoginSuccessTest extends TestSetup{
 		logoutProcess.logout(logoutPage, "");
 		logger.info("Thread {} ({}) with webDriver with hashCode {} has successfully completed logout process", Thread.currentThread().getId(), TestCaseName.convert(method.getName()), WebDriverManager.getDriver().hashCode());
 	}
-
 }
