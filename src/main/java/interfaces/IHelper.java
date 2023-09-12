@@ -5,5 +5,5 @@ package interfaces;
 **/
 
 public interface IHelper {
-	int determineIndex(String productName);
+	int determineIndex();
 }

@@ -15,7 +15,7 @@ import webElement.Element;
 public class LogoutProcess {
 
 	public void cartLogout(LogoutPage logoutPage) {
-		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
+		WebDriver webDriver = (WebDriver) LocalStore.getObject(String.valueOf(Thread.currentThread().getId()));
 		logoutPage.openAccountMenu();
 
 		TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.YOUR_ACCOUNT_TEXT +"')]")), "openAccountMenu()");
@@ -28,7 +28,7 @@ public class LogoutProcess {
 	}
 	
 	public void logout(LogoutPage logoutPage, String testCaseName) {
-		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
+		WebDriver webDriver = (WebDriver) LocalStore.getObject(String.valueOf(Thread.currentThread().getId()));
 		if(testCaseName.contains("searchOrdersTest")) {
 			TestAssert.elementNotNull(Element.getElement(By.xpath("//*[contains(text(), '"+ TextData.SEARCH_RESULTS_TEXT +"')]")), "logout()");
 			TestAssert.pageTitle("logout()", PageTitleData.ORDERS_PAGE_TITLE, webDriver.getTitle());

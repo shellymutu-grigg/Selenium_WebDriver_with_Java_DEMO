@@ -9,13 +9,14 @@ import data.PageTitleData;
 import data.TextData;
 import functions.TestAssert;
 import pageObjects.LoginPage;
+import resources.WebDriverManager;
 import webElement.Element;
 
 public class LoginProcess {
 	String email = System.getenv(ConfigData.AMAZON_USERNAME);
 	
 	public void completeLogin(String password, LoginPage loginPage) {
-		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
+		WebDriver webDriver = WebDriverManager.getDriver();
 		loginPage.checkForPreviousLoginFailure();
 		
 		String pageTitle;

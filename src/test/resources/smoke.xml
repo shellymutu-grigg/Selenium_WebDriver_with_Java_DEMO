@@ -11,6 +11,7 @@
 
         <listeners>
             <listener class-name="resources.ExtentListeners"/>
+            <listener class-name="resources.WebDriverListener"/>
         </listeners>
 
     <!-- <test thread-count="3" name="Smoke Test Suite"> -->

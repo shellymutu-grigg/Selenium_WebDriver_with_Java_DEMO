@@ -6,7 +6,7 @@ import org.testng.ITestResult;
 public class RetryAnalyzer implements IRetryAnalyzer {
 
     int counter = 0;
-    int retryLimit = 2;
+    int retryLimit = 1;
     /*
      * https://toolsqa.com/testng/retry-failed-tests-testng/
      * @see org.testng.IRetryAnalyzer#retry(org.testng.ITestResult)

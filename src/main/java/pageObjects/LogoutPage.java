@@ -1,9 +1,7 @@
 package pageObjects;
 
-import data.ConfigData;
 import data.LocalStore;
 import data.TextData;
-import functions.Get;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -52,6 +50,6 @@ public class LogoutPage {
 	}
 
 	public void setActions(){
-		actions = new Actions((WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER));
+		actions = new Actions((WebDriver) LocalStore.getObject(String.valueOf(Thread.currentThread().getId())));
 	}
 }

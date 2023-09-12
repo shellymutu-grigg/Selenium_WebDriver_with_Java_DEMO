@@ -18,8 +18,8 @@ public class LoginPage implements ITestListener{
 	By accountLinkBy = By.id("nav-global-location-popover-link");
 	By continueButtonBy = By.id("continue");
 	By accountMenuBy = By.id("nav-link-accountList-nav-line-1");
-	By landingPageBy = By.cssSelector(".navFooterLine");
-	By landingPageAltBy = By.cssSelector(".nav-footer-copyright");
+	static By landingPageBy = By.cssSelector(".navFooterLine");
+	static By landingPageAltBy = By.cssSelector(".nav-footer-copyright");
 	By loginButtonBy = By.id("signInSubmit");
 	By loginFailPuzzle = By.id("cvf-page-content");
 	By loginFailPuzzleMessageText = By.cssSelector(".a-spacing-mini");
@@ -28,11 +28,11 @@ public class LoginPage implements ITestListener{
 	By loginFailAlert = By.id("auth-error-message-box");
 	By loginFailAlertMessageText = By.cssSelector(".a-alert-content");
 
-	By tryDifferentImageBy = By.xpath("//*[contains(text(), '"+ TextData.TRY_DIFFERENT_IMAGE_TEXT +"')]");
+	static By tryDifferentImageBy = By.xpath("//*[contains(text(), '"+ TextData.TRY_DIFFERENT_IMAGE_TEXT +"')]");
 	By signInLinkBy = By.xpath("//span[normalize-space()='"+ TextData.ACCOUNT_MENU_LINK_TEXT+"']");
 	By userEmailBy = By.id("ap_email");
 	By userPasswordBy = By.id("ap_password");
-	By yourAccountLinkBy = By.linkText(TextData.YOUR_ACCOUNT_TEXT);
+	static By yourAccountLinkBy = By.linkText(TextData.YOUR_ACCOUNT_TEXT);
 	
 	public LogoutPage initialiseLogoutPage() {
 		return new LogoutPage();
@@ -75,7 +75,7 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public boolean checkIfSignedIn() {
-		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
+		WebDriver webDriver = (WebDriver) LocalStore.getObject(String.valueOf(Thread.currentThread().getId()));
 		return webDriver.getTitle().contains(PageTitleData.LANDING_PAGE_TITLE);
 	}
 	
@@ -84,7 +84,7 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void checkForPreviousLoginFailure() {
-		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
+		WebDriver webDriver = (WebDriver) LocalStore.getObject(String.valueOf(Thread.currentThread().getId()));
 		String accountListText = Objects.requireNonNull(Element.getElement(accountMenuBy)).getText();
 		if(!accountListText.contains(TextData.LOGGED_OUT_TEXT)) {
 			initialiseLogoutPage().openAccountMenu();

@@ -30,7 +30,7 @@ public class OrdersPage {
 	static Logger logger = LoggerFactory.getLogger(OrdersPage.class);
 
 	public OrdersPage() {
-		WebDriver webDriver = (WebDriver) LocalStore.getObject(ConfigData.SYSTEM_PROPERTY_WEBDRIVER);
+		WebDriver webDriver = (WebDriver) LocalStore.getObject(String.valueOf(Thread.currentThread().getId()));
 		actions = new Actions(webDriver);
 	}
 
