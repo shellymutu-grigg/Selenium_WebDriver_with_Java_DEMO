@@ -1,17 +1,14 @@
 package resources;
 
-import java.io.File;
+
 import java.io.IOException;
-import java.text.DateFormat;
+import java.io.InputStream;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+
+import java.util.Map;
+import java.util.Properties;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +34,7 @@ public class ExtentListeners implements ITestListener {
     
 	@Override
     public void onStart(ITestContext context) {
+
     }
 
     @Override

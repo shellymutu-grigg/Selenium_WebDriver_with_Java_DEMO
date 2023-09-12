@@ -14,16 +14,17 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	    <maven.compiler.source>17</maven.compiler.source>
-	    <maven.compiler.target>17</maven.compiler.target>
+		<java.version>1.8</java.version>
 		<selenium-java.version>4.11.0</selenium-java.version>
 		<testng.version>7.8.0</testng.version>
 		<webdrivermanager.version>5.4.1</webdrivermanager.version>
 		<extentreports.version>5.1.0</extentreports.version>
-		<slf4j-simple.version>2.0.9</slf4j-simple.version>
+		<slf4j-log4j12.version>2.0.5</slf4j-log4j12.version>
 		<slf4j-api.version>2.0.9</slf4j-api.version>
-		<log4j-core.version>3.0.0-alpha1</log4j-core.version>
+		<log4j.version>3.0.0-alpha1</log4j.version>
 		<lombok.version>1.18.28</lombok.version>
+		<maven-surefire-plugin-version>2.22.2</maven-surefire-plugin-version>
+		<maven-compiler-plugin>3.8.1</maven-compiler-plugin>
   	</properties>
 
 	<dependencies>
@@ -56,11 +57,11 @@
 		    <version>${extentreports.version}</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-reload4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4j-simple.version}</version>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j-log4j12.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
@@ -69,15 +70,6 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j-api.version}</version>
 		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4j-core.version}</version>
-		</dependency>
-
 
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
@@ -98,7 +90,7 @@
 					  <plugin>
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-surefire-plugin</artifactId>
-						  <version>2.22.1</version>
+						  <version>${maven-surefire-plugin-version}</version>
 						  <configuration>
 							  <suiteXmlFiles>
 								  <suiteXmlFile>src/test/resources/e2e.xml</suiteXmlFile>
@@ -117,7 +109,7 @@
 					  <plugin>
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-surefire-plugin</artifactId>
-						  <version>2.22.1</version>
+						  <version>${maven-surefire-plugin-version}</version>
 						  <configuration>
 							  <suiteXmlFiles>
 								  <suiteXmlFile>src/test/resources/loginSuccess.xml</suiteXmlFile>
@@ -136,7 +128,7 @@
 					  <plugin>
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-surefire-plugin</artifactId>
-						  <version>2.22.1</version>
+						  <version>${maven-surefire-plugin-version}</version>
 						  <configuration>
 							  <suiteXmlFiles>
 								  <suiteXmlFile>src/test/resources/loginFailure.xml</suiteXmlFile>
@@ -155,7 +147,7 @@
 					  <plugin>
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-surefire-plugin</artifactId>
-						  <version>2.22.1</version>
+						  <version>${maven-surefire-plugin-version}</version>
 						  <configuration>
 							  <suiteXmlFiles>
 								  <suiteXmlFile>src/test/resources/searchOrders.xml</suiteXmlFile>
@@ -174,7 +166,7 @@
 					  <plugin>
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-surefire-plugin</artifactId>
-						  <version>2.22.1</version>
+						  <version>${maven-surefire-plugin-version}</version>
 						  <configuration>
 							  <suiteXmlFiles>
 								  <suiteXmlFile>src/test/resources/smoke.xml</suiteXmlFile>
@@ -193,7 +185,7 @@
 					  <plugin>
 						  <groupId>org.apache.maven.plugins</groupId>
 						  <artifactId>maven-surefire-plugin</artifactId>
-						  <version>2.22.1</version>
+						  <version>${maven-surefire-plugin-version}</version>
 						  <configuration>
 							  <suiteXmlFiles>
 								  <suiteXmlFile>src/test/resources/grid.xml</suiteXmlFile>
@@ -209,76 +201,20 @@
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (could be moved to parent pom) -->
       <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
         <plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 	        <artifactId>maven-compiler-plugin</artifactId>
-	        <version>3.11.0</version>
+	        <version>${maven-compiler-plugin}</version>
 	        <configuration>
-		        <fork>true</fork>
-		        <compilerArgs>
-		            <arg>-Xlint:all</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
-		            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED</arg>
-		        </compilerArgs>
-		        <!--for unmappable characters in classes-->
-		        <encoding>UTF-8</encoding>
-		        <showDeprecation>true</showDeprecation>
-		        <showWarnings>true</showWarnings>
-		        <!--for lombok annotations to resolve-->
-		        <!--contradictory to maven, intelliJ fails with this-->
-		        <annotationProcessorPaths>
-		            <path>
-		                <groupId>org.projectlombok</groupId>
-		                <artifactId>lombok</artifactId>
-		                <version>1.18.16</version>
-		            </path>
-		        </annotationProcessorPaths>
+				<source>11</source>
+				<target>11</target>
 		    </configuration>
         </plugin>
         <plugin>
 			<groupId>org.apache.maven.plugins</groupId>
-          	<artifactId>maven-surefire-plugin</artifactId>
-          	<version>2.22.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>${maven-surefire-plugin-version}</version>
+		</plugin>
       </plugins>
     </pluginManagement>
   </build>
