@@ -1,10 +1,10 @@
 package data;
 
+import java.util.Hashtable;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class LocalStore {
-        private static final ThreadLocal<Map<String, Object>> localStore = ThreadLocal.withInitial(ConcurrentHashMap::new);
+        private static final ThreadLocal<Map<String, Object>> localStore = ThreadLocal.withInitial(Hashtable::new);
 
         public static void setObject(String key, Object object){
             // Store the global variable

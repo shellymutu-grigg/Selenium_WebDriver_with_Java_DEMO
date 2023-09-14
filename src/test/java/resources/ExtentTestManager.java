@@ -1,6 +1,6 @@
 package resources;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -8,7 +8,7 @@ import com.aventstack.extentreports.ExtentTest;
 
 public class ExtentTestManager {
 	
-    static Map<Integer, ExtentTest> extentTestMap = new HashMap<>();
+    static Map<Integer, ExtentTest> extentTestMap = new Hashtable<>();
     static ExtentReports extentReports = ExtentManager.createExtentReports();
     
     public static synchronized ExtentTest getTest() {

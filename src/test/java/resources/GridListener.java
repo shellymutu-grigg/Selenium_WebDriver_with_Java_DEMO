@@ -1,18 +1,16 @@
 package resources;
 
 import configuration.GridDriverConfig;
-import functions.TestCaseName;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
-import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 @Slf4j
-public class GridListener extends GridDriverConfig implements ITestListener, IInvokedMethodListener {
+public class GridListener extends GridDriverConfig implements IInvokedMethodListener {
     Logger logger = LoggerFactory.getLogger(GridListener.class);
 
     @Override
