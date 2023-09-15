@@ -32,7 +32,7 @@ public class LogoutPage {
 			throw new MoveTargetOutOfBoundsException(MessageFormat.format("MoveTargetOutOfBoundsException: {0}", e.getMessage()));
 	    }
 		try {
-			Thread.sleep(100);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			logger.error("InterruptedException: {}", e.getMessage());
 			throw new RuntimeException(MessageFormat.format("InterruptedException: {0}", e.getMessage()));

@@ -39,12 +39,14 @@ public class LoginPage implements ITestListener{
 	}
 	
 	public void navigateToURL() {
+		// If the user encounters an amazon security prompt click 'Try different image' link to navigate to landing page
 		if (Element.isPresent(tryDifferentImageBy)) {
 			Element.click(tryDifferentImageBy, false);
 		}
 		else if(Element.getElement(landingPageBy).isDisplayed()) {
 			Element.getElement(landingPageBy);
 		}
+		// If the user encounters the 'Your Account' alternative landing page navigate to landing page
 		else if(Element.getElement(landingPageAltBy).isDisplayed()) {
 			Element.getElement(landingPageAltBy);
 			if(Element.getElement(yourAccountLinkBy).isDisplayed()) {

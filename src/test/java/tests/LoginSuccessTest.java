@@ -29,6 +29,7 @@ import webElement.Element;
 @Listeners({ExtentListeners.class, WebDriverListener.class})
 @Slf4j
 public class LoginSuccessTest {
+	By signOutBy = By.xpath("//*[contains(text(), '" + TextData.SIGN_OUT_TEXT +"')]");
 	LoginProcess loginProcess = new LoginProcess();
 	LogoutProcess logoutProcess = new LogoutProcess();
 	String password = System.getenv(ConfigData.AMAZON_PASSWORD_SUCCESS);
@@ -43,7 +44,7 @@ public class LoginSuccessTest {
 		GIVEN a user enters a correct email and password combination
 		WHEN they access the Enter Email and Enter Password screens
 		THEN the application will log the user in
-			AND the user will be able to review their account
+			AND the user will be able to see the logout option in the account menu
 	 */
 	public void loginSuccessTest(Method method) {
 		ExtentTestManager.startTest(TestCaseName.convert(method.getName()), "A user is able to successfully login with a valid email and password combo");
@@ -85,6 +86,10 @@ public class LoginSuccessTest {
 		logger.info("Thread {} ({}) with webDriver with hashCode {} has successfully completed login process", Thread.currentThread().getId(), TestCaseName.convert(method.getName()), WebDriverManager.getDriver().hashCode());
 
 		LogoutPage logoutPage = loginPage.initialiseLogoutPage();
+
+		logoutPage.openAccountMenu();
+		TestAssert.elementNotNull(Element.getElement(By.id("nav-item-signout")), "openAccountMenu()");
+
 		logoutProcess.logout(logoutPage, "");
 		logger.info("Thread {} ({}) with webDriver with hashCode {} has successfully completed logout process", Thread.currentThread().getId(), TestCaseName.convert(method.getName()), WebDriverManager.getDriver().hashCode());
 	}
