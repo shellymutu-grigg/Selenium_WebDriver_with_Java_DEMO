@@ -3,6 +3,7 @@
 <!-- Login Success Tests -->
 <suite name="Login Suite">
 	<groups>
+        <define name="LoginSuccess"/>
 		<run>
 			<include name="LoginSuccess"/>
 		</run>

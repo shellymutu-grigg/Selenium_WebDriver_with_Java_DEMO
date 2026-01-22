@@ -13,7 +13,7 @@
 		<listener class-name="resources.GridListener"/>
 	</listeners>
   	
-	<test thread-count="2" parallel="classes" name="Selenium Grid Tests">
+	<test thread-count="1" parallel="classes" name="Selenium Grid Tests">
     	<classes>
       		<class name="tests.SeleniumGridGoogleTest"/>
 			<class name="tests.SeleniumGridSMGTest"/>

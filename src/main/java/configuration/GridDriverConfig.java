@@ -17,64 +17,79 @@ import org.testng.ITestResult;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.time.Duration;
 
 @Slf4j
 public class GridDriverConfig {
-    public static AbstractDriverOptions browserOptions;
+
     static Logger logger = LoggerFactory.getLogger(GridDriverConfig.class);
 
     public static WebDriver gridDriverSetup(ITestResult result, String browserType) {
-        WebDriver webDriver = null;
-        logger.info("Thread {} ({}) has initiated gridDriverSetup({})", Thread.currentThread().getId(), result.getMethod().getMethodName(), browserType);
-        if (browserType != null) {
-            if (browserType.equalsIgnoreCase(ConfigData.CHROME_DRIVER)) {
-                ChromeOptions chromeOptions = new ChromeOptions();
-                boolean headless = Boolean.parseBoolean(Get.globalProperty(ConfigData.HEADLESS));
-                if (headless) {
-                    chromeOptions.addArguments("--headless=new");
-                }
-                browserOptions = chromeOptions;
-            } else if (browserType.equalsIgnoreCase(ConfigData.FIREFOX_DRIVER)) {
-                FirefoxOptions firefoxOptions = new FirefoxOptions();
-                boolean headless = Boolean.parseBoolean(Get.globalProperty(ConfigData.HEADLESS));
-                if (headless) {
-                    firefoxOptions.addArguments("--headless");
-                }
-                browserOptions = firefoxOptions;
-            } else if (browserType.equalsIgnoreCase(ConfigData.EDGE_DRIVER)) {
-                browserOptions = new EdgeOptions();
-                EdgeOptions edgeOptions = new EdgeOptions();
-                boolean headless = Boolean.parseBoolean(Get.globalProperty(ConfigData.HEADLESS));
-                if (headless) {
-                    edgeOptions.addArguments("--headless");
-                }
-                browserOptions = edgeOptions;
-            }
+        logger.info(
+                "Thread {} ({}) has initiated gridDriverSetup({})",
+                Thread.currentThread().getId(),
+                result.getMethod().getMethodName(),
+                browserType
+        );
 
-            browserOptions.setPlatformName("Windows 11");
-
-            try {
-                webDriver = new RemoteWebDriver(new URL(ConfigData.REMOTE_DRIVER_URL), browserOptions);
-            } catch (MalformedURLException e) {
-                logger.error("MalformedURLException: {}", e.getMessage());
-                throw new RuntimeException(MessageFormat.format("MalformedURLException: {0}", e.getMessage()));
-            }
-
-            webDriver.manage().window().setSize(new Dimension(1050, 650));
-
-            try {
-                //Add implicit timeout
-                webDriver.manage()
-                        .timeouts()
-                        .implicitlyWait(Duration.ofSeconds(5));
-            } catch (NullPointerException e) {
-                logger.error("NullPointerException: {}", e.getMessage());
-                throw new NullPointerException(MessageFormat.format("NullPointerException: {0}", e.getMessage()));
-            }
+        if (browserType == null || browserType.trim().isEmpty()) {
+            browserType = Get.globalProperty(ConfigData.BROWSER);
         }
-        logger.info("Thread {} ({}) has instantiated webDriver with hashCode of {}", Thread.currentThread().getId(), result.getMethod().getMethodName(), webDriver.hashCode());
+
+        if (browserType == null || browserType.trim().isEmpty()) {
+            throw new IllegalArgumentException("Browser type not specified");
+        }
+
+        AbstractDriverOptions<?> browserOptions;
+
+        boolean headless = Boolean.parseBoolean(Get.globalProperty(ConfigData.HEADLESS));
+
+        if (browserType.equalsIgnoreCase(ConfigData.CHROME_DRIVER)) {
+            ChromeOptions options = new ChromeOptions();
+            if (headless) {
+                options.addArguments("--headless=new");
+            }
+            browserOptions = options;
+
+        } else if (browserType.equalsIgnoreCase(ConfigData.FIREFOX_DRIVER)) {
+            FirefoxOptions options = new FirefoxOptions();
+            if (headless) {
+                options.addArguments("--headless");
+            }
+            browserOptions = options;
+
+        } else if (browserType.equalsIgnoreCase(ConfigData.EDGE_DRIVER)) {
+            EdgeOptions options = new EdgeOptions();
+            if (headless) {
+                options.addArguments("--headless");
+            }
+            browserOptions = options;
+
+        } else {
+            throw new IllegalArgumentException("Unsupported browser type: " + browserType);
+        }
+
+        WebDriver webDriver;
+        try {
+            String gridUrl = Get.globalProperty(ConfigData.REMOTE_DRIVER_URL);
+            if (gridUrl == null || gridUrl.trim().isEmpty()) {
+                gridUrl = "http://localhost:4444"; // runtime fallback
+            }
+            webDriver = new RemoteWebDriver(new URL(gridUrl), browserOptions);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Invalid Grid URL", e);
+        }
+
+        webDriver.manage().window().setSize(new Dimension(1050, 650));
+        webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+        logger.info(
+                "Thread {} ({}) has instantiated webDriver with hashCode {}",
+                Thread.currentThread().getId(),
+                result.getMethod().getMethodName(),
+                webDriver.hashCode()
+        );
+
         LocalStore.setObject(String.valueOf(Thread.currentThread().getId()), webDriver);
         return webDriver;
     }

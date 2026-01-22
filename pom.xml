@@ -15,9 +15,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<selenium-java.version>4.11.0</selenium-java.version>
+		<selenium-java.version>4.40.0</selenium-java.version>
 		<testng.version>7.8.0</testng.version>
-		<webdrivermanager.version>5.4.1</webdrivermanager.version>
+		<webdrivermanager.version>6.3.3</webdrivermanager.version>
 		<extentreports.version>5.1.0</extentreports.version>
 		<slf4j-log4j12.version>2.0.5</slf4j-log4j12.version>
 		<slf4j-api.version>2.0.9</slf4j-api.version>
